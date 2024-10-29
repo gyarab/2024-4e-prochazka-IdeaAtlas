@@ -2,6 +2,7 @@
  <template>
     <div>
         <p>Map with id {{ id }}</p>
+        <MapCard/>
     </div>
  </template>
  
@@ -10,6 +11,7 @@
     definePageMeta({
         layout: 'maps'
     })
+
  </script>
  
  <style scoped>
