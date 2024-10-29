@@ -2,7 +2,7 @@
     <div>
         <header>
             <nav>
-                <NuxtLink to="/">Neco</NuxtLink>
+                <NuxtLink to="/">Idea Atlas</NuxtLink>
                 <ul>
                     <li><NuxtLink to="/">Home</NuxtLink></li>
                     <li><NuxtLink to="/about">About</NuxtLink></li>

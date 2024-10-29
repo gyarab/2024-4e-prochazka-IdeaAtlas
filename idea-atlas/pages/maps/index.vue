@@ -5,7 +5,9 @@
 </template>
 
 <script setup lang="ts">
-
+    definePageMeta({
+        layout: 'maps'
+    })
 </script>
 
 <style scoped>
