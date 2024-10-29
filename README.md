@@ -14,6 +14,12 @@ Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduct
 
 ## Setup
 
+install bun (on windows)
+```bash
+powershell -c "irm bun.sh/install.ps1 | iex"
+```
+change directory
+
 ```bash
 cd idea-atlas
 ```
