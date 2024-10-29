@@ -51,3 +51,12 @@ bun run preview
 ```
 
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+
+
+
+# Project structure guide
+
+
+## bun.lockb
+
+is a lock file created by the Bun JavaScript runtime to capture the exact versions of all dependencies installed in a project.
