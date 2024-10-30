@@ -83,10 +83,10 @@
       .enter().append("circle")
       .attr("r", 5)
       .attr("fill", d => color(d.group.toString()))
-      .call(d3.drag()
-        .on("start", dragstarted)
-        .on("drag", dragged)
-        .on("end", dragended));
+      .call(d3.drag<SVGCircleElement, Node>()
+        .on("start", (event, d) => dragstarted(event, d))
+        .on("drag", (event, d) => dragged(event, d))
+        .on("end", (event, d) => dragended(event, d)));
   
     function ticked() {
       link
