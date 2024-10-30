@@ -90,10 +90,10 @@
   
     function ticked() {
       link
-        .attr("x1", d => (d.source as Node).x!)
-        .attr("y1", d => (d.source as Node).y!)
-        .attr("x2", d => (d.target as Node).x!)
-        .attr("y2", d => (d.target as Node).y!);
+        .attr("x1", d => (d.source as unknown as Node).x!)
+        .attr("y1", d => (d.source as unknown as Node).y!)
+        .attr("x2", d => (d.target as unknown as Node).x!)
+        .attr("y2", d => (d.target as unknown as Node).y!);
   
       node
         .attr("cx", d => d.x!)
