@@ -13,6 +13,7 @@
     "@nuxtjs/tailwindcss": "^6.12.2",
     "d3": "^7.9.0",
     "nuxt": "^3.13.2",
+    "vis-network": "^9.1.9",
     "vue": "latest",
     "vue-router": "latest"
   }
