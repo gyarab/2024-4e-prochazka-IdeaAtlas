@@ -1,12 +1,11 @@
 <template>
-    <div>
-      <p>This is the default page for map {{ id }}</p>
-      <MapGraph />
-    </div>
-  </template>
-  
-  <script setup lang="ts">
-import MapGraph from '~/components/MapGraph.vue';
+  <div>
+    <p>This is the default page for map {{ id }}</p>
+    <MapGraph />
+    <SigmaGraph />
+  </div>
+</template>
 
-  const {id} = useRoute().params;
-  </script>
+<script setup lang="ts">
+const { id } = useRoute().params;
+</script>
