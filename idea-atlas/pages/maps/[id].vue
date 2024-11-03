@@ -1,8 +1,6 @@
 <template>
   <div>
     <p>This is the default page for map {{ id }}</p>
-    <MapGraph />
-    <SigmaGraph />
     <MapNetwork />
   </div>
 </template>
