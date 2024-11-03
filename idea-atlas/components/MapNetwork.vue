@@ -1,36 +1,16 @@
 <script setup lang="ts">
 import * as vNG from "v-network-graph"
-interface Node {
-    name: string;
-}
-
-interface Edge {
-    source: string;
-    target: string;
-}
-
-const nodes: Record<string, Node> = {};
-const edges: Record<string, Edge> = {};
-
-// Generate 50 nodes
-for (let i = 1; i <= 50; i++) {
-    nodes[`node${i}`] = { name: `Node ${i}` };
-}
-
-// Generate 75 edges
-for (let i = 1; i <= 75; i++) {
-    const source = `node${Math.ceil(Math.random() * 50)}`;
-    const target = `node${Math.ceil(Math.random() * 50)}`;
-    edges[`edge${i}`] = { source, target };
-}
+import { reactive } from "vue"
+import data from "./data"
 
 // Define the configurations
 const configs = reactive(
     vNG.defineConfigs({
-                    view: {
+        view: {
                         scalingObjects: true, // Enable scaling objects, so the nodes and edges will be scaled when zooming
                   minZoomLevel: 0.1,
                   maxZoomLevel: 16,
+                  
         },
     })
 );
@@ -39,8 +19,9 @@ const configs = reactive(
 <template>
         <v-network-graph
             class="fixed inset-0 w-screen h-screen"
-            :nodes="nodes"
-            :edges="edges"
+            :nodes="data.nodes"
+            :edges="data.edges"
+            :layouts="data.layouts"
             :configs="configs"
         />
 </template>
