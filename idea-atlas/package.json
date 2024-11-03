@@ -16,6 +16,7 @@
     "graphology-layout": "^0.6.1",
     "nuxt": "^3.13.2",
     "sigma": "^3.0.0-beta.36",
+    "v-network-graph": "^0.9.18",
     "vis-network": "^9.1.9",
     "vue": "latest",
     "vue-router": "latest"
