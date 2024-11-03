@@ -1,6 +1,5 @@
 <template>
   <div>
-    <p>This is the default page for map {{ id }}</p>
     <MapNetwork />
   </div>
 </template>
@@ -9,4 +8,5 @@
 import MapNetwork from '~/components/MapNetwork.vue';
 
 const { id } = useRoute().params;
+// {{id}}
 </script>

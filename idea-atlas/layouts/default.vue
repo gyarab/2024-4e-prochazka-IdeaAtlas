@@ -10,7 +10,8 @@
                 </ul>
             </nav>
         </header>
-        <div class="container mx-auto p-4">
+        <!-- "container mx-auto p-4" -->
+        <div>
         <slot /> <!-- page content -->
         </div>
     </div>
