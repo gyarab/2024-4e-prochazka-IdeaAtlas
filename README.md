@@ -27,7 +27,6 @@ cd idea-atlas
 Make sure to install dependencies:
 
 ```bash
-# bun
 bun install
 ```
 
