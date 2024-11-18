@@ -18,8 +18,10 @@ install bun (on windows)
 ```bash
 powershell -c "irm bun.sh/install.ps1 | iex"
 ```
+```bash
+irm bun.sh/install.ps1 | iex
 change directory
-
+```
 ```bash
 cd idea-atlas
 ```
