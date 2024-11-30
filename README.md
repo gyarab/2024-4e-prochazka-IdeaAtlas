@@ -12,21 +12,64 @@ IdeaAtlas is (will be) Brain storming visualisation web tool for creating knowle
 
 Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
 
-## Setup
+## Linux Setup
 
-install bun (on windows)
+install bun
+
 ```bash
-powershell -c "irm bun.sh/install.ps1 | iex"
+curl -fsSL https://bun.sh/install | bash
 ```
-```bash
-irm bun.sh/install.ps1 | iex
-change directory
-```
+go to the project directory
+
 ```bash
 cd idea-atlas
 ```
 
-Make sure to install dependencies:
+install dependencies:
+
+```bash
+bun install
+```
+
+## Development Server
+
+Start the development server on `http://localhost:3000`:
+
+```bash
+# bun
+bun run dev
+```
+
+## Production
+
+Build the application for production:
+
+```bash
+# bun
+bun run build
+```
+
+Locally preview production build:
+
+```bash
+# bun
+bun run preview
+```
+## Setup for windows
+
+install bun (on windows)
+
+```bash
+powershell -c "irm bun.sh/install.ps1 | iex"
+```
+
+go to the project directory
+
+```bash
+cd idea-atlas
+```
+
+install dependencies:
 
 ```bash
 bun install
