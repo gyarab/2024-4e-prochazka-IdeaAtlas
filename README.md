@@ -12,7 +12,14 @@ IdeaAtlas is (will be) Brain storming visualisation web tool for creating knowle
 
 Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
 
+
 # Linux Setup
+
+clone this repo
+
+```bash
+git clone https://github.com/gyarab/2024-4e-prochazka-IdeaAtlas.git
+```
 
 install bun
 
@@ -31,6 +38,12 @@ install dependencies:
 bun install
 ```
 # Setup for windows
+
+clone this repo
+
+```bash
+git clone https://github.com/gyarab/2024-4e-prochazka-IdeaAtlas.git
+```
 
 install bun (on windows)
 
