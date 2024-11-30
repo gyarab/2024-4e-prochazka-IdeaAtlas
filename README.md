@@ -12,7 +12,7 @@ IdeaAtlas is (will be) Brain storming visualisation web tool for creating knowle
 
 Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
 
-## Linux Setup
+# Linux Setup
 
 install bun
 
@@ -30,32 +30,7 @@ install dependencies:
 ```bash
 bun install
 ```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# bun
-bun run preview
-```
-## Setup for windows
+# Setup for windows
 
 install bun (on windows)
 
@@ -75,7 +50,7 @@ install dependencies:
 bun install
 ```
 
-## Development Server
+# Development Server
 
 Start the development server on `http://localhost:3000`:
 
@@ -84,7 +59,7 @@ Start the development server on `http://localhost:3000`:
 bun run dev
 ```
 
-## Production
+# Production
 
 Build the application for production:
 
