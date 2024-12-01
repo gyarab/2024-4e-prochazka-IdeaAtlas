@@ -12,7 +12,20 @@ IdeaAtlas is (will be) Brain storming visualisation web tool for creating knowle
 
 Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
 
+# Docker Setup
+go to project directory
+```bash
+cd idea-atlas
+```
+Build the Docker image
+```bash
+docker build -t idea-atlas .
+```
 
+Run the Docker container
+```bash
+docker run -p 3000:3000 idea-atlas
+```
 # Linux Setup
 
 clone this repo
