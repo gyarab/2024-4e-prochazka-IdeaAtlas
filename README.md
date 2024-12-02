@@ -15,6 +15,7 @@ Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduct
 # Docker Setup
 go to project directory
 ```bash
+cd 2024-4e-prochazka-IdeaAtlas
 cd idea-atlas
 ```
 Build the Docker image
