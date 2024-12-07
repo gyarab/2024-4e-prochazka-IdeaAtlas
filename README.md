@@ -9,6 +9,14 @@ IdeaAtlas is (will be) Brain storming visualisation web tool for creating knowle
 
 
 # Docker Setup
+
+
+clone this repo
+
+```bash
+git clone https://github.com/gyarab/2024-4e-prochazka-IdeaAtlas.git
+```
+
 go to project directory
 ```bash
 cd 2024-4e-prochazka-IdeaAtlas
