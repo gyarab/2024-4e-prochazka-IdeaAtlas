@@ -3,7 +3,9 @@ dist
 output
 .git
 .vscode
-.env
+#TODO:
+#.env should not be included in the docker image
+#.env
 .DS_Store
 Dockerfile
 docker-compose.yml
