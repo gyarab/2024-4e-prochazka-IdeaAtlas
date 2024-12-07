@@ -10,6 +10,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@nuxtjs/supabase": "^1.4.3",
     "@nuxtjs/tailwindcss": "^6.12.2",
     "d3-force": "^3.0.0",
     "nuxt": "^3.13.2",
