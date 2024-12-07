@@ -8,10 +8,6 @@ IdeaAtlas is (will be) Brain storming visualisation web tool for creating knowle
 
 
 
-# Nuxt Minimal Starter
-
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
-
 # Docker Setup
 go to project directory
 ```bash
@@ -75,6 +71,23 @@ install dependencies:
 
 ```bash
 bun install
+```
+# Suppabse locally setup
+```bash
+# Get the code
+git clone --depth 1 https://github.com/supabase/supabase
+
+# Go to the docker folder
+cd supabase/docker
+
+# Copy the fake env vars
+cp .env.example .env
+
+# Pull the latest images
+docker compose pull
+
+# Start the services (in detached mode)
+docker compose up -d
 ```
 
 # Development Server
