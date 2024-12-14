@@ -97,6 +97,16 @@ docker compose pull
 # Start the services (in detached mode)
 docker compose up -d
 ```
+Accessing Supabase Studio
+```bash
+localhost:8000
+```
+default login credentials
+```bash
+supabase
+this_password_is_insecure_and_should_be_updated
+```
+
 
 # Development Server
 
