@@ -1,36 +1,35 @@
 <template>
-    <div class="container_box">
-        <div class="content_box w-96">
-            <h2>Register</h2>
+    <div class="flex items-center justify-center min-h-screen bg-gray-100">
+        <div class="bg-white p-8 rounded-lg shadow-md w-96">
+            <h2 class="text-2xl font-bold mb-6 text-center">Register</h2>
             <!-- Email Input -->
-            <div class="mt-3">
-                <label for="email">Email: <br></label>
-                <input class="input" id="email" v-model="email" type="email" placeholder="Enter your email" />
+            <div class="mb-4">
+                <label for="email" class="block text-gray-700">Email:</label>
+                <input class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" id="email" v-model="email" type="email" placeholder="Enter your email" />
             </div>
             
             <!-- Password Input -->
-            <div class="mt-3">
-                <label for="password">Password: <br></label>
-                <input class="input" id="password" v-model="password" type="password" placeholder="Enter your password" />
+            <div class="mb-4">
+                <label for="password" class="block text-gray-700">Password:</label>
+                <input class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" id="password" v-model="password" type="password" placeholder="Enter your password" />
             </div>
             
             <!-- Submit Button -->
-            <button @click="signUp" class="btn mt-3">Register</button>
+            <button @click="signUp" class="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600">Register</button>
 
             <!-- Message Container -->
-            <div class="message-box">
-                <div v-if="successMsg" class="success">{{ successMsg }}</div>
-                <div v-if="errorMsg" class="error">{{ errorMsg }}</div>
+            <div class="mt-4">
+                <div v-if="successMsg" class="text-green-500">{{ successMsg }}</div>
+                <div v-if="errorMsg" class="text-red-500">{{ errorMsg }}</div>
             </div>
 
-            
             <!-- Redirect to login -->
-            <div class="mt-5">
-                <NuxtLink to="/login"> <p class="underline"> Already have an account? Login </p> </NuxtLink>
+            <div class="mt-6 text-center">
+                <NuxtLink to="/login" class="text-blue-500 underline">Already have an account? Login</NuxtLink>
             </div>
         </div>
     </div>
-  </template>
+</template>
 
 <script setup>
     const client = useSupabaseClient()
