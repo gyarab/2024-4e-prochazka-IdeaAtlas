@@ -6,5 +6,8 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
     '@nuxtjs/supabase'
   ],
+  supabase: {
+    redirect: false
+  },
   css: ["v-network-graph/lib/style.css"]
 })
