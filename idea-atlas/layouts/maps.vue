@@ -1,27 +1,25 @@
 <template>
     <div>
         <header class="shadow-sm bg-white">
-            <nav class="container mx-auto p-4">
-                <NuxtLink to="/maps" class="font-bold">Maps</NuxtLink>
+            <nav class="container mx-auto p-4 flex justify-between">
+                <NuxtLink to="/" class="font-bold">Idea Atlas</NuxtLink>
+                <ul class="flex gap-4">
+                    <li><NuxtLink to="/">Home</NuxtLink></li>
+                    <li><NuxtLink to="/about">About</NuxtLink></li>
+                    <!-- TODO it should not be seen until log in -->
+                    <li><NuxtLink to="/maps" class="btn">Maps</NuxtLink></li>
+                    <!-- TODO it should not be seen until log in -->
+                    <li><NuxtLink to="/profile" class="btn">profile</NuxtLink></li>
+                </ul>
             </nav>
         </header>
-        <div class="container mx-auto p-4">
-            <slot /> <!-- page content -->
+        <!-- "container mx-auto p-4" -->
+        <div>
+        <slot /> <!-- page content -->
         </div>
-        <footer class="container mx-auto p-4 flex justify-between border-t-2">
-            <ul class="flex gap-4">
-                <li>
-                    <NuxtLink to="/">Home</NuxtLink>
-                </li>
-                <li>
-                    <NuxtLink to="/about">About</NuxtLink>
-                </li>
-                <li>
-                    <NuxtLink to="/maps" class= "btn">Maps</NuxtLink>
-                </li>
-            </ul>
-        </footer>
     </div>
-</template>
 
-<style scoped></style>
+</template>
+<style scoped>
+    
+</style>
