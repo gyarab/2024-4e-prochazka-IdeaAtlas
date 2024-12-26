@@ -1,7 +1,7 @@
 <script setup>
 definePageMeta({
     middleware: ["auth"],
-})
+});
 const user = useSupabaseUser();
 const client = useSupabaseClient();
 const router = useRouter();
@@ -12,8 +12,7 @@ async function logout() {
         if (error) {
             throw error;
         }
-        console.log("Logout successful");
-        router.push("/");
+        router.push("/login");
     } catch (error) {
         console.error("Error during logout:", error);
     }
@@ -28,7 +27,7 @@ async function logout() {
         <button @click="logout" class="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700">Logout</button>
     </div>
     <div v-else class="text-red-500">
-        <p>Please log in</p>
+        <p>Loading</p>
     </div>
 </div>
 </template>
