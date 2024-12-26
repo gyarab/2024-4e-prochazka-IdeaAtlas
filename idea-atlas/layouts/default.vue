@@ -6,7 +6,10 @@
                 <ul class="flex gap-4">
                     <li><NuxtLink to="/">Home</NuxtLink></li>
                     <li><NuxtLink to="/about">About</NuxtLink></li>
+                    <!-- TODO it should not be seen until log in -->
                     <li><NuxtLink to="/maps" class="btn">Maps</NuxtLink></li>
+                    <!-- TODO it should not be seen until log in -->
+                    <li><NuxtLink to="/profile" class="btn">profile</NuxtLink></li>
                 </ul>
             </nav>
         </header>
