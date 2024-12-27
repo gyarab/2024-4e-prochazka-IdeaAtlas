@@ -2,7 +2,11 @@
 <template>
     <div>
         <h1>Test</h1>
-        <button @click="insertGraph">Insert Node</button>
+        <button @click="insertGraphs([
+  { name: 'Raketa' },
+  { name: 'Sputnik' },
+  { name: 'Voyager' }
+]);">Insert Node</button>
     </div>
 </template>
 
@@ -19,4 +23,21 @@ async function insertGraph() {
     console.log('Node inserted successfully');
   }
 }
+async function insertGraphs(graphs) {
+  if (!Array.isArray(graphs) || graphs.length === 0) {
+    console.error('Please provide a non-empty array of graphs.');
+    return;
+  }
+
+  const { error } = await supabase
+    .from('graphs')
+    .insert(graphs);
+  
+  if (error) {
+    console.error('Error inserting graphs:', error);
+  } else {
+    console.log('Graphs inserted successfully');
+  }
+}
+
 </script>
