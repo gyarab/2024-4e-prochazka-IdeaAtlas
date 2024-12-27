@@ -2,17 +2,17 @@
 <template>
     <div>
         <h1>Test</h1>
-        <button @click="insertNode">Insert Node</button>
+        <button @click="insertGraph">Insert Node</button>
     </div>
 </template>
 
 <script setup>
 const supabase = useSupabaseClient();
 
-async function insertNode() {
+async function insertGraph() {
   const { error } = await supabase
-    .from('test')
-    .insert({ id: 1, name: 'Denmark' });
+    .from('graphs')
+    .insert({name: 'Raketa' });
   if (error) {
     console.error(error);
   } else {
