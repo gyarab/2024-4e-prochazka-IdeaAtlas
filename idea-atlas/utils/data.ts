@@ -12,15 +12,7 @@ const edges: Edges = {
   edge1: { source: "node1", target: "node2" },
   edge2: { source: "node2", target: "node3" },
   edge3: { source: "node3", target: "node4" },
-  edge4: { source: "node3", target: "node4" },
-  edge5: { source: "node4", target: "node5" },
-  edge6: { source: "node4", target: "node5" },
-  edge7: { source: "node4", target: "node5" },
-  edge8: { source: "node4", target: "node5" },
-  edge9: { source: "node4", target: "node5" },
-  edge10: { source: "node4", target: "node5" },
-  edge11: { source: "node4", target: "node5" },
-  edge12: { source: "node4", target: "node5" },
+  edge4: { source: "node4", target: "node5" },
 }
 
 const layouts: Layouts = {

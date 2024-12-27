@@ -1,6 +1,6 @@
 <template>
     <div>
-
+    <button @click="insertNodes(supabase, nodes)">Insert Nodes</button>
     </div>
 </template>
 
@@ -13,8 +13,4 @@ const nodes = data.nodes
 console.log(nodes)
 
 const supabase = useSupabaseClient();
-
-insertNodes(supabase, nodes);
-
-
 </script>
