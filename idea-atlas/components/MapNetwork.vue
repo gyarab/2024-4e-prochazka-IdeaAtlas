@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import * as vNG from "v-network-graph"
 import { reactive } from "vue"
-import data from "./data"
+import data from "../utils/data"
 
 // Define the configurations
 const configs = reactive(
