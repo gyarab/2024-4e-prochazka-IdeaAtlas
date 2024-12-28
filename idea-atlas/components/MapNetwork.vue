@@ -17,7 +17,8 @@ const loading = ref(true); // Loading state
 
 onMounted(async () => {
   try {
-    const fetchedData = await service.fetchGraph(supabase);
+    //TODO hardcoded graph id
+    const fetchedData = await service.fetchGraph(supabase,"8bedcacd-0049-4f32-a1e5-4fe72a2080d2");
 
     if (fetchedData) {
       data.nodes = fetchedData.nodes || [];

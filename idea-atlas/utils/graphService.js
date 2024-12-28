@@ -70,24 +70,26 @@ async function insertLayouts(supabase, layouts) {
 }
 
 
-//TODO need to select which graph to fetch
-async function fetchData(supabase) {
+async function fetchData(supabase, graph_id) {
   // Fetch nodes
   const { data: nodesData, error: nodesError } = await supabase
     .from('nodes')
-    .select('*');
+    .select('*')
+    .eq('graph_id', graph_id);
   if (nodesError) throw nodesError;
 
   // Fetch edges
   const { data: edgesData, error: edgesError } = await supabase
     .from('edges')
-    .select('*');
+    .select('*')
+    .eq('graph_id', graph_id);
   if (edgesError) throw edgesError;
 
   // Fetch layouts
   const { data: layoutsData, error: layoutsError } = await supabase
     .from('layouts')
-    .select('*');
+    .select('*')
+    .eq('graph_id', graph_id);
   if (layoutsError) throw layoutsError;
 
   return { nodesData, edgesData, layoutsData };
@@ -120,9 +122,9 @@ function reconstructData(nodesData, edgesData, layoutsData) {
 }
 
 
-async function fetchGraph(supabase) {
+async function fetchGraph(supabase, graph_id) {
   try {
-    const { nodesData, edgesData, layoutsData } = await fetchData(supabase);
+    const { nodesData, edgesData, layoutsData } = await fetchData(supabase, graph_id);
     const { nodes, edges, layouts } = reconstructData(
       nodesData,
       edgesData,
