@@ -13,7 +13,7 @@ async function insertNodes(supabase, nodes) {
   
   const { error } = await supabase
     .from('nodes')
-    .insert(nodesToInsert);
+    .upsert(nodesToInsert);
 
   if (error) {
     console.error('Error inserting nodes:', error);
@@ -36,7 +36,7 @@ async function insertEdges(supabase, edges) {
   // Insert edges into the table
   const { data, error } = await supabase
     .from('edges')
-    .insert(edgesToInsert);
+    .upsert(edgesToInsert);
 
   if (error) {
     console.error('Error inserting edges:', error);
@@ -60,7 +60,7 @@ async function insertLayouts(supabase, layouts) {
 
   const { error } = await supabase
     .from('layouts')
-    .insert(layoutsToInsert);
+    .upsert(layoutsToInsert);
 
   if (error) {
     console.error('Error inserting layouts:', error);

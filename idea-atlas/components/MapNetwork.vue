@@ -64,6 +64,15 @@ const configs = reactive(
 
 <template>
   <div>
+        <button @click="service.insertNodes(supabase, data.nodes)">Insert Nodes</button>
+    </div>
+    <div>
+        <button @click="service.insertEdges(supabase, data.edges)">Insert Eges</button>
+    </div>
+    <div>
+        <button @click="service.insertLayouts(supabase, data.layouts)">Insert Layouts</button>
+    </div>
+  <div>
         <button @click="console.log(data)">console log data</button>
     </div>
   <client-only>
