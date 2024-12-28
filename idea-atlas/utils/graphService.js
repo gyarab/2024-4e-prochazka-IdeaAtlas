@@ -45,6 +45,8 @@ async function insertEdges(supabase, edges) {
   }
 
 }
+
+
 // Insert layouts into the 'layouts' table in the Supabase database
 //supabse must be passed from somhwere where it is part of nuxt life cycle
 async function insertLayouts(supabase, layouts) {
@@ -66,6 +68,8 @@ async function insertLayouts(supabase, layouts) {
     console.log('Layouts inserted successfully');
   }
 }
+
+
 //TODO need to select which graph to fetch
 async function fetchData(supabase) {
   // Fetch nodes
@@ -113,6 +117,7 @@ function reconstructData(nodesData, edgesData, layoutsData) {
 
   return { nodes, edges, layouts };
 }
+
 
 async function fetchGraph(supabase) {
   try {
