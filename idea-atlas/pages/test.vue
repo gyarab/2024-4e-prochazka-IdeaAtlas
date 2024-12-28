@@ -8,6 +8,9 @@
     <div>
         <button @click="service.insertLayouts(supabase, layouts)">Insert Layouts</button>
     </div>
+    <div>
+        <button @click="service.fetchGraph(supabase)">Fetch Graph</button>
+    </div>
 </template>
 
 <script setup>

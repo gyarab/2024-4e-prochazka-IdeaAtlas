@@ -66,7 +66,72 @@ async function insertLayouts(supabase, layouts) {
     console.log('Layouts inserted successfully');
   }
 }
+//TODO need to select which graph to fetch
+async function fetchData(supabase) {
+  // Fetch nodes
+  const { data: nodesData, error: nodesError } = await supabase
+    .from('nodes')
+    .select('*');
+  if (nodesError) throw nodesError;
+
+  // Fetch edges
+  const { data: edgesData, error: edgesError } = await supabase
+    .from('edges')
+    .select('*');
+  if (edgesError) throw edgesError;
+
+  // Fetch layouts
+  const { data: layoutsData, error: layoutsError } = await supabase
+    .from('layouts')
+    .select('*');
+  if (layoutsError) throw layoutsError;
+
+  return { nodesData, edgesData, layoutsData };
+}
 
 
+function reconstructData(nodesData, edgesData, layoutsData) {
+  // Reconstruct nodes
+  const nodes = nodesData.reduce((acc, node) => {
+    acc[node.id] = { name: node.name };
+    return acc;
+  }, {});
+
+  // Reconstruct edges
+  const edges = edgesData.reduce((acc, edge) => {
+    acc[edge.id] = { source: edge.source, target: edge.target };
+    return acc;
+  }, {});
+
+  // Reconstruct layouts
+  const layouts = {
+    nodes: layoutsData.reduce((acc, layout) => {
+      acc[layout.node_id] = { x: layout.x, y: layout.y };
+      return acc;
+    }, {}),
+  };
+
+  return { nodes, edges, layouts };
+}
+
+async function fetchGraph(supabase) {
+  try {
+    const { nodesData, edgesData, layoutsData } = await fetchData(supabase);
+    const { nodes, edges, layouts } = reconstructData(
+      nodesData,
+      edgesData,
+      layoutsData
+    );
+
+    console.log({ nodes, edges, layouts });
+  } catch (error) {
+    console.error('Error fetching or reconstructing data:', error);
+  }
+}
+
+
+
+
+//TODO insert function for whole graph
 //exports the functions so they can be used in other files
-export default {insertNodes, insertEdges, insertLayouts}
+export default {insertNodes, insertEdges, insertLayouts, fetchGraph}
