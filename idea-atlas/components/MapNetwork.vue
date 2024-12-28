@@ -1,13 +1,37 @@
 <script setup lang="ts">
-import * as vNG from "v-network-graph"
-import { reactive } from "vue"
-//import data from "../utils/data"
-import service from "../utils/graphService"
+import * as vNG from "v-network-graph";
+import { reactive, ref, onMounted } from "vue";
+import service from "../utils/graphService";
 
-const supabase = useSupabaseClient()
+const supabase = useSupabaseClient();
 
-const data = service.fetchGraph(supabase)
-console.log(data)
+// Reactive state for graph data
+const data = reactive({
+  nodes: [] as any[], // Specify the type if you know it
+  edges: [] as any[],
+  layouts: [] as any[],
+});
+
+const loading = ref(true); // Loading state
+
+onMounted(async () => {
+  try {
+    const fetchedData = await service.fetchGraph(supabase);
+
+    if (fetchedData) {
+      data.nodes = fetchedData.nodes || [];
+      data.edges = fetchedData.edges || [];
+      data.layouts = fetchedData.layouts || [];
+    } else {
+      console.warn("No data returned from fetchGraph");
+    }
+  } catch (error) {
+    console.error("Error fetching graph data:", error);
+  } finally {
+    loading.value = false; // Set loading to false after data fetch
+  }
+});
+
 // Define the configurations
 const configs = reactive(
   vNG.defineConfigs({
@@ -29,24 +53,35 @@ const configs = reactive(
       },
       layoutHandler: new vNG.GridLayout({ grid: 10 }),
       scalingObjects: true, // Enable scaling objects, so the nodes and edges will be scaled when zooming
-                  minZoomLevel: 0.1,
-                  maxZoomLevel: 16,
+      minZoomLevel: 0.1,
+      maxZoomLevel: 16,
     },
   })
-)
+);
 </script>
 
 <template>
-    <client-only>
-        <v-network-graph
-            class="fixed inset-0 w-screen h-screen"
-            :nodes="data.nodes"
-            :edges="data.edges"
-            :layouts="data.layouts"
-            :configs="configs"
-        />
-    </client-only>
+  <client-only>
+    <div v-if="loading" class="loading-indicator">Loading...</div>
+    <v-network-graph
+      v-else
+      class="fixed inset-0 w-screen h-screen"
+      :nodes="data.nodes"
+      :edges="data.edges"
+      :layouts="data.layouts"
+      :configs="configs"
+    />
+  </client-only>
 </template>
 
 <style>
+.loading-indicator {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  color: #555;
+}
 </style>
