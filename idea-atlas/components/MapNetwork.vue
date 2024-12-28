@@ -62,6 +62,9 @@ const configs = reactive(
 </script>
 
 <template>
+  <div>
+        <button @click="console.log(data)">console log data</button>
+    </div>
   <client-only>
     <div v-if="loading" class="loading-indicator">Loading...</div>
     <v-network-graph
