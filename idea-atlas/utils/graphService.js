@@ -94,23 +94,24 @@ async function fetchData(supabase) {
 }
 
 
+//acc = accumulator - reduces the incoming data
 function reconstructData(nodesData, edgesData, layoutsData) {
   // Reconstruct nodes
   const nodes = nodesData.reduce((acc, node) => {
-    acc[node.id] = { name: node.name };
+    acc[node.node_id_in_graph] = { name: node.name };
     return acc;
   }, {});
 
   // Reconstruct edges
   const edges = edgesData.reduce((acc, edge) => {
-    acc[edge.id] = { source: edge.source, target: edge.target };
+    acc[edge.edge_id_in_graph] = { source: edge.source, target: edge.target };
     return acc;
   }, {});
 
   // Reconstruct layouts
   const layouts = {
     nodes: layoutsData.reduce((acc, layout) => {
-      acc[layout.node_id] = { x: layout.x, y: layout.y };
+      acc[layout.node_id_in_graph] = { x: layout.x, y: layout.y };
       return acc;
     }, {}),
   };
@@ -127,8 +128,7 @@ async function fetchGraph(supabase) {
       edgesData,
       layoutsData
     );
-
-    console.log({ nodes, edges, layouts });
+    return { nodes, edges, layouts };
   } catch (error) {
     console.error('Error fetching or reconstructing data:', error);
   }

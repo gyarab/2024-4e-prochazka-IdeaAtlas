@@ -1,8 +1,13 @@
 <script setup lang="ts">
 import * as vNG from "v-network-graph"
 import { reactive } from "vue"
-import data from "../utils/data"
+//import data from "../utils/data"
+import service from "../utils/graphService"
 
+const supabase = useSupabaseClient()
+
+const data = service.fetchGraph(supabase)
+console.log(data)
 // Define the configurations
 const configs = reactive(
   vNG.defineConfigs({
