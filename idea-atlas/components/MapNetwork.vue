@@ -7,12 +7,13 @@ const supabase = useSupabaseClient();
 
 // Reactive state for graph data
 const data = reactive({
-  nodes: [] as any[], // Specify the type if you know it
-  edges: [] as any[],
-  layouts: [] as any[],
+  nodes: {} as Record<string, { name: string }>, // Using your Nodes structure
+  edges: {} as Record<string, { source: string; target: string }>, // Using your Edges structure
+  layouts: { nodes: {} } as { nodes: Record<string, { x: number; y: number }> }, // Using your Layouts structure
 });
 
 const loading = ref(true); // Loading state
+
 
 onMounted(async () => {
   try {
