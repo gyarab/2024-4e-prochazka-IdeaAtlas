@@ -1,14 +1,18 @@
 <template>
     <div>
-    <button @click="insertNodes(supabase, nodes)">Insert Nodes</button>
+        <button @click="service.insertNodes(supabase, nodes)">Insert Nodes</button>
+    </div>
+    <div>
+        <button @click="service.insertEdges(supabase, edges)">Insert Eges</button>
     </div>
 </template>
 
 <script setup>
-import insertNodes from "~/utils/graphService";
+import service from "~/utils/graphService";
 import data from "../utils/data"
 
 const nodes = data.nodes
+const edges = data.edges
 
 console.log(nodes)
 

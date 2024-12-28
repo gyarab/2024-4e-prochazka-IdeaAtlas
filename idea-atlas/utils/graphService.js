@@ -19,11 +19,16 @@ async function insertNodes(supabase, nodes) {
     console.log('Nodes inserted successfully');
   }
 }
+
+
+// Insert edges into the 'edges' table in the Supabase database
+//supabse must be passed from somhwere where it is part of nuxt life cycle
 async function insertEdges(supabase, edges) {
   // Extract edge values and map them to an array of objects for insertion
   const edgesToInsert = Object.values(edges).map(edge => ({
     source: edge.source,
-    target: edge.target
+    target: edge.target,
+    graph_id: graph_id
   }));
   // Insert edges into the table
   const { data, error } = await supabase
@@ -37,4 +42,7 @@ async function insertEdges(supabase, edges) {
   }
 
 }
-export default insertNodes;
+
+
+//exports the functions so they can be used in other files
+export default {insertNodes, insertEdges}
