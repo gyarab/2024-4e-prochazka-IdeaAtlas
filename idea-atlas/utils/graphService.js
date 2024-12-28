@@ -5,10 +5,12 @@ const graph_id = "8bedcacd-0049-4f32-a1e5-4fe72a2080d2";
 //supabse must be passed from somhwere where it is part of nuxt life cycle
 async function insertNodes(supabase, nodes) {
   // Extract node values and map them to an array of objects for insertion
-  const nodesToInsert = Object.values(nodes).map(node => ({
+  const nodesToInsert = Object.entries(nodes).map(([key, node]) => ({
+    node_id_in_graph: key,
     name: node.name,
-    graph_id: graph_id
+    graph_id: graph_id,
   }));
+  
   const { error } = await supabase
     .from('nodes')
     .insert(nodesToInsert);
@@ -25,7 +27,8 @@ async function insertNodes(supabase, nodes) {
 //supabse must be passed from somhwere where it is part of nuxt life cycle
 async function insertEdges(supabase, edges) {
   // Extract edge values and map them to an array of objects for insertion
-  const edgesToInsert = Object.values(edges).map(edge => ({
+  const edgesToInsert = Object.entries(edges).map(([key, edge]) => ({
+    edge_id_in_graph: key,
     source: edge.source,
     target: edge.target,
     graph_id: graph_id
@@ -42,7 +45,28 @@ async function insertEdges(supabase, edges) {
   }
 
 }
+// Insert layouts into the 'layouts' table in the Supabase database
+//supabse must be passed from somhwere where it is part of nuxt life cycle
+async function insertLayouts(supabase, layouts) {
+  // Extract layout values and map them to an array of objects for insertion
+  const layoutsToInsert = Object.entries(layouts.nodes).map(([key, layout]) => ({
+    node_id_in_graph: key,
+    x: layout.x,
+    y: layout.y,
+    graph_id: graph_id,
+  }));
+
+  const { error } = await supabase
+    .from('layouts')
+    .insert(layoutsToInsert);
+
+  if (error) {
+    console.error('Error inserting layouts:', error);
+  } else {
+    console.log('Layouts inserted successfully');
+  }
+}
 
 
 //exports the functions so they can be used in other files
-export default {insertNodes, insertEdges}
+export default {insertNodes, insertEdges, insertLayouts}

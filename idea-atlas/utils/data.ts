@@ -1,11 +1,11 @@
 import type { Nodes, Edges, Layouts } from "v-network-graph"
 
 const nodes: Nodes = {
-  node1: { name: "Node 1" },
-  node2: { name: "Node 2" },
-  node3: { name: "Node 3" },
-  node4: { name: "Node 4" },
-  node5: { name: "Node 5" },
+  node1: { name: "rocket" },
+  node2: { name: "fuel" },
+  node3: { name: "space" },
+  node4: { name: "stars" },
+  node5: { name: "planets" },
 }
 
 const edges: Edges = {
