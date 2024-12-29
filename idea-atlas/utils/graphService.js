@@ -6,6 +6,7 @@ const graph_id = "8bedcacd-0049-4f32-a1e5-4fe72a2080d2";
 async function insertNodes(supabase, nodes) {
   // Extract node values and map them to an array of objects for insertion
   const nodesToInsert = Object.entries(nodes).map(([key, node]) => ({
+    id: graph_id + key,
     node_id_in_graph: key,
     name: node.name,
     graph_id: graph_id,
@@ -28,6 +29,7 @@ async function insertNodes(supabase, nodes) {
 async function insertEdges(supabase, edges) {
   // Extract edge values and map them to an array of objects for insertion
   const edgesToInsert = Object.entries(edges).map(([key, edge]) => ({
+    id: graph_id + key,
     edge_id_in_graph: key,
     source: edge.source,
     target: edge.target,
@@ -52,6 +54,7 @@ async function insertEdges(supabase, edges) {
 async function insertLayouts(supabase, layouts) {
   // Extract layout values and map them to an array of objects for insertion
   const layoutsToInsert = Object.entries(layouts.nodes).map(([key, layout]) => ({
+    id: graph_id + key,
     node_id_in_graph: key,
     x: layout.x,
     y: layout.y,
