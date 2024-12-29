@@ -1,9 +1,9 @@
 //TODO - hardcoded
 const graph_id = "8bedcacd-0049-4f32-a1e5-4fe72a2080d2";
 
-// Insert nodes into the 'nodes' table in the Supabase database
+// Upsert nodes into the 'nodes' table in the Supabase database
 //supabse must be passed from somhwere where it is part of nuxt life cycle
-async function insertNodes(supabase, nodes) {
+async function upsertNodes(supabase, nodes) {
   // Extract node values and map them to an array of objects for insertion
   const nodesToInsert = Object.entries(nodes).map(([key, node]) => ({
     id: graph_id + key,
@@ -24,9 +24,9 @@ async function insertNodes(supabase, nodes) {
 }
 
 
-// Insert edges into the 'edges' table in the Supabase database
+// Upsert edges into the 'edges' table in the Supabase database
 //supabse must be passed from somhwere where it is part of nuxt life cycle
-async function insertEdges(supabase, edges) {
+async function upsertEdges(supabase, edges) {
   // Extract edge values and map them to an array of objects for insertion
   const edgesToInsert = Object.entries(edges).map(([key, edge]) => ({
     id: graph_id + key,
@@ -49,9 +49,9 @@ async function insertEdges(supabase, edges) {
 }
 
 
-// Insert layouts into the 'layouts' table in the Supabase database
+// Upsert layouts into the 'layouts' table in the Supabase database
 //supabse must be passed from somhwere where it is part of nuxt life cycle
-async function insertLayouts(supabase, layouts) {
+async function upsertLayouts(supabase, layouts) {
   // Extract layout values and map them to an array of objects for insertion
   const layoutsToInsert = Object.entries(layouts.nodes).map(([key, layout]) => ({
     id: graph_id + key,
@@ -70,6 +70,12 @@ async function insertLayouts(supabase, layouts) {
   } else {
     console.log('Layouts inserted successfully');
   }
+}
+//upserts whole graph data
+async function upsertGraphData(supabase, data){
+  upsertNodes(supabase, data.nodes);
+  upsertEdges(supabase, data.edges);
+  upsertLayouts(supabase, data.layouts);
 }
 
 
@@ -144,4 +150,4 @@ async function fetchGraph(supabase, graph_id) {
 
 //TODO insert function for whole graph
 //exports the functions so they can be used in other files
-export default {insertNodes, insertEdges, insertLayouts, fetchGraph}
+export default {upsertGraphData, fetchGraph}
