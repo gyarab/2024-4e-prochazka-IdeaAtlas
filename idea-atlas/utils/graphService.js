@@ -36,14 +36,14 @@ async function insertEdges(supabase, edges) {
     graph_id: graph_id
   }));
   // Insert edges into the table
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from('edges')
     .upsert(edgesToInsert);
 
   if (error) {
     console.error('Error inserting edges:', error);
   } else {
-    console.log('Edges inserted successfully:', data);
+    console.log('Edges inserted successfully');
   }
 
 }
