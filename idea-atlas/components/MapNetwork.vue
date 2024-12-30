@@ -15,28 +15,37 @@ const data = reactive({
 });
 const loading = ref(true);
 
-const graph = ref<vNG.Instance>()
+// Reference to the graph instance
+const graph = ref<vNG.Instance>();
+
+// State to control the visibility of the node input dialog
 const showNodeInput = ref(false);
+
+// Position where the new node will be added
 const newNodePosition = ref({ x: 0, y: 0 });
 
 onMounted(async () => {
   
   
+  // Object to store current mouse coordinates
   let mousePosition = { x: 0, y: 0 };
 
-  // Track mouse position on mousemove
+  // Event listener to track mouse position in real-time
+  // Updates mousePosition whenever the mouse moves
   document.addEventListener('mousemove', (event) => {
     mousePosition = { x: event.offsetX, y: event.offsetY };
   });
 
-  // Listen for keydown event
+  // Event listener for keyboard input
+  // Specifically watches for 'q' key press to trigger node creation
   document.addEventListener('keydown', (event) => {
     if (event.key === 'q' || event.key === 'Q') {
       console.log("Q key pressed");
-      // check if graph exists
+      // Validate that graph component is initialized
       if (!graph.value) return;
-      // Use the current mouse position
+      // Set the position for the new node based on current mouse location
       newNodePosition.value = mousePosition;
+      // Show the node input dialog
       showNodeInput.value = true;
     }
   });
@@ -111,6 +120,9 @@ const configs = reactive(
     :layouts="data.layouts"
     :configs="configs"/>
   </client-only>
+  <!-- Node input dialog component for creating new nodes -->
+  <!-- Shows when showNodeInput is true, positioned at newNodePosition -->
+  <!-- Emits 'close' event to hide dialog and 'submit' event with node name -->
   <NodeInputDialog
     :is-open="showNodeInput"
     :position="newNodePosition"
