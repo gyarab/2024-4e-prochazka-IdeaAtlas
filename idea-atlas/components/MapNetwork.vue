@@ -13,11 +13,15 @@ const data = reactive({
   edges: {} as Record<string, { source: string; target: string }>,
   layouts: { nodes: {} } as { nodes: Record<string, { x: number; y: number }> },
 });
+
+
 const loading = ref(true);
 
 // Reference to the graph instance
 const graph = ref<vNG.Instance>();
 
+// State to store IDs of selected nodes
+const selectedNodes = ref<string[]>([])
 // State to control the visibility of the node input dialog
 const showNodeInput = ref(false);
 
@@ -106,6 +110,9 @@ const configs = reactive(
       minZoomLevel: 0.1,
       maxZoomLevel: 16,
     },
+    node: {
+      selectable: true,
+    }
   })
 );
 </script>
@@ -119,12 +126,15 @@ const configs = reactive(
   </div>
   <client-only>
     <div v-if="loading" class="loading-indicator">Loading...</div>
+    <!-- v-model creates 2 way binding -->
     <v-network-graph v-else class="fixed inset-0 w-screen h-screen"
-    ref="graph" 
-    :nodes="data.nodes" qq
+    ref="graph"
+    v-model:selected-nodes="selectedNodes"
+    :nodes="data.nodes"
     :edges="data.edges"
     :layouts="data.layouts"
-    :configs="configs"/>
+    :configs="configs"
+    />
   </client-only>
   <!-- Node input dialog component for creating new nodes -->
   <!-- Shows when showNodeInput is true, positioned at newNodePosition -->
