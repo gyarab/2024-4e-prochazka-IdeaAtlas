@@ -4,6 +4,7 @@ import { reactive, ref, onMounted, onUnmounted } from "vue"; // Added onUnmounte
 import service from "../utils/graphService";
 import manager from "../utils/graphManager";
 import NodeInputDialog from './NodeInputDialog.vue';
+import { keyboardShortcuts } from '../config/keyboardShortcuts';
 
 const supabase = useSupabaseClient();
 
@@ -24,8 +25,6 @@ const showNodeInput = ref(false);
 const newNodePosition = ref({ x: 0, y: 0 });
 
 onMounted(async () => {
-  
-  
   // Object to store current mouse coordinates
   let mousePosition = { x: 0, y: 0 };
 
@@ -42,8 +41,8 @@ onMounted(async () => {
     // Prevents creating a new node while the dialog is open
     if (showNodeInput.value) return;
     
-    if (event.code === 'Space') {
-      console.log("Space key pressed");
+    if (event.code === keyboardShortcuts.addNode.key) {
+      console.log(`${keyboardShortcuts.addNode.description}`);
       // Validate that graph component is initialized
       if (!graph.value) return;
       // Set the position for the new node based on current mouse location
@@ -51,7 +50,9 @@ onMounted(async () => {
       // Show the node input dialog
       showNodeInput.value = true;
       // Prevent default space behavior (like scrolling)
-      event.preventDefault();
+      if (keyboardShortcuts.addNode.preventDefault) {
+        event.preventDefault();
+      }
     }
   });
  

@@ -137,7 +137,7 @@ function reconstructData(nodesData, edgesData, layoutsData) {
   return { nodes, edges, layouts };
 }
 
-
+// This function fetches all the data for certain graph from the database and reconstructs it into the graph data structure
 async function fetchGraph(supabase, graph_id) {
   try {
     const { nodesData, edgesData, layoutsData } = await fetchData(supabase, graph_id);
