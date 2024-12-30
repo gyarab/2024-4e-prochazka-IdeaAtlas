@@ -1,5 +1,12 @@
+//this file is responsible for fetching and upserting graph data to the database
+
 //TODO - hardcoded
 const graph_id = "8bedcacd-0049-4f32-a1e5-4fe72a2080d2";
+
+
+//exports the functions so they can be used in other files
+export default {upsertGraphData, fetchGraph}
+
 
 // Upsert nodes into the 'nodes' table in the Supabase database
 //supabse must be passed from somhwere where it is part of nuxt life cycle
@@ -144,10 +151,3 @@ async function fetchGraph(supabase, graph_id) {
     console.error('Error fetching or reconstructing data:', error);
   }
 }
-
-
-
-
-//TODO insert function for whole graph
-//exports the functions so they can be used in other files
-export default {upsertGraphData, fetchGraph}

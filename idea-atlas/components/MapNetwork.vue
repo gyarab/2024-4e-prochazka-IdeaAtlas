@@ -68,7 +68,7 @@ const configs = reactive(
 
 <template>
   <div>
-        <button @click="manager.addNewNode(data.nodes, test_name)">add new node</button>
+        <button @click="manager.addNewNode(data, test_name)">add new node</button>
     </div>
   <div>
         <button @click="service.upsertGraphData(supabase, data)">Upsert whole graph</button>
