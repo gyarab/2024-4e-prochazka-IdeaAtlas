@@ -17,8 +17,10 @@ const loading = ref(true);
 
 // Handler function for keypress
 const handleKeyPress = (event: KeyboardEvent) => {
+  // === values and types are equal
   if (event.key === 'q') {
-    manager.addNewNode(data, test_name);
+    // TODO hard coded axis values
+    manager.addNewNode(data, test_name, 0, 0);
   }
 };
 
