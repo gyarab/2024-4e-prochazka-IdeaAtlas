@@ -11,7 +11,7 @@ function addNewNode(data, newName) {
     
     // Add the new node
     data.nodes[nextNodeId] = { name: newName };
-    
+    // Adds the new node to the layouts so its position is tracked
     data.layouts.nodes[nextNodeId] = { x: 0, y: 0 };
 
 
