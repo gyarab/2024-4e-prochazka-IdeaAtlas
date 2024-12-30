@@ -46,7 +46,6 @@ onMounted(async () => {
     if (showNodeInput.value) return;
     
     if (event.code === keyboardShortcuts.addNode.key) {
-      console.log(`${keyboardShortcuts.addNode.description}`);
       // Validate that graph component is initialized
       if (!graph.value) return;
       // Set the position for the new node based on current mouse location
