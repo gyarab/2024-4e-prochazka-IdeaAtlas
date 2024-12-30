@@ -14,7 +14,6 @@ const inputRef = ref<HTMLInputElement | null>(null);
 watch(() => props.isOpen, (newValue) => {
   if (newValue) {
     nodeName.value = '';
-    // Focus the input on next tick to ensure the element exists
     setTimeout(() => {
       inputRef.value?.focus();
     }, 0);
@@ -28,6 +27,23 @@ const handleSubmit = (e: Event) => {
     nodeName.value = '';
   }
 };
+
+const handleKeydown = (e: KeyboardEvent) => {
+  if (e.key === 'Escape') {
+    e.preventDefault();
+    emit('close');
+  }
+};
+
+// Add global event listener for Escape key
+onMounted(() => {
+  document.addEventListener('keydown', handleKeydown);
+});
+
+// Clean up event listener
+onUnmounted(() => {
+  document.removeEventListener('keydown', handleKeydown);
+});
 </script>
 
 <template>
@@ -49,7 +65,6 @@ const handleSubmit = (e: Event) => {
             type="text"
             placeholder="Enter node name"
             class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-            @keydown.esc="emit('close')"
           />
         </form>
       </div>
