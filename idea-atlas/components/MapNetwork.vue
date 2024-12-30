@@ -15,6 +15,21 @@ const data = reactive({
 });
 const loading = ref(true);
 
+const graph = ref<vNG.Instance>()
+
+const eventHandlers: vNG.EventHandlers = {
+  "view:click": ({ event }) => {
+    console.log("left click 1")
+    if (!graph.value) return
+    console.log("left click 2")
+    const point = { x: event.offsetX, y: event.offsetY }
+    // translate coordinates: DOM -> SVG
+    const svgPoint = graph.value.translateFromDomToSvgCoordinates(point)
+
+    // add node and its position
+    manager.addNewNode(data, test_name, svgPoint.x, svgPoint.y);
+  },
+}
 // Handler function for keypress
 const handleKeyPress = (event: KeyboardEvent) => {
   // === values and types are equal
@@ -91,10 +106,12 @@ const configs = reactive(
     <v-network-graph
       v-else
       class="fixed inset-0 w-screen h-screen"
+      ref="graph"
       :nodes="data.nodes"
       :edges="data.edges"
       :layouts="data.layouts"
       :configs="configs"
+      :event-handlers="eventHandlers"
     />
   </client-only>
 </template>
