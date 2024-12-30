@@ -5,7 +5,6 @@ import service from "../utils/graphService";
 import manager from "../utils/graphManager";
 import NodeInputDialog from './NodeInputDialog.vue';
 
-const test_name = "test database new node "
 const supabase = useSupabaseClient();
 
 const data = reactive({
