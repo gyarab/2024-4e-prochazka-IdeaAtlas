@@ -3,7 +3,7 @@ import * as vNG from "v-network-graph";
 import { reactive, ref, onMounted, onUnmounted } from "vue"; // Added onUnmounted
 import service from "../utils/graphService";
 import manager from "../utils/graphManager";
-
+import NodeInputDialog from './NodeInputDialog.vue';
 
 const test_name = "test database new node "
 const supabase = useSupabaseClient();
@@ -16,7 +16,8 @@ const data = reactive({
 const loading = ref(true);
 
 const graph = ref<vNG.Instance>()
-
+const showNodeInput = ref(false);
+const newNodePosition = ref({ x: 0, y: 0 });
 
 onMounted(async () => {
   
@@ -36,9 +37,10 @@ onMounted(async () => {
       if (!graph.value) return;
       // Use the current mouse position
       const svgPoint = graph.value.translateFromDomToSvgCoordinates(mousePosition);
-
+      newNodePosition.value = mousePosition;
       // Add node at the current mouse position
       manager.addNewNode(data, test_name, svgPoint.x, svgPoint.y);
+      showNodeInput.value = true;
     }
   });
 
@@ -60,6 +62,14 @@ onMounted(async () => {
   }
 });
 
+// Add handler for node name submission
+const handleNodeNameSubmit = (name: string) => {
+  const svgPoint = graph.value?.translateFromDomToSvgCoordinates(newNodePosition.value);
+  if (svgPoint) {
+    manager.addNewNode(data, name, svgPoint.x, svgPoint.y);
+  }
+  showNodeInput.value = false;
+};
 
 const configs = reactive(
   vNG.defineConfigs({
@@ -102,11 +112,17 @@ const configs = reactive(
     <div v-if="loading" class="loading-indicator">Loading...</div>
     <v-network-graph v-else class="fixed inset-0 w-screen h-screen"
     ref="graph" 
-    :nodes="data.nodes" 
+    :nodes="data.nodes" qq
     :edges="data.edges"
     :layouts="data.layouts"
     :configs="configs"/>
   </client-only>
+  <NodeInputDialog
+    :is-open="showNodeInput"
+    :position="newNodePosition"
+    @close="showNodeInput = false"
+    @submit="handleNodeNameSubmit"
+  />
 </template>
 
 <style>
