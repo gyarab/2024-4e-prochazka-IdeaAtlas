@@ -17,31 +17,35 @@ const loading = ref(true);
 
 const graph = ref<vNG.Instance>()
 
-const eventHandlers: vNG.EventHandlers = {
-  "view:click": ({ event }) => {
-    console.log("left click 1")
-    if (!graph.value) return
-    console.log("left click 2")
-    const point = { x: event.offsetX, y: event.offsetY }
-    // translate coordinates: DOM -> SVG
-    const svgPoint = graph.value.translateFromDomToSvgCoordinates(point)
-
-    // add node and its position
-    manager.addNewNode(data, test_name, svgPoint.x, svgPoint.y);
-  },
-}
-// Handler function for keypress
-const handleKeyPress = (event: KeyboardEvent) => {
-  // === values and types are equal
-  if (event.key === 'q') {
-    // TODO hard coded axis values
-    manager.addNewNode(data, test_name, 0, 0);
-  }
-};
 
 onMounted(async () => {
+  
+  
+  let mousePosition = { x: 0, y: 0 };
+
+  // Track mouse position on mousemove
+  document.addEventListener('mousemove', (event) => {
+    mousePosition = { x: event.offsetX, y: event.offsetY };
+  });
+
+  // Listen for keydown event
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'q' || event.key === 'Q') {
+      console.log("Q key pressed");
+      // check if graph exists
+      if (!graph.value) return;
+      // Use the current mouse position
+      const svgPoint = graph.value.translateFromDomToSvgCoordinates(mousePosition);
+
+      // Add node at the current mouse position
+      manager.addNewNode(data, test_name, svgPoint.x, svgPoint.y);
+    }
+  });
+
+  //TODO
+  //Fetches grpah data from the database
   try {
-    const fetchedData = await service.fetchGraph(supabase,"8bedcacd-0049-4f32-a1e5-4fe72a2080d2");
+    const fetchedData = await service.fetchGraph(supabase, "8bedcacd-0049-4f32-a1e5-4fe72a2080d2");
     if (fetchedData) {
       data.nodes = fetchedData.nodes || [];
       data.edges = fetchedData.edges || [];
@@ -54,15 +58,8 @@ onMounted(async () => {
   } finally {
     loading.value = false;
   }
-
-  // Add the event listener when component is mounted
-  window.addEventListener('keypress', handleKeyPress);
 });
 
-// Remove the event listener when component is unmounted
-onUnmounted(() => {
-  window.removeEventListener('keypress', handleKeyPress);
-});
 
 const configs = reactive(
   vNG.defineConfigs({
@@ -103,16 +100,12 @@ const configs = reactive(
   </div>
   <client-only>
     <div v-if="loading" class="loading-indicator">Loading...</div>
-    <v-network-graph
-      v-else
-      class="fixed inset-0 w-screen h-screen"
-      ref="graph"
-      :nodes="data.nodes"
-      :edges="data.edges"
-      :layouts="data.layouts"
-      :configs="configs"
-      :event-handlers="eventHandlers"
-    />
+    <v-network-graph v-else class="fixed inset-0 w-screen h-screen"
+    ref="graph" 
+    :nodes="data.nodes" 
+    :edges="data.edges"
+    :layouts="data.layouts"
+    :configs="configs"/>
   </client-only>
 </template>
 
