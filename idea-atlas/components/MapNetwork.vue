@@ -1,29 +1,30 @@
 <script setup lang="ts">
 import * as vNG from "v-network-graph";
-import { reactive, ref, onMounted } from "vue";
+import { reactive, ref, onMounted, onUnmounted } from "vue"; // Added onUnmounted
 import service from "../utils/graphService";
-import manager  from "../utils/graphManager";
+import manager from "../utils/graphManager";
 
 
 const test_name = "test database new node "
-
 const supabase = useSupabaseClient();
 
-// Reactive state for graph data
 const data = reactive({
-  nodes: {} as Record<string, { name: string }>, // Using  Nodes structure
-  edges: {} as Record<string, { source: string; target: string }>, // Using  Edges structure
-  layouts: { nodes: {} } as { nodes: Record<string, { x: number; y: number }> }, // Using Layouts structure
+  nodes: {} as Record<string, { name: string }>,
+  edges: {} as Record<string, { source: string; target: string }>,
+  layouts: { nodes: {} } as { nodes: Record<string, { x: number; y: number }> },
 });
+const loading = ref(true);
 
-const loading = ref(true); // Loading state
-
+// Handler function for keypress
+const handleKeyPress = (event: KeyboardEvent) => {
+  if (event.key === 'q') {
+    manager.addNewNode(data, test_name);
+  }
+};
 
 onMounted(async () => {
   try {
-    //TODO hardcoded graph id
     const fetchedData = await service.fetchGraph(supabase,"8bedcacd-0049-4f32-a1e5-4fe72a2080d2");
-
     if (fetchedData) {
       data.nodes = fetchedData.nodes || [];
       data.edges = fetchedData.edges || [];
@@ -34,11 +35,18 @@ onMounted(async () => {
   } catch (error) {
     console.error("Error fetching graph data:", error);
   } finally {
-    loading.value = false; // Set loading to false after data fetch
+    loading.value = false;
   }
+
+  // Add the event listener when component is mounted
+  window.addEventListener('keypress', handleKeyPress);
 });
 
-// Define the configurations
+// Remove the event listener when component is unmounted
+onUnmounted(() => {
+  window.removeEventListener('keypress', handleKeyPress);
+});
+
 const configs = reactive(
   vNG.defineConfigs({
     view: {
@@ -58,7 +66,7 @@ const configs = reactive(
         },
       },
       layoutHandler: new vNG.GridLayout({ grid: 10 }),
-      scalingObjects: true, // Enable scaling objects, so the nodes and edges will be scaled when zooming
+      scalingObjects: true,
       minZoomLevel: 0.1,
       maxZoomLevel: 16,
     },
@@ -68,14 +76,14 @@ const configs = reactive(
 
 <template>
   <div>
-        <button @click="manager.addNewNode(data, test_name)">add new node</button>
-    </div>
+    <button @click="manager.addNewNode(data, test_name)">add new node</button>
+  </div>
   <div>
-        <button @click="service.upsertGraphData(supabase, data)">Upsert whole graph</button>
-    </div>
+    <button @click="service.upsertGraphData(supabase, data)">Upsert whole graph</button>
+  </div>
   <div>
-        <button @click="console.log(data)">console log data</button>
-    </div>
+    <button @click="console.log(data)">console log data</button>
+  </div>
   <client-only>
     <div v-if="loading" class="loading-indicator">Loading...</div>
     <v-network-graph
