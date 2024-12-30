@@ -36,10 +36,7 @@ onMounted(async () => {
       // check if graph exists
       if (!graph.value) return;
       // Use the current mouse position
-      const svgPoint = graph.value.translateFromDomToSvgCoordinates(mousePosition);
       newNodePosition.value = mousePosition;
-      // Add node at the current mouse position
-      manager.addNewNode(data, test_name, svgPoint.x, svgPoint.y);
       showNodeInput.value = true;
     }
   });
