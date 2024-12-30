@@ -11,7 +11,15 @@ function addNewNode(data, newName) {
     
     // Add the new node
     data.nodes[nextNodeId] = { name: newName };
+    
+    data.layouts.nodes[nextNodeId] = { x: 0, y: 0 };
+
+
 }
+
+
+
+
 
 function findCurrentMaxNodeId(data) {
     return Math.max(
