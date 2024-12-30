@@ -38,17 +38,23 @@ onMounted(async () => {
   // Event listener for keyboard input
   // Specifically watches for 'q' key press to trigger node creation
   document.addEventListener('keydown', (event) => {
-    if (event.key === 'q' || event.key === 'Q') {
-      console.log("Q key pressed");
+    // Return if the node input dialog is already open
+    // Prevents creating a new node while the dialog is open
+    if (showNodeInput.value) return;
+    
+    if (event.code === 'Space') {
+      console.log("Space key pressed");
       // Validate that graph component is initialized
       if (!graph.value) return;
       // Set the position for the new node based on current mouse location
       newNodePosition.value = mousePosition;
       // Show the node input dialog
       showNodeInput.value = true;
+      // Prevent default space behavior (like scrolling)
+      event.preventDefault();
     }
   });
-
+ 
   //TODO
   //Fetches grpah data from the database
   try {
