@@ -2,6 +2,10 @@
 import * as vNG from "v-network-graph";
 import { reactive, ref, onMounted } from "vue";
 import service from "../utils/graphService";
+import manager  from "../utils/graphManager";
+
+
+const test_name = "test database new node "
 
 const supabase = useSupabaseClient();
 
@@ -63,6 +67,9 @@ const configs = reactive(
 </script>
 
 <template>
+  <div>
+        <button @click="manager.addNewNode(data.nodes, test_name)">add new node</button>
+    </div>
   <div>
         <button @click="service.upsertGraphData(supabase, data)">Upsert whole graph</button>
     </div>
