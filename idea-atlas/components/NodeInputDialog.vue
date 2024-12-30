@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue';
+import { ref, watch, onMounted, onUnmounted } from 'vue';
 
 const props = defineProps<{
   isOpen: boolean;
@@ -35,12 +35,10 @@ const handleKeydown = (e: KeyboardEvent) => {
   }
 };
 
-// Add global event listener for Escape key
 onMounted(() => {
   document.addEventListener('keydown', handleKeydown);
 });
 
-// Clean up event listener
 onUnmounted(() => {
   document.removeEventListener('keydown', handleKeydown);
 });
@@ -49,15 +47,14 @@ onUnmounted(() => {
 <template>
   <Teleport to="body">
     <div v-if="isOpen" 
-         class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
-         @click="emit('close')">
-      <div class="absolute bg-white rounded-lg shadow-lg p-4"
+         class="fixed inset-0 pointer-events-none">
+      <div class="absolute bg-white rounded-lg shadow-xl p-4 pointer-events-auto border-2 border-blue-200"
            :style="{
              left: `${position.x}px`,
              top: `${position.y}px`,
-             transform: 'translate(-50%, -50%)'
-           }"
-           @click.stop>
+             transform: 'translate(-50%, -50%)',
+             zIndex: 1000
+           }">
         <form @submit="handleSubmit" class="w-64">
           <input
             ref="inputRef"
