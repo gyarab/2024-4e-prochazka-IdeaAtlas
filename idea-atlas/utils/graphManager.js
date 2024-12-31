@@ -17,14 +17,14 @@ function addNewNode(data, newName, xMousePos, yMousePos) {
 }
 //Deletes multiple nodes from the graph
 function deleteNodes(data, nodesToDelete) {
-
+    
     const nodes = data.nodes;
     // Nodes which will remain after deletion 
     const remainingNodes = {};
 
-    // Spares only the nodes which are not contained in the nodesToDelete Object
+    // Spares only the nodes which are not contained in the nodesToDelete array
     for (const [key, value] of Object.entries(nodes)) {
-        if (!nodesToDelete.has(key)) {
+        if (!nodesToDelete.includes(key)) {
             remainingNodes[key] = value;
         }
     }
@@ -36,19 +36,17 @@ function deleteNodes(data, nodesToDelete) {
     const edges = data.edges;
     const remainingEdges = {};
     for (const [key, edge] of Object.entries(edges)) {
-        // Check for the source and target nodes in the nodesToDelete Object
-        if (!nodesToDelete.has(edge.source) && !nodesToDelete.has(edge.target)) {
+        // Check for the source and target nodes in the nodesToDelete array
+        if (!nodesToDelete.includes(edge.source) && !nodesToDelete.includes(edge.target)) {
             remainingEdges[key] = edge;
         }
     }
     data.edges = remainingEdges;
 
     // Clean up layouts
-    // of - iterates over the keys of the nodesToDelete Object
     for (const nodeId of nodesToDelete) {
         delete data.layouts.nodes[nodeId];
     }
-
 }
 
 

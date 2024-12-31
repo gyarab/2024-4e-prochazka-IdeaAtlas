@@ -38,8 +38,17 @@ onMounted(async () => {
     mousePosition = { x: event.offsetX, y: event.offsetY };
   });
 
+  // Event listener for backspace to delete selected nodes
+  document.addEventListener('keydown', (event) => {
+    if (event.key === keyboardShortcuts.deleteNode.key && selectedNodes.value.length > 0) {
+      if (keyboardShortcuts.deleteNode.preventDefault) {
+        event.preventDefault();
+      }
+      manager.deleteNodes(data, selectedNodes.value);
+    }
+  });
+  
   // Event listener for keyboard input
-  // Specifically watches for 'q' key press to trigger node creation
   document.addEventListener('keydown', (event) => {
     // Return if the node input dialog is already open
     // Prevents creating a new node while the dialog is open
@@ -58,7 +67,13 @@ onMounted(async () => {
       }
     }
   });
- 
+
+// Remove event listeners when component is unmounted
+onUnmounted(() => {
+  document.removeEventListener('mousemove', (event) => {});
+  document.removeEventListener('keydown', (event) => {});
+  document.removeEventListener('keydown', (event) => {});
+});
   //TODO
   //Fetches grpah data from the database
   try {
@@ -121,7 +136,7 @@ const configs = reactive(
     <button @click="service.upsertGraphData(supabase, data)">Upsert whole graph</button>
   </div>
   <div>
-    <button @click="console.log(data)">console log data</button>
+    <button @click="console.log(selectedNodes)">console log data</button>
   </div>
   <client-only>
     <div v-if="loading" class="loading-indicator">Loading...</div>
