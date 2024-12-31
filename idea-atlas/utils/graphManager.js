@@ -32,7 +32,23 @@ function deleteNodes(data, nodesToDelete) {
     // Updates the nodes object
     data.nodes = remainingNodes;
 
-    //TODO - remove edges that are connected to the deleted nodes + layouts
+    // Removes the edges which contain any of the nodes to be deleted
+    const edges = data.edges;
+    const remainingEdges = {};
+    for (const [key, edge] of Object.entries(edges)) {
+        // Check for the source and target nodes in the nodesToDelete Object
+        if (!nodesToDelete.has(edge.source) && !nodesToDelete.has(edge.target)) {
+            remainingEdges[key] = edge;
+        }
+    }
+    data.edges = remainingEdges;
+
+    // Clean up layouts
+    // of - iterates over the keys of the nodesToDelete Object
+    for (const nodeId of nodesToDelete) {
+        delete data.layouts.nodes[nodeId];
+    }
+
 }
 
 
