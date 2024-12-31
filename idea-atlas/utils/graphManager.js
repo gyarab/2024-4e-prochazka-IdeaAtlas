@@ -1,5 +1,5 @@
 // This file contains the functions that are used to manage the graph data structure
-export default { addNewNode, deleteNodes };
+export default { addNewNode, deleteNodes, addEdges };
 
 // adds a new node to the graph
 function addNewNode(data, newName, xMousePos, yMousePos) {
@@ -17,7 +17,7 @@ function addNewNode(data, newName, xMousePos, yMousePos) {
 }
 //Deletes multiple nodes from the graph
 function deleteNodes(data, nodesToDelete) {
-    
+
     const nodes = data.nodes;
     // Nodes which will remain after deletion 
     const remainingNodes = {};
@@ -48,13 +48,35 @@ function deleteNodes(data, nodesToDelete) {
         delete data.layouts.nodes[nodeId];
     }
 }
+// Function which will add to edges:
+// With source as the first node in the array
+// And target as all the other nodes in the array
+// TODO - check if the edge already exists
+function addEdges(data, selectedNodes) {
+    // Return if selected nodes are less than 2 - cannot create an edge
+    if (selectedNodes.length < 2) return;
+
+    const source = selectedNodes[0];
+    const maxEdgeId = findCurrentMaxEdgeId(data);
 
 
+    for (let i = 1; i < selectedNodes.length; i++) {
+        const target = selectedNodes[i];
+        const nextEdgeId = `edge${maxEdgeId + i}`;
+        data.edges[nextEdgeId] = { source, target };
+    }
+}
 
 
 
 function findCurrentMaxNodeId(data) {
     return Math.max(
-        ...Object.keys(data.nodes).map(key => parseInt(key.replace("node", ""), 10))
+        ...Object.keys(data.nodes).map(key => parseInt(key.replace("node", ""), 10)) //10 = decimal
+    );
+}
+function findCurrentMaxEdgeId(data) {
+    return Math.max(
+        ...Object.keys(data.edges || {}).map(key => parseInt(key.replace("edge", ""), 10)),
+        0
     );
 }

@@ -37,7 +37,15 @@ onMounted(async () => {
   document.addEventListener('mousemove', (event) => {
     mousePosition = { x: event.offsetX, y: event.offsetY };
   });
-
+  // Event listener for Enter key to create edges between selected nodes
+  document.addEventListener('keydown', (event) => {
+    if (event.key === keyboardShortcuts.addEdge.key && selectedNodes.value.length >= 2) {
+      if (keyboardShortcuts.addEdge.preventDefault) {
+        event.preventDefault();
+      }
+      manager.addEdges(data, selectedNodes.value);
+    }
+  });
   // Event listener for backspace to delete selected nodes
   document.addEventListener('keydown', (event) => {
     if (event.key === keyboardShortcuts.deleteNode.key && selectedNodes.value.length > 0) {
