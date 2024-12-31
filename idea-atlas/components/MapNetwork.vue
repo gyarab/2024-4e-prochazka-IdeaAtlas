@@ -24,7 +24,7 @@ const graph = ref<vNG.Instance>();
 const selectedNodes = ref<string[]>([])
 // State to control the visibility of the node input dialog
 const showNodeInput = ref(false);
-
+const showNodeEdit = ref(false);
 // Position where the new node will be added
 const newNodePosition = ref({ x: 0, y: 0 });
 
@@ -37,30 +37,14 @@ onMounted(async () => {
   document.addEventListener('mousemove', (event) => {
     mousePosition = { x: event.offsetX, y: event.offsetY };
   });
-  // Event listener for Enter key to create edges between selected nodes
-  document.addEventListener('keydown', (event) => {
-    if (event.key === keyboardShortcuts.addEdge.key && selectedNodes.value.length >= 2) {
-      if (keyboardShortcuts.addEdge.preventDefault) {
-        event.preventDefault();
-      }
-      manager.addEdges(data, selectedNodes.value);
-    }
-  });
-  // Event listener for backspace to delete selected nodes
-  document.addEventListener('keydown', (event) => {
-    if (event.key === keyboardShortcuts.deleteNode.key && selectedNodes.value.length > 0) {
-      if (keyboardShortcuts.deleteNode.preventDefault) {
-        event.preventDefault();
-      }
-      manager.deleteNodes(data, selectedNodes.value);
-    }
-  });
   
-  // Event listener for keyboard input
+  
+  // Event listener for Space key to create new nodes
   document.addEventListener('keydown', (event) => {
     // Return if the node input dialog is already open
     // Prevents creating a new node while the dialog is open
     if (showNodeInput.value) return;
+    if (showNodeEdit.value) return;
     
     if (event.code === keyboardShortcuts.addNode.key) {
       // Validate that graph component is initialized
@@ -76,13 +60,57 @@ onMounted(async () => {
     }
   });
 
+  // Event listener for Enter key to create edges b
+  // etween selected nodes
+  document.addEventListener('keydown', (event) => {
+    // Return if the node input dialog is already open
+    // Prevents creating a new node while the dialog is open
+    if (showNodeInput.value) return;
+    if (showNodeEdit.value) return;
+    if (event.key === keyboardShortcuts.addEdge.key && selectedNodes.value.length >= 2) {
+      if (keyboardShortcuts.addEdge.preventDefault) {
+        event.preventDefault();
+      }
+      manager.addEdges(data, selectedNodes.value);
+    }
+  });
+  // Event listener for backspace to delete selected nodes
+  document.addEventListener('keydown', (event) => {
+    // Return if the node input dialog is already open
+    // Prevents creating a new node while the dialog is open
+    if (showNodeInput.value) return;
+    if (showNodeEdit.value) return;
+    if (event.key === keyboardShortcuts.deleteNode.key && selectedNodes.value.length > 0) {
+      if (keyboardShortcuts.deleteNode.preventDefault) {
+        event.preventDefault();
+      }
+      manager.deleteNodes(data, selectedNodes.value);
+    }
+  });
+  // Event listener for TODO key to edit selected nodes
+  document.addEventListener('keydown', (event) => {
+    // Return if the node input dialog is already open
+    // Prevents creating a new node while the dialog is open
+    if (showNodeInput.value) return;
+    if (showNodeEdit.value) return;
+    // Check if the edit node shortcut is pressed and at least one node is selected
+    if (event.key === keyboardShortcuts.editNode.key && selectedNodes.value.length > 0) {
+      // Prevent default behavior of the key press
+      if (keyboardShortcuts.editNode.preventDefault) {
+        event.preventDefault();
+      }
+      // Show the node edit dialog
+      showNodeEdit.value = true;
+    }
+  });
+
 // Remove event listeners when component is unmounted
 onUnmounted(() => {
   document.removeEventListener('mousemove', (event) => {});
   document.removeEventListener('keydown', (event) => {});
   document.removeEventListener('keydown', (event) => {});
 });
-  //TODO
+  //TOdo fetch the correct graph by id
   //Fetches grpah data from the database
   try {
     const fetchedData = await service.fetchGraph(supabase, "8bedcacd-0049-4f32-a1e5-4fe72a2080d2");
@@ -105,6 +133,14 @@ const handleNodeNameSubmit = (name: string) => {
   const svgPoint = graph.value?.translateFromDomToSvgCoordinates(newNodePosition.value);
   if (svgPoint) {
     manager.addNewNode(data, name, svgPoint.x, svgPoint.y);
+  }
+  showNodeInput.value = false;
+};
+const handleNodeNameEdit = (newName: string) => {
+  // TODO this might not have to be here
+  const svgPoint = graph.value?.translateFromDomToSvgCoordinates(newNodePosition.value);
+  if (svgPoint) {
+    manager.editNodes(data, selectedNodes.value, newName);
   }
   showNodeInput.value = false;
 };
@@ -166,6 +202,14 @@ const configs = reactive(
     :position="newNodePosition"
     @close="showNodeInput = false"
     @submit="handleNodeNameSubmit"
+  />
+  <!-- TODO find a position of first selected node -->
+  <NodeEditDialog
+    :is-open="showNodeEdit"
+    
+    :position="{ x: 500, y: 500 }"
+    @close="showNodeEdit = false"
+    @submit="handleNodeNameEdit"
   />
 </template>
 

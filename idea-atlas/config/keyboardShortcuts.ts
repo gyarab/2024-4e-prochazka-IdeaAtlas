@@ -8,6 +8,7 @@ export interface KeyboardShortcutsConfig {
     addNode: KeyboardShortcut;
     deleteNode: KeyboardShortcut;
     addEdge: KeyboardShortcut;
+    editNode: KeyboardShortcut;
     // Add more shortcut configurations here as needed
 }
 
@@ -20,11 +21,16 @@ export const keyboardShortcuts: KeyboardShortcutsConfig = {
     deleteNode: {
         key: 'Backspace',
         description: 'Delete selected node(s)',
-        preventDefault: true
+        preventDefault: false
     },
     addEdge: {
         key: 'Enter',
         description: 'Add a new edge',
+        preventDefault: false
+    },
+    editNode: {
+        key: 'q',
+        description: 'Rename selected node(s)',
         preventDefault: true
     },
     // Add more shortcuts here as needed
