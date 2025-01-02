@@ -12,6 +12,8 @@ export interface KeyboardShortcutsConfig {
     deleteNode: KeyboardShortcut;
     addEdge: KeyboardShortcut;
     editNode: KeyboardShortcut;
+    deselect: KeyboardShortcut;
+    
     // Add more shortcut configurations here as needed
 }
 // What is code ?
@@ -42,6 +44,12 @@ export const keyboardShortcuts: KeyboardShortcutsConfig = {
         code: 'Enter',
         key: 'Enter',
         description: 'Rename selected node(s)',
+        preventDefault: true
+    },
+    deselect: {
+        code: 'Escape',
+        key: '',
+        description: 'Deselect all selected nodes and edges',
         preventDefault: true
     },
     // Add more shortcuts here as needed

@@ -2,7 +2,7 @@
 import * as vNG from "v-network-graph";
 import { reactive, ref, onMounted, onUnmounted } from "vue"; // Added onUnmounted
 import service from "../utils/graphService";
-import { addNewNode, deleteNodes, addEdges, editNodes, deleteEdges } from "../utils/graphManager";
+import { addNewNode, deleteNodes, addEdges, editNodes, deleteEdges, emptySelected } from "../utils/graphManager";
 import NodeInputDialog from './NodeInputDialog.vue';
 import { keyboardShortcuts } from '../config/keyboardShortcuts';
 import {
@@ -47,12 +47,19 @@ onMounted(async () => {
     mousePosition = { x: event.offsetX, y: event.offsetY };
   });
   
-  
+  // Event listener for Esc key to deselect all nodes and edges
+  document.addEventListener('keydown', (event) => {
+    if (event.code === keyboardShortcuts.deselect.code) {
+      emptySelected(selectedNodes, selectedEdges);
+    }
+  });
   // Event listener for Enter key to create new nodes
   document.addEventListener('keydown', (event) => {
     // Return if the node input dialog is already open
     // Prevents creating a new node while the dialog is open
     if (checkInputFieldShown()) return;
+    // Prevent creating a new node if the Ctrl key is pressed
+    // Ctrl + Enter is used for editing nodes
     if (event.ctrlKey)return;
     if (event.code === keyboardShortcuts.addNode.code) {
       // Validate that graph component is initialized

@@ -1,5 +1,5 @@
 // This file contains the functions that are used to manage the graph data structure
-export { addNewNode, deleteNodes, addEdges, editNodes, deleteEdges };
+export { addNewNode, deleteNodes, addEdges, editNodes, deleteEdges, emptySelected};
 
 // adds a new node to the graph
 function addNewNode(data, newName, xMousePos, yMousePos) {
@@ -85,6 +85,15 @@ function editNodes(data, selectedNodes, newName) {
         data.nodes[nodeId].name = newName;
     }
 }
+
+function emptySelected(selectedNodes, selectedEdges) {
+    selectedNodes.value = [];
+    selectedEdges.value = [];
+
+    return { selectedNodes, selectedEdges };
+}
+
+
 function findCurrentMaxNodeId(data) {
     return Math.max(
         ...Object.keys(data.nodes).map(key => parseInt(key.replace("node", ""), 10)) //10 = decimal
