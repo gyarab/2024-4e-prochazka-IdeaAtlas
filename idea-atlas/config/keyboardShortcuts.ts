@@ -37,9 +37,10 @@ export const keyboardShortcuts: KeyboardShortcutsConfig = {
         description: 'Add a new edge',
         preventDefault: true
     },
+    // This only activates with a ctrl key pressed as well
     editNode: {
-        code: 'f2',
-        key: 'F2',
+        code: 'Enter',
+        key: 'Enter',
         description: 'Rename selected node(s)',
         preventDefault: true
     },

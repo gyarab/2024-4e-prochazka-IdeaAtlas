@@ -45,7 +45,7 @@ onMounted(async () => {
     // Prevents creating a new node while the dialog is open
     if (showNodeInput.value) return;
     if (showNodeEdit.value) return;
-    
+    if (event.ctrlKey)return;
     if (event.code === keyboardShortcuts.addNode.code) {
       // Validate that graph component is initialized
       if (!graph.value) return;
@@ -95,7 +95,7 @@ onMounted(async () => {
     if (showNodeInput.value) return;
     if (showNodeEdit.value) return;
     // Check if the edit node shortcut is pressed and at least one node is selected
-    if (event.code === keyboardShortcuts.editNode.code && selectedNodes.value.length > 0) {
+    if (event.code === keyboardShortcuts.editNode.code && event.ctrlKey && selectedNodes.value.length > 0) {
       // Prevent default behavior of the key press
       if (keyboardShortcuts.editNode.preventDefault) {
         event.preventDefault();
