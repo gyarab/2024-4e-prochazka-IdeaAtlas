@@ -1,3 +1,5 @@
+// this file contains the configuration for keyboard shortcuts used in the application
+
 export interface KeyboardShortcut {
     key: string;
     description: string;
