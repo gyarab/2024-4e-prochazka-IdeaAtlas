@@ -5,6 +5,13 @@ import service from "../utils/graphService";
 import manager from "../utils/graphManager";
 import NodeInputDialog from './NodeInputDialog.vue';
 import { keyboardShortcuts } from '../config/keyboardShortcuts';
+import {
+    setShowingNodeInput,
+    getShowingNodeInput,
+    getShowingNodeEdit,
+    setShowingNodeEdit,
+    checkInputFieldShown
+} from '../utils/uiTracker';
 
 const supabase = useSupabaseClient();
 
@@ -23,8 +30,6 @@ const graph = ref<vNG.Instance>();
 // State to store IDs of selected nodes
 const selectedNodes = ref<string[]>([])
 // State to control the visibility of the node input dialog
-const showNodeInput = ref(false);
-const showNodeEdit = ref(false);
 // Position where the new node will be added
 const newNodePosition = ref({ x: 0, y: 0 });
 
@@ -43,8 +48,7 @@ onMounted(async () => {
   document.addEventListener('keydown', (event) => {
     // Return if the node input dialog is already open
     // Prevents creating a new node while the dialog is open
-    if (showNodeInput.value) return;
-    if (showNodeEdit.value) return;
+    if (checkInputFieldShown()) return;
     if (event.ctrlKey)return;
     if (event.code === keyboardShortcuts.addNode.code) {
       // Validate that graph component is initialized
@@ -52,7 +56,7 @@ onMounted(async () => {
       // Set the position for the new node based on current mouse location
       newNodePosition.value = mousePosition;
       // Show the node input dialog
-      showNodeInput.value = true;
+      setShowingNodeInput(true);
       // Prevent default space behavior (like scrolling)
       if (keyboardShortcuts.addNode.preventDefault) {
         event.preventDefault();
@@ -64,8 +68,7 @@ onMounted(async () => {
   document.addEventListener('keydown', (event) => {
     // Return if the node input dialog is already open
     // Prevents creating a new node while the dialog is open
-    if (showNodeInput.value) return;
-    if (showNodeEdit.value) return;
+    if (checkInputFieldShown()) return;
     if (event.code === keyboardShortcuts.addEdge.code && selectedNodes.value.length >= 2) {
       if (keyboardShortcuts.addEdge.preventDefault) {
         event.preventDefault();
@@ -79,8 +82,7 @@ onMounted(async () => {
     // Prevents creating a new node while the dialog is open
     // ?
     // Maybe this if statement should be further in the code - after the check for the key
-    if (showNodeInput.value) return;
-    if (showNodeEdit.value) return;
+    if (checkInputFieldShown()) return;
     if (event.code === keyboardShortcuts.deleteNode.code && selectedNodes.value.length > 0) {
       if (keyboardShortcuts.deleteNode.preventDefault) {
         event.preventDefault();
@@ -92,8 +94,7 @@ onMounted(async () => {
   document.addEventListener('keydown', (event) => {
     // Return if the node input dialog is already open
     // Prevents creating a new node while the dialog is open
-    if (showNodeInput.value) return;
-    if (showNodeEdit.value) return;
+    if (checkInputFieldShown()) return;
     // Check if the edit node shortcut is pressed and at least one node is selected
     if (event.code === keyboardShortcuts.editNode.code && event.ctrlKey && selectedNodes.value.length > 0) {
       // Prevent default behavior of the key press
@@ -135,7 +136,7 @@ const handleNodeNameSubmit = (name: string) => {
   if (svgPoint) {
     manager.addNewNode(data, name, svgPoint.x, svgPoint.y);
   }
-  showNodeInput.value = false;
+  setShowingNodeInput(false);
 };
 const handleNodeNameEdit = (newName: string) => {
   // TODO this might not have to be here
@@ -143,7 +144,7 @@ const handleNodeNameEdit = (newName: string) => {
   if (svgPoint) {
     manager.editNodes(data, selectedNodes.value, newName);
   }
-  showNodeInput.value = false;
+  setShowingNodeEdit(false);
 };
 
 const configs = reactive(
@@ -199,17 +200,17 @@ const configs = reactive(
   <!-- Shows when showNodeInput is true, positioned at newNodePosition -->
   <!-- Emits 'close' event to hide dialog and 'submit' event with node name -->
   <NodeInputDialog
-    :is-open="showNodeInput"
+    :is-open="getShowingNodeInput()"
     :position="newNodePosition"
-    @close="showNodeInput = false"
+    @close="setShowingNodeInput(false)"
     @submit="handleNodeNameSubmit"
   />
   <!-- TODO find a position of first selected node -->
   <NodeEditDialog
-    :is-open="showNodeEdit"
+    :is-open="getShowingNodeEdit()"
     
     :position="{ x: 500, y: 500 }"
-    @close="showNodeEdit = false"
+    @close="setShowingNodeEdit(false)"
     @submit="handleNodeNameEdit"
   />
 </template>
