@@ -39,7 +39,7 @@ onMounted(async () => {
   });
   
   
-  // Event listener for Space key to create new nodes
+  // Event listener for Enter key to create new nodes
   document.addEventListener('keydown', (event) => {
     // Return if the node input dialog is already open
     // Prevents creating a new node while the dialog is open
@@ -60,14 +60,13 @@ onMounted(async () => {
     }
   });
 
-  // Event listener for Enter key to create edges b
-  // etween selected nodes
+  // Event listener for Space key to create edges between selected nodes
   document.addEventListener('keydown', (event) => {
     // Return if the node input dialog is already open
     // Prevents creating a new node while the dialog is open
     if (showNodeInput.value) return;
     if (showNodeEdit.value) return;
-    if (event.key === keyboardShortcuts.addEdge.key && selectedNodes.value.length >= 2) {
+    if (event.code === keyboardShortcuts.addEdge.key && selectedNodes.value.length >= 2) {
       if (keyboardShortcuts.addEdge.preventDefault) {
         event.preventDefault();
       }
@@ -78,6 +77,8 @@ onMounted(async () => {
   document.addEventListener('keydown', (event) => {
     // Return if the node input dialog is already open
     // Prevents creating a new node while the dialog is open
+    // ?
+    // Maybe this if statement should be further in the code - after the check for the key
     if (showNodeInput.value) return;
     if (showNodeEdit.value) return;
     if (event.key === keyboardShortcuts.deleteNode.key && selectedNodes.value.length > 0) {
@@ -103,7 +104,7 @@ onMounted(async () => {
       showNodeEdit.value = true;
     }
   });
-
+//TODO add all event listeners
 // Remove event listeners when component is unmounted
 onUnmounted(() => {
   document.removeEventListener('mousemove', (event) => {});
@@ -128,7 +129,7 @@ onUnmounted(() => {
   }
 });
 
-// Add handler for node name submission
+// Handler for node name submission
 const handleNodeNameSubmit = (name: string) => {
   const svgPoint = graph.value?.translateFromDomToSvgCoordinates(newNodePosition.value);
   if (svgPoint) {

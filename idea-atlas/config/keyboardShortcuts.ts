@@ -16,7 +16,7 @@ export interface KeyboardShortcutsConfig {
 
 export const keyboardShortcuts: KeyboardShortcutsConfig = {
     addNode: {
-        key: 'Space',
+        key: 'Enter',
         description: 'Add a new node at cursor position',
         preventDefault: true
     },
@@ -26,12 +26,12 @@ export const keyboardShortcuts: KeyboardShortcutsConfig = {
         preventDefault: false
     },
     addEdge: {
-        key: 'Enter',
+        key: 'Space',
         description: 'Add a new edge',
-        preventDefault: false
+        preventDefault: true
     },
     editNode: {
-        key: 'q',
+        key: '',
         description: 'Rename selected node(s)',
         preventDefault: true
     },
