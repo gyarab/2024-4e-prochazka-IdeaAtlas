@@ -2,6 +2,7 @@
 
 export interface KeyboardShortcut {
     code: string;
+    key: string;
     description: string;
     preventDefault?: boolean;
 }
@@ -13,28 +14,32 @@ export interface KeyboardShortcutsConfig {
     editNode: KeyboardShortcut;
     // Add more shortcut configurations here as needed
 }
-// Why is here code instead of key?
+// What is code ?
 // The code presents the physical key on the keyboard
-// While the key presents actual character that is producet with pressing the physical key
+// While the key presents actual character that is produced with pressing the physical key
 // For example: code: 'Space', key: ' '
 export const keyboardShortcuts: KeyboardShortcutsConfig = {
     addNode: {
         code: 'Enter',
+        key: 'Enter',
         description: 'Add a new node at cursor position',
         preventDefault: true
     },
     deleteNode: {
         code: 'Backspace',
+        key: 'Backspace',
         description: 'Delete selected node(s)',
         preventDefault: true
     },
     addEdge: {
         code: 'Space',
+        key: ' ',
         description: 'Add a new edge',
         preventDefault: true
     },
     editNode: {
         code: 'f2',
+        key: 'F2',
         description: 'Rename selected node(s)',
         preventDefault: true
     },
