@@ -2,6 +2,13 @@
 
 import { ref } from 'vue'
 
+export {
+    setShowingNodeInput,
+    getShowingNodeInput,
+    getShowingNodeEdit,
+    setShowingNodeEdit,
+    checkInputFieldShown
+}
 export const showNodeInput = ref(false)
 export const showNodeEdit = ref(false)
 
@@ -21,12 +28,4 @@ function setShowingNodeEdit(value: boolean) {
 // Returns true if either the node input or node edit field is shown
 function checkInputFieldShown() {
     return showNodeInput.value || showNodeEdit.value
-}
-
-export {
-    setShowingNodeInput,
-    getShowingNodeInput,
-    getShowingNodeEdit,
-    setShowingNodeEdit,
-    checkInputFieldShown
 }

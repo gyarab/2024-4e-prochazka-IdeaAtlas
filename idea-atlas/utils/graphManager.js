@@ -1,5 +1,5 @@
 // This file contains the functions that are used to manage the graph data structure
-export default { addNewNode, deleteNodes, addEdges, editNodes };
+export { addNewNode, deleteNodes, addEdges, editNodes, deleteEdges };
 
 // adds a new node to the graph
 function addNewNode(data, newName, xMousePos, yMousePos) {
@@ -65,6 +65,17 @@ function addEdges(data, selectedNodes) {
         const nextEdgeId = `edge${maxEdgeId + i}`;
         data.edges[nextEdgeId] = { source, target };
     }
+}
+
+function deleteEdges(data, edgesToDelete) {
+    const edges = data.edges;
+    const remainingEdges = {};
+    for (const [key, edge] of Object.entries(edges)) {
+        if (!edgesToDelete.includes(key)) {
+            remainingEdges[key] = edge;
+        }
+    }
+    data.edges = remainingEdges;
 }
 // This function will change the name of a node
 function editNodes(data, selectedNodes, newName) {

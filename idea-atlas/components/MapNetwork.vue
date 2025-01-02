@@ -2,7 +2,7 @@
 import * as vNG from "v-network-graph";
 import { reactive, ref, onMounted, onUnmounted } from "vue"; // Added onUnmounted
 import service from "../utils/graphService";
-import manager from "../utils/graphManager";
+import { addNewNode, deleteNodes, addEdges, editNodes, deleteEdges } from "../utils/graphManager";
 import NodeInputDialog from './NodeInputDialog.vue';
 import { keyboardShortcuts } from '../config/keyboardShortcuts';
 import {
@@ -12,6 +12,7 @@ import {
     setShowingNodeEdit,
     checkInputFieldShown
 } from '../utils/uiTracker';
+
 
 const supabase = useSupabaseClient();
 
@@ -29,6 +30,9 @@ const graph = ref<vNG.Instance>();
 
 // State to store IDs of selected nodes
 const selectedNodes = ref<string[]>([])
+// State to store IDs of selected edges
+const selectedEdges = ref<string[]>([])
+
 // State to control the visibility of the node input dialog
 // Position where the new node will be added
 const newNodePosition = ref({ x: 0, y: 0 });
@@ -73,24 +77,29 @@ onMounted(async () => {
       if (keyboardShortcuts.addEdge.preventDefault) {
         event.preventDefault();
       }
-      manager.addEdges(data, selectedNodes.value);
+      addEdges(data, selectedNodes.value);
     }
   });
-  // Event listener for backspace to delete selected nodes
+  // Event listener for backspace to delete selected nodes or edges
   document.addEventListener('keydown', (event) => {
     // Return if the node input dialog is already open
     // Prevents creating a new node while the dialog is open
     // ?
     // Maybe this if statement should be further in the code - after the check for the key
     if (checkInputFieldShown()) return;
-    if (event.code === keyboardShortcuts.deleteNode.code && selectedNodes.value.length > 0) {
+    if (event.code === keyboardShortcuts.deleteNode.code) {
       if (keyboardShortcuts.deleteNode.preventDefault) {
         event.preventDefault();
       }
-      manager.deleteNodes(data, selectedNodes.value);
-    }
+      if (selectedEdges.value.length > 0) {
+          deleteEdges(data, selectedEdges.value);
+        }
+      if (selectedNodes.value.length > 0) {
+        deleteNodes(data, selectedNodes.value);
+      }
+      }
   });
-  // Event listener for TODO key to edit selected nodes
+  // Event listener for CTRL + Enter key to edit selected nodes
   document.addEventListener('keydown', (event) => {
     // Return if the node input dialog is already open
     // Prevents creating a new node while the dialog is open
@@ -134,7 +143,7 @@ onUnmounted(() => {
 const handleNodeNameSubmit = (name: string) => {
   const svgPoint = graph.value?.translateFromDomToSvgCoordinates(newNodePosition.value);
   if (svgPoint) {
-    manager.addNewNode(data, name, svgPoint.x, svgPoint.y);
+    addNewNode(data, name, svgPoint.x, svgPoint.y);
   }
   setShowingNodeInput(false);
 };
@@ -142,7 +151,7 @@ const handleNodeNameEdit = (newName: string) => {
   // TODO this might not have to be here
   const svgPoint = graph.value?.translateFromDomToSvgCoordinates(newNodePosition.value);
   if (svgPoint) {
-    manager.editNodes(data, selectedNodes.value, newName);
+    editNodes(data, selectedNodes.value, newName);
   }
   setShowingNodeEdit(false);
 };
@@ -172,7 +181,10 @@ const configs = reactive(
     },
     node: {
       selectable: true,
-    }
+    },
+    edge: {
+      selectable: true,
+    },
   })
 );
 </script>
@@ -190,6 +202,7 @@ const configs = reactive(
     <v-network-graph v-else class="fixed inset-0 w-screen h-screen"
     ref="graph"
     v-model:selected-nodes="selectedNodes"
+    v-model:selected-edges="selectedEdges"
     :nodes="data.nodes"
     :edges="data.edges"
     :layouts="data.layouts"
