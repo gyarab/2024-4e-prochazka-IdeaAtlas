@@ -159,6 +159,15 @@ const handleNodeNameEdit = (newName: string) => {
 const configs = reactive(
   vNG.defineConfigs({
     view: {
+      boxSelectionEnabled: true,
+      selection: {
+        box: {
+          color: "#0000ff20",
+          strokeWidth: 1,
+          strokeColor: "#aaaaff",
+          strokeDasharray: "0",
+        },
+      },
       grid: {
         visible: true,
         interval: 10,
