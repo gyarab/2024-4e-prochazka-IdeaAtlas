@@ -1,3 +1,5 @@
+// This file tracks the state of the UI
+
 import { ref } from 'vue'
 
 export const showNodeInput = ref(false)
