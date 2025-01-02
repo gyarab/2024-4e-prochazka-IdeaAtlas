@@ -85,7 +85,7 @@ function editNodes(data, selectedNodes, newName) {
         data.nodes[nodeId].name = newName;
     }
 }
-
+// This function will empty the selected nodes and edges
 function emptySelected(selectedNodes, selectedEdges) {
     selectedNodes.value = [];
     selectedEdges.value = [];
