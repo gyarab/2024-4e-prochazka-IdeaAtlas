@@ -9,8 +9,9 @@ export interface KeyboardShortcut {
 
 export interface KeyboardShortcutsConfig {
     addNode: KeyboardShortcut;
-    deleteNode: KeyboardShortcut;
-    addEdge: KeyboardShortcut;
+    deleteSelected: KeyboardShortcut;
+    addEdgeOneSource: KeyboardShortcut;
+    addEdges: KeyboardShortcut;
     editNode: KeyboardShortcut;
     deselect: KeyboardShortcut;
     
@@ -27,16 +28,23 @@ export const keyboardShortcuts: KeyboardShortcutsConfig = {
         description: 'Add a new node at cursor position',
         preventDefault: true
     },
-    deleteNode: {
+    deleteSelected: {
         code: 'Backspace',
         key: 'Backspace',
         description: 'Delete selected node(s)',
         preventDefault: true
     },
-    addEdge: {
+    // This only activates with a ctrl key pressed as well
+    addEdgeOneSource: {
         code: 'Space',
         key: ' ',
-        description: 'Add a new edge',
+        description: 'Adds edges from the selected node to other nodes',
+        preventDefault: true
+    },
+    addEdges: {
+        code: 'Space',
+        key: ' ',
+        description: 'Adds edges between all selected nodes',
         preventDefault: true
     },
     // This only activates with a ctrl key pressed as well

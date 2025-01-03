@@ -1,5 +1,5 @@
 // This file contains the functions that are used to manage the graph data structure
-export { addNewNode, deleteNodes, addEdges, editNodes, deleteEdges, emptySelected};
+export { addNewNode, deleteNodes, addEgesOneSource, editNodes, deleteEdges, addEdges, emptySelected };
 
 // adds a new node to the graph
 function addNewNode(data, newName, xMousePos, yMousePos) {
@@ -52,7 +52,7 @@ function deleteNodes(data, nodesToDelete) {
 // With source as the first node in the array
 // And target as all the other nodes in the array
 // TODO - check if the edge already exists
-function addEdges(data, selectedNodes) {
+function addEgesOneSource(data, selectedNodes) {
     // Return if selected nodes are less than 2 - cannot create an edge
     if (selectedNodes.length < 2) return;
 
@@ -61,12 +61,43 @@ function addEdges(data, selectedNodes) {
 
 
     for (let i = 1; i < selectedNodes.length; i++) {
+
         const target = selectedNodes[i];
+
+        // Creates a new edge id
         const nextEdgeId = `edge${maxEdgeId + i}`;
+        // Adds the new edge to the data
         data.edges[nextEdgeId] = { source, target };
     }
 }
 
+// Function which will add edges between all selected nodes
+// TODO - check if the edge already exists
+function addEdges(data, selectedNodes) {
+    // Return if selected nodes are less than 2 - cannot create an edge
+    if (selectedNodes.length < 2) return;
+    console.log(selectedNodes)
+
+    const maxEdgeId = findCurrentMaxEdgeId(data);
+    // Tracks how many new edges are created
+    // So the next edge id can be generated
+    let newEdgeCounter = 0;
+
+    for (let srcIndex = 0; srcIndex < selectedNodes.length - 1; srcIndex++) {
+        for (let trgtIndex = srcIndex + 1; trgtIndex < selectedNodes.length; trgtIndex++) {
+            console.log(srcIndex, trgtIndex)
+            const source = selectedNodes[srcIndex];
+            const target = selectedNodes[trgtIndex];
+            // Increase the counter by 1
+            newEdgeCounter++;
+            console.log(newEdgeCounter)
+            // Creates a new edge id
+            const nextEdgeId = `edge${maxEdgeId + newEdgeCounter}`;
+            // Adds the new edge to the data
+            data.edges[nextEdgeId] = { source, target };
+        }
+    }
+}
 function deleteEdges(data, edgesToDelete) {
     const edges = data.edges;
     const remainingEdges = {};
@@ -101,7 +132,6 @@ function findCurrentMaxNodeId(data) {
 }
 function findCurrentMaxEdgeId(data) {
     return Math.max(
-        ...Object.keys(data.edges || {}).map(key => parseInt(key.replace("edge", ""), 10)),
-        0
+        ...Object.keys(data.edges || {}).map(key => parseInt(key.replace("edge", ""), 10)) //10 = decimal
     );
 }

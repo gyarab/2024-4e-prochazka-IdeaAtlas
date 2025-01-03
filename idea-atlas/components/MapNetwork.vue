@@ -2,7 +2,7 @@
 import * as vNG from "v-network-graph";
 import { reactive, ref, onMounted, onUnmounted } from "vue"; // Added onUnmounted
 import service from "../utils/graphService";
-import { addNewNode, deleteNodes, addEdges, editNodes, deleteEdges, emptySelected } from "../utils/graphManager";
+import { addNewNode, deleteNodes,addEgesOneSource, editNodes, deleteEdges,addEdges, emptySelected } from "../utils/graphManager";
 import NodeInputDialog from './NodeInputDialog.vue';
 import { keyboardShortcuts } from '../config/keyboardShortcuts';
 import {
@@ -75,13 +75,25 @@ onMounted(async () => {
     }
   });
 
-  // Event listener for Space key to create edges between selected nodes
+  // Event listener for Space key to create edges between selected nodes - one source
   document.addEventListener('keydown', (event) => {
     // Return if the node input dialog is already open
-    // Prevents creating a new node while the dialog is open
     if (checkInputFieldShown()) return;
-    if (event.code === keyboardShortcuts.addEdge.code && selectedNodes.value.length >= 2) {
-      if (keyboardShortcuts.addEdge.preventDefault) {
+    if (event.ctrlKey) return;
+    if (event.code === keyboardShortcuts.addEdgeOneSource.code && selectedNodes.value.length >= 2) {
+      if (keyboardShortcuts.addEdgeOneSource.preventDefault) {
+        event.preventDefault();
+      }
+      addEgesOneSource(data, selectedNodes.value);
+    }
+  });
+    // Event listener for Space + Ctrl key to create edges between selected nodes
+    document.addEventListener('keydown', (event) => {
+    // Return if the node input dialog is already open
+    if (checkInputFieldShown()) return;
+    // Check if the add edge shortcut + Ctrl is pressed and at least two nodes are selected
+    if (event.code === keyboardShortcuts.addEdgeOneSource.code && event.ctrlKey && selectedNodes.value.length >= 2) {
+      if (keyboardShortcuts.addEdgeOneSource.preventDefault) {
         event.preventDefault();
       }
       addEdges(data, selectedNodes.value);
@@ -90,12 +102,9 @@ onMounted(async () => {
   // Event listener for backspace to delete selected nodes or edges
   document.addEventListener('keydown', (event) => {
     // Return if the node input dialog is already open
-    // Prevents creating a new node while the dialog is open
-    // ?
-    // Maybe this if statement should be further in the code - after the check for the key
     if (checkInputFieldShown()) return;
-    if (event.code === keyboardShortcuts.deleteNode.code) {
-      if (keyboardShortcuts.deleteNode.preventDefault) {
+    if (event.code === keyboardShortcuts.deleteSelected.code) {
+      if (keyboardShortcuts.deleteSelected.preventDefault) {
         event.preventDefault();
       }
       if (selectedEdges.value.length > 0) {
@@ -109,7 +118,6 @@ onMounted(async () => {
   // Event listener for CTRL + Enter key to edit selected nodes
   document.addEventListener('keydown', (event) => {
     // Return if the node input dialog is already open
-    // Prevents creating a new node while the dialog is open
     if (checkInputFieldShown()) return;
     // Check if the edit node shortcut is pressed and at least one node is selected
     if (event.code === keyboardShortcuts.editNode.code && event.ctrlKey && selectedNodes.value.length > 0) {
@@ -128,7 +136,7 @@ onUnmounted(() => {
   document.removeEventListener('keydown', (event) => {});
   document.removeEventListener('keydown', (event) => {});
 });
-  //TOdo fetch the correct graph by id
+  //TODO fetch the correct graph by id
   //Fetches grpah data from the database
   try {
     const fetchedData = await service.fetchGraph(supabase, "8bedcacd-0049-4f32-a1e5-4fe72a2080d2");
