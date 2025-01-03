@@ -51,7 +51,6 @@ function deleteNodes(data, nodesToDelete) {
 // Function which will add to edges:
 // With source as the first node in the array
 // And target as all the other nodes in the array
-// TODO - check if the edge already exists
 function addEgesOneSource(data, selectedNodes) {
     // Return if selected nodes are less than 2 - cannot create an edge
     if (selectedNodes.length < 2) return;
@@ -63,16 +62,18 @@ function addEgesOneSource(data, selectedNodes) {
     for (let i = 1; i < selectedNodes.length; i++) {
 
         const target = selectedNodes[i];
+        // Checks if already such an edge exists
+        if (!edgeExists(data, source, target)) {
 
-        // Creates a new edge id
-        const nextEdgeId = `edge${maxEdgeId + i}`;
-        // Adds the new edge to the data
-        data.edges[nextEdgeId] = { source, target };
+            // Creates a new edge id
+            const nextEdgeId = `edge${maxEdgeId + i}`;
+            // Adds the new edge to the data
+            data.edges[nextEdgeId] = { source, target };
+        }
     }
 }
 
 // Function which will add edges between all selected nodes
-// TODO - check if the edge already exists
 function addEdges(data, selectedNodes) {
     // Return if selected nodes are less than 2 - cannot create an edge
     if (selectedNodes.length < 2) return;
@@ -85,16 +86,19 @@ function addEdges(data, selectedNodes) {
 
     for (let srcIndex = 0; srcIndex < selectedNodes.length - 1; srcIndex++) {
         for (let trgtIndex = srcIndex + 1; trgtIndex < selectedNodes.length; trgtIndex++) {
-            console.log(srcIndex, trgtIndex)
+
             const source = selectedNodes[srcIndex];
             const target = selectedNodes[trgtIndex];
-            // Increase the counter by 1
-            newEdgeCounter++;
-            console.log(newEdgeCounter)
-            // Creates a new edge id
-            const nextEdgeId = `edge${maxEdgeId + newEdgeCounter}`;
-            // Adds the new edge to the data
-            data.edges[nextEdgeId] = { source, target };
+            if (!edgeExists(data, source, target)) {
+
+                // Increase the counter by 1
+                newEdgeCounter++;
+
+                // Creates a new edge id
+                const nextEdgeId = `edge${maxEdgeId + newEdgeCounter}`;
+                // Adds the new edge to the data
+                data.edges[nextEdgeId] = { source, target };
+            }
         }
     }
 }
@@ -124,7 +128,13 @@ function emptySelected(selectedNodes, selectedEdges) {
     return { selectedNodes, selectedEdges };
 }
 
-
+// Check if an edge already exists between two nodes
+function edgeExists(data, source, target) {
+    return Object.values(data.edges || {}).some(edge =>
+        (edge.source === source && edge.target === target) ||
+        (edge.source === target && edge.target === source)
+    );
+}
 function findCurrentMaxNodeId(data) {
     return Math.max(
         ...Object.keys(data.nodes).map(key => parseInt(key.replace("node", ""), 10)) //10 = decimal
