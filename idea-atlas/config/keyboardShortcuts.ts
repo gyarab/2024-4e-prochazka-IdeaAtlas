@@ -14,6 +14,7 @@ export interface KeyboardShortcutsConfig {
     addEdges: KeyboardShortcut;
     editNode: KeyboardShortcut;
     deselect: KeyboardShortcut;
+    deleteEdgesFromSelectedNodes: KeyboardShortcut;
     
     // Add more shortcut configurations here as needed
 }
@@ -32,6 +33,13 @@ export const keyboardShortcuts: KeyboardShortcutsConfig = {
         code: 'Backspace',
         key: 'Backspace',
         description: 'Delete selected node(s)',
+        preventDefault: true
+    },
+    // This only activates with a ctrl key pressed as well
+    deleteEdgesFromSelectedNodes: {
+        code: 'Backspace',
+        key: 'Backspace',
+        description: 'Delete edge(s) selected from selected node(s)',
         preventDefault: true
     },
     // This only activates with a ctrl key pressed as well

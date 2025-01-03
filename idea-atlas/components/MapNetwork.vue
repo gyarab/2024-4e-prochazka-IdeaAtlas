@@ -2,16 +2,25 @@
 import * as vNG from "v-network-graph";
 import { reactive, ref, onMounted, onUnmounted } from "vue"; // Added onUnmounted
 import service from "../utils/graphService";
-import { addNewNode, deleteNodes,addEgesOneSource, editNodes, deleteEdges,addEdges, emptySelected } from "../utils/graphManager";
 import NodeInputDialog from './NodeInputDialog.vue';
 import { keyboardShortcuts } from '../config/keyboardShortcuts';
 import {
-    setShowingNodeInput,
-    getShowingNodeInput,
-    getShowingNodeEdit,
-    setShowingNodeEdit,
-    checkInputFieldShown
+  setShowingNodeInput,
+  getShowingNodeInput,
+  getShowingNodeEdit,
+  setShowingNodeEdit,
+  checkInputFieldShown
 } from '../utils/uiTracker';
+import {
+  addNewNode,
+  deleteNodes,
+  addEgesOneSource,
+  editNodes,
+  deleteEdges,
+  addEdges,
+  emptySelected,
+  deleeteEdgesBasedOnNodes
+} from "../utils/graphManager";
 
 
 const supabase = useSupabaseClient();
@@ -46,7 +55,7 @@ onMounted(async () => {
   document.addEventListener('mousemove', (event) => {
     mousePosition = { x: event.offsetX, y: event.offsetY };
   });
-  
+
   // Event listener for Esc key to deselect all nodes and edges
   document.addEventListener('keydown', (event) => {
     if (event.code === keyboardShortcuts.deselect.code) {
@@ -60,7 +69,7 @@ onMounted(async () => {
     if (checkInputFieldShown()) return;
     // Prevent creating a new node if the Ctrl key is pressed
     // Ctrl + Enter is used for editing nodes
-    if (event.ctrlKey)return;
+    if (event.ctrlKey) return;
     if (event.code === keyboardShortcuts.addNode.code) {
       // Validate that graph component is initialized
       if (!graph.value) return;
@@ -87,8 +96,8 @@ onMounted(async () => {
       addEgesOneSource(data, selectedNodes.value);
     }
   });
-    // Event listener for Space + Ctrl key to create edges between selected nodes
-    document.addEventListener('keydown', (event) => {
+  // Event listener for Space + Ctrl key to create edges between selected nodes
+  document.addEventListener('keydown', (event) => {
     // Return if the node input dialog is already open
     if (checkInputFieldShown()) return;
     // Check if the add edge shortcut + Ctrl is pressed and at least two nodes are selected
@@ -103,17 +112,33 @@ onMounted(async () => {
   document.addEventListener('keydown', (event) => {
     // Return if the node input dialog is already open
     if (checkInputFieldShown()) return;
+    // Prevent this event if the Ctrl key is pressed
+    if (event.ctrlKey) return;
     if (event.code === keyboardShortcuts.deleteSelected.code) {
       if (keyboardShortcuts.deleteSelected.preventDefault) {
         event.preventDefault();
       }
       if (selectedEdges.value.length > 0) {
-          deleteEdges(data, selectedEdges.value);
-        }
+        deleteEdges(data, selectedEdges.value);
+      }
       if (selectedNodes.value.length > 0) {
         deleteNodes(data, selectedNodes.value);
       }
+    }
+  });
+  // Event listener for backspace + ctrl to delete selected all edges based on selected nodes
+  document.addEventListener('keydown', (event) => {
+    // Return if the node input dialog is already open
+    if (checkInputFieldShown()) return;
+    // Backspace + Ctrl
+    if (event.code === keyboardShortcuts.deleteEdgesFromSelectedNodes.code && event.ctrlKey) {
+      if (keyboardShortcuts.deleteSelected.preventDefault) {
+        event.preventDefault();
       }
+      if (selectedNodes.value.length > 0) {
+        deleeteEdgesBasedOnNodes(data, selectedNodes.value);
+      }
+    }
   });
   // Event listener for CTRL + Enter key to edit selected nodes
   document.addEventListener('keydown', (event) => {
@@ -129,13 +154,13 @@ onMounted(async () => {
       showNodeEdit.value = true;
     }
   });
-//TODO add all event listeners
-// Remove event listeners when component is unmounted
-onUnmounted(() => {
-  document.removeEventListener('mousemove', (event) => {});
-  document.removeEventListener('keydown', (event) => {});
-  document.removeEventListener('keydown', (event) => {});
-});
+  //TODO add all event listeners
+  // Remove event listeners when component is unmounted
+  onUnmounted(() => {
+    document.removeEventListener('mousemove', (event) => { });
+    document.removeEventListener('keydown', (event) => { });
+    document.removeEventListener('keydown', (event) => { });
+  });
   //TODO fetch the correct graph by id
   //Fetches grpah data from the database
   try {
@@ -223,33 +248,18 @@ const configs = reactive(
   <client-only>
     <div v-if="loading" class="loading-indicator">Loading...</div>
     <!-- v-model creates 2 way binding -->
-    <v-network-graph v-else class="fixed inset-0 w-screen h-screen"
-    ref="graph"
-    v-model:selected-nodes="selectedNodes"
-    v-model:selected-edges="selectedEdges"
-    :nodes="data.nodes"
-    :edges="data.edges"
-    :layouts="data.layouts"
-    :configs="configs"
-    />
+    <v-network-graph v-else class="fixed inset-0 w-screen h-screen" ref="graph" v-model:selected-nodes="selectedNodes"
+      v-model:selected-edges="selectedEdges" :nodes="data.nodes" :edges="data.edges" :layouts="data.layouts"
+      :configs="configs" />
   </client-only>
   <!-- Node input dialog component for creating new nodes -->
   <!-- Shows when showNodeInput is true, positioned at newNodePosition -->
   <!-- Emits 'close' event to hide dialog and 'submit' event with node name -->
-  <NodeInputDialog
-    :is-open="getShowingNodeInput()"
-    :position="newNodePosition"
-    @close="setShowingNodeInput(false)"
-    @submit="handleNodeNameSubmit"
-  />
+  <NodeInputDialog :is-open="getShowingNodeInput()" :position="newNodePosition" @close="setShowingNodeInput(false)"
+    @submit="handleNodeNameSubmit" />
   <!-- TODO find a position of first selected node -->
-  <NodeEditDialog
-    :is-open="getShowingNodeEdit()"
-    
-    :position="{ x: 500, y: 500 }"
-    @close="setShowingNodeEdit(false)"
-    @submit="handleNodeNameEdit"
-  />
+  <NodeEditDialog :is-open="getShowingNodeEdit()" :position="{ x: 500, y: 500 }" @close="setShowingNodeEdit(false)"
+    @submit="handleNodeNameEdit" />
 </template>
 
 <style>
