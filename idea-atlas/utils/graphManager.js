@@ -86,7 +86,6 @@ function addEgesOneSource(data, selectedNodes) {
 function addEdges(data, selectedNodes) {
     // Return if selected nodes are less than 2 - cannot create an edge
     if (selectedNodes.length < 2) return;
-    console.log(selectedNodes)
 
     const maxEdgeId = findCurrentMaxEdgeId(data);
     // Tracks how many new edges are created
@@ -136,9 +135,7 @@ function deleteEdges(data, edgesToDelete) {
 }
 // This function will change the name of a node
 function editNodes(data, selectedNodes, newName) {
-    console.log("editNodes")
     for (const nodeId of selectedNodes) {
-        console.log(nodeId)
         data.nodes[nodeId].name = newName;
     }
 }
@@ -159,11 +156,13 @@ function edgeExists(data, source, target) {
 }
 function findCurrentMaxNodeId(data) {
     return Math.max(
-        ...Object.keys(data.nodes).map(key => parseInt(key.replace("node", ""), 10)) //10 = decimal
+        ...Object.keys(data.nodes).map(key => parseInt(key.replace("node", ""), 10)),//10 = decimal
+        0 // If there are no nodes, return 0
     );
 }
 function findCurrentMaxEdgeId(data) {
     return Math.max(
-        ...Object.keys(data.edges || {}).map(key => parseInt(key.replace("edge", ""), 10)) //10 = decimal
+        ...Object.keys(data.edges || {}).map(key => parseInt(key.replace("edge", ""), 10)),//10 = decimal
+        0 // If there are no edges, return 0
     );
 }

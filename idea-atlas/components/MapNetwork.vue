@@ -243,7 +243,7 @@ const configs = reactive(
     <button @click="service.upsertGraphData(supabase, data)">Upsert whole graph</button>
   </div>
   <div>
-    <button @click="console.log(selectedNodes)">console log data</button>
+    <button @click="console.log(data)">console log data</button>
   </div>
   <client-only>
     <div v-if="loading" class="loading-indicator">Loading...</div>
