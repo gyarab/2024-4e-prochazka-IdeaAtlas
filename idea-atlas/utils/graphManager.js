@@ -173,18 +173,14 @@ function moveForward(data){
     console.log("moveForward");
     historyManager.moveForward();
     const newdata = historyManager.getCurrentData();
-    data.edges = newdata.edges;
-    data.nodes = newdata.nodes;
-    data.layouts = newdata.layouts;
+    Object.assign(data, newdata);
     console.log(data);
 }
 function moveBackward(data){
     console.log("moveBackward");
     historyManager.moveBackward();
     const newdata = historyManager.getCurrentData();
-    data.edges = newdata.edges;
-    data.nodes = newdata.nodes;
-    data.layouts = newdata.layouts;
+    Object.assign(data, newdata);
     console.log(data);
 }
 
