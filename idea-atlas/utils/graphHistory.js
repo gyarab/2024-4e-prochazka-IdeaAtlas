@@ -2,7 +2,6 @@
 class HistoryManager {
     constructor() {
         this.history = [];
-
         this.currentIndex = -1;
         this.maxHistory = 10; // Maximum number of saved states
     }
@@ -28,7 +27,6 @@ class HistoryManager {
             this.history.shift();
             this.currentIndex--;
         }
-        console.log(this.history);
     }
     // Increment the currentIndex by 1
     // If currentIndex is greater than the length of history, set currentIndex to the length of history -
@@ -50,9 +48,6 @@ class HistoryManager {
     }
     // Returns the current data
     getCurrentData() {
-        console.log(this.currentIndex);
-        console.log(this.history);
-        console.log(this.history[this.currentIndex]);
         return this.history[this.currentIndex];
     }
 

@@ -168,20 +168,17 @@ function findCurrentMaxEdgeId(data) {
         0 // If there are no edges, return 0
     );
 }
-
+// This function will move the history forward
 function moveForward(data){
-    console.log("moveForward");
     historyManager.moveForward();
     const newdata = historyManager.getCurrentData();
     Object.assign(data, newdata);
-    console.log(data);
 }
+// This function will move the history backward
 function moveBackward(data){
-    console.log("moveBackward");
     historyManager.moveBackward();
     const newdata = historyManager.getCurrentData();
     Object.assign(data, newdata);
-    console.log(data);
 }
 
 export {
