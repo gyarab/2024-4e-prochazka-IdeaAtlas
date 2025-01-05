@@ -51,9 +51,6 @@ const newNodePosition = ref({ x: 0, y: 0 });
 
 onMounted(async () => {
 
-  // Initialize history for undo/redo functionality
-  initilizeHistory(data);
-
   // Object to store current mouse coordinates
   let mousePosition = { x: 0, y: 0 };
 
@@ -196,6 +193,9 @@ onMounted(async () => {
       data.nodes = fetchedData.nodes || [];
       data.edges = fetchedData.edges || [];
       data.layouts = fetchedData.layouts || [];
+
+      // Initialize history for undo/redo functionality
+      initilizeHistory(data);
     } else {
       console.warn("No data returned from fetchGraph");
     }
