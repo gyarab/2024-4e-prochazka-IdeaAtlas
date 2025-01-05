@@ -71,15 +71,15 @@ export const keyboardShortcuts: KeyboardShortcutsConfig = {
     },
     // This only activates with a ctrl key pressed as well
     undo: {
-        code: 'KeyE',
+        code: 'KeyZ',
         key: 'z',
         description: 'Undo the last action',
         preventDefault: true
     },
     // This only activates with a ctrl key pressed as well
     redo: {
-        code: 'KeyQ',
-        key: 'y',
+        code: 'KeyZ',
+        key: 'z',
         description: 'Redo the last undone action',
         preventDefault: true
     },

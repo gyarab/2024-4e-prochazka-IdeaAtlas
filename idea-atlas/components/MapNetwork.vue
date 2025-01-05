@@ -137,7 +137,7 @@ onMounted(async () => {
 
   const handleUndoKey = (event: KeyboardEvent) => {
     if (checkInputFieldShown()) return;
-    if (event.code === keyboardShortcuts.undo.code) {
+    if (event.code === keyboardShortcuts.undo.code && event.ctrlKey) {
       if (keyboardShortcuts.undo.preventDefault) {
         event.preventDefault();
       }
@@ -148,7 +148,7 @@ onMounted(async () => {
 
   const handleRedoKey = (event: KeyboardEvent) => {
     if (checkInputFieldShown()) return;
-    if (event.code === keyboardShortcuts.redo.code) {
+    if (event.code === keyboardShortcuts.redo.code && event.ctrlKey && event.shiftKey) {
       if (keyboardShortcuts.redo.preventDefault) {
         event.preventDefault();
       }
