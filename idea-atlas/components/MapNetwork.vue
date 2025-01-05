@@ -12,6 +12,7 @@ import {
   checkInputFieldShown
 } from '../utils/uiTracker';
 import {
+  initilizeHistory,
   addNewNode,
   deleteNodes,
   addEgesOneSource,
@@ -49,6 +50,10 @@ const selectedEdges = ref<string[]>([])
 const newNodePosition = ref({ x: 0, y: 0 });
 
 onMounted(async () => {
+
+  // Initialize history for undo/redo functionality
+  initilizeHistory(data);
+
   // Object to store current mouse coordinates
   let mousePosition = { x: 0, y: 0 };
 

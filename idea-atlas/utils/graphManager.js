@@ -1,6 +1,10 @@
 // This file contains the functions that are used to manage the graph data structure
 import { historyManager } from "./graphHistory";
 
+
+function initilizeHistory(data) {
+    historyManager.addToHistory(data);
+}
 // adds a new node to the graph
 function addNewNode(data, newName, xMousePos, yMousePos) {
     // Find the largest numeric part of the existing keys
@@ -185,6 +189,7 @@ function moveBackward(data){
 }
 
 export {
+    initilizeHistory,
     addNewNode,
     deleteNodes,
     addEgesOneSource,
