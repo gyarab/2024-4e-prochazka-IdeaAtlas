@@ -109,17 +109,17 @@ function addEdges(data, selectedNodes) {
     }
     historyManager.addToHistory(data);
 }
+// This function will delete all edges between the nodes in the nodesToDeleteEdgesFrom array
 function deleeteEdgesBasedOnNodes(data, nodesToDeleteEdgesFrom) {
     const edges = data.edges;
     const edgesToDelete = [];
     for (const [key, edge] of Object.entries(edges)) {
-        if (nodesToDeleteEdgesFrom.includes(edge.source) || nodesToDeleteEdgesFrom.includes(edge.target)) {
+        // Only delete edges where both source and target are in nodesToDeleteEdgesFrom
+        if (nodesToDeleteEdgesFrom.includes(edge.source) && nodesToDeleteEdgesFrom.includes(edge.target)) {
             edgesToDelete.push(key);
         }
     }
-    // This function will add the new data to the history
     deleteEdges(data, edgesToDelete);
-    // historyManager.addToHistory(data); - is not used here - correct 
 }
 
 
