@@ -3,16 +3,25 @@ class HistoryManager {
     constructor() {
         this.history = [];
 
-        this.currentIndex = 0;
+        this.currentIndex = -1;
         this.maxHistory = 10; // Maximum number of saved states
     }
 
 
     // I guess In Js we do not declare function with function keyword in class - strange
     addToHistory(data) {
+        // Create deep copy using structuredClone
+        const dataCopy = {
+            nodes: JSON.parse(JSON.stringify(data.nodes)),
+            edges: JSON.parse(JSON.stringify(data.edges)),
+            layouts: JSON.parse(JSON.stringify(data.layouts))
+        };
         
-        this.history[this.currentIndex] = data;
+        // Remove any future history entries
+        this.history = this.history.slice(0, this.currentIndex + 1);
+
         this.currentIndex++;
+        this.history[this.currentIndex] = dataCopy;
         // If currentIndex is greater than maxHistory, remove the first element
         // And shift all elements to the left
         if (this.currentIndex > this.maxHistory) {
@@ -41,6 +50,9 @@ class HistoryManager {
     }
     // Returns the current data
     getCurrentData() {
+        console.log(this.currentIndex);
+        console.log(this.history);
+        console.log(this.history[this.currentIndex]);
         return this.history[this.currentIndex];
     }
 
