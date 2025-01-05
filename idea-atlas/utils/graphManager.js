@@ -166,12 +166,14 @@ function findCurrentMaxEdgeId(data) {
 }
 
 function moveForward(data){
+    console.log("moveForward");
     historyManager.moveForward();
-    data.value = historyManager.getCurrentData();
+    data = historyManager.getCurrentData();
+    console.log(data);
 }
 function moveBackward(data){
     historyManager.moveBackward();
-    data.value = historyManager.getCurrentData();
+    data = historyManager.getCurrentData();
 }
 
 export {

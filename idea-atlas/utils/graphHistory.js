@@ -10,6 +10,7 @@ class HistoryManager {
 
     // I guess In Js we do not declare function with function keyword in class - strange
     addToHistory(data) {
+        
         this.history[this.currentIndex] = data;
         this.currentIndex++;
         // If currentIndex is greater than maxHistory, remove the first element
@@ -18,6 +19,7 @@ class HistoryManager {
             this.history.shift();
             this.currentIndex--;
         }
+        console.log(this.history);
     }
     // Increment the currentIndex by 1
     // If currentIndex is greater than the length of history, set currentIndex to the length of history -
