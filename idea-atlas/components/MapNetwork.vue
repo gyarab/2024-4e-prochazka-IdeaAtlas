@@ -59,12 +59,13 @@ onMounted(async () => {
     mousePosition = { x: event.offsetX, y: event.offsetY };
   };
 
+  //handleDeselectKey: Deselects all currently selected nodes and edges when deselect key is pressed
   const handleDeselectKey = (event: KeyboardEvent) => {
     if (event.code === keyboardShortcuts.deselect.code) {
       emptySelected(selectedNodes, selectedEdges);
     }
   };
-
+  //handleAddNodeKey: Creates a new node at current mouse position when add node key is pressed
   const handleAddNodeKey = (event: KeyboardEvent) => {
     if (checkInputFieldShown()) return;
     if (event.ctrlKey) return;
@@ -77,7 +78,7 @@ onMounted(async () => {
       }
     }
   };
-
+  // HandleAddEdgeOneSourceKey: Creates edges from first selected node to all other selected nodes
   const handleAddEdgeOneSourceKey = (event: KeyboardEvent) => {
     if (checkInputFieldShown()) return;
     if (event.ctrlKey) return;
@@ -88,7 +89,7 @@ onMounted(async () => {
       addEgesOneSource(data, selectedNodes.value);
     }
   };
-
+  // handleAddEdgeKey: Creates edges between all selected nodes when Ctrl + add edge key is pressed
   const handleAddEdgeKey = (event: KeyboardEvent) => {
     if (checkInputFieldShown()) return;
     if (event.code === keyboardShortcuts.addEdgeOneSource.code && event.ctrlKey && selectedNodes.value.length >= 2) {
@@ -98,7 +99,7 @@ onMounted(async () => {
       addEdges(data, selectedNodes.value);
     }
   };
-
+  // HandleDeleteSelectedKey: Deletes all selected nodes and edges
   const handleDeleteSelectedKey = (event: KeyboardEvent) => {
     if (checkInputFieldShown()) return;
     if (event.ctrlKey) return;
@@ -114,7 +115,7 @@ onMounted(async () => {
       }
     }
   };
-
+  // HandleDeleteEdgesFromSelectedNodesKey: Deletes all edges connected to selected nodes
   const handleDeleteEdgesFromSelectedNodesKey = (event: KeyboardEvent) => {
     if (checkInputFieldShown()) return;
     if (event.code === keyboardShortcuts.deleteEdgesFromSelectedNodes.code && event.ctrlKey) {
@@ -126,7 +127,7 @@ onMounted(async () => {
       }
     }
   };
-
+  // HandleEditNodeKey: Opens node edit dialog for selected node
   const handleEditNodeKey = (event: KeyboardEvent) => {
     if (checkInputFieldShown()) return;
     if (event.code === keyboardShortcuts.editNode.code && event.ctrlKey && selectedNodes.value.length > 0) {
@@ -136,7 +137,7 @@ onMounted(async () => {
       showNodeEdit.value = true;
     }
   };
-
+  // HandleUndoKey: Undoes last action
   const handleUndoKey = (event: KeyboardEvent) => {
     if (checkInputFieldShown()) return;
     if (event.code === keyboardShortcuts.undo.code && event.ctrlKey) {
@@ -147,7 +148,7 @@ onMounted(async () => {
       console.log("undo");
     }
   };
-
+  // HandleRedoKey: Redoes last undone action
   const handleRedoKey = (event: KeyboardEvent) => {
     if (checkInputFieldShown()) return;
     if (event.code === keyboardShortcuts.redo.code && event.ctrlKey && event.shiftKey) {
