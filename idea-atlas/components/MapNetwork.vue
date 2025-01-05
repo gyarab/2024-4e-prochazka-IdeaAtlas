@@ -19,7 +19,9 @@ import {
   deleteEdges,
   addEdges,
   emptySelected,
-  deleeteEdgesBasedOnNodes
+  deleeteEdgesBasedOnNodes,
+  moveForward,
+  moveBackward
 } from "../utils/graphManager";
 
 
@@ -152,6 +154,31 @@ onMounted(async () => {
       }
       // Show the node edit dialog
       showNodeEdit.value = true;
+    }
+  });
+
+  // Event listener for CTRL + Z to undo the last action
+  document.addEventListener('keydown', (event) => {
+    // Return if the node input dialog is already open
+    if (checkInputFieldShown()) return;
+    // Check if the add edge shortcut + Ctrl is pressed and at least two nodes are selected
+    if (event.code === keyboardShortcuts.undo.code && event.ctrlKey) {
+      if (keyboardShortcuts.undo.preventDefault) {
+        event.preventDefault();
+      }
+      moveBackward(data);
+    }
+  });
+
+  // Event listener for CTRL + Y to redo the last undone action
+  document.addEventListener('keydown', (event) => {
+    // Return if the node input dialog is already open
+    if (checkInputFieldShown()) return;
+    if (event.code === keyboardShortcuts.redo.code && event.ctrlKey) {
+      if (keyboardShortcuts.redo.preventDefault) {
+        event.preventDefault();
+      }
+      moveForward(data);
     }
   });
   //TODO add all event listeners

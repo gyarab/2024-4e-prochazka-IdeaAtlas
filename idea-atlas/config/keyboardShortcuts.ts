@@ -15,7 +15,8 @@ export interface KeyboardShortcutsConfig {
     editNode: KeyboardShortcut;
     deselect: KeyboardShortcut;
     deleteEdgesFromSelectedNodes: KeyboardShortcut;
-    
+    undo: KeyboardShortcut;
+    redo: KeyboardShortcut;
     // Add more shortcut configurations here as needed
 }
 // What is code ?
@@ -66,6 +67,20 @@ export const keyboardShortcuts: KeyboardShortcutsConfig = {
         code: 'Escape',
         key: '',
         description: 'Deselect all selected nodes and edges',
+        preventDefault: true
+    },
+    // This only activates with a ctrl key pressed as well
+    undo: {
+        code: 'Z',
+        key: 'Z',
+        description: 'Undo the last action',
+        preventDefault: true
+    },
+    // This only activates with a ctrl key pressed as well
+    redo: {
+        code: 'Y',
+        key: 'Y',
+        description: 'Redo the last undone action',
         preventDefault: true
     },
     // Add more shortcuts here as needed
