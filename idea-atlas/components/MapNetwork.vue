@@ -52,43 +52,31 @@ onMounted(async () => {
   // Object to store current mouse coordinates
   let mousePosition = { x: 0, y: 0 };
 
-  // Event listener to track mouse position in real-time
-  // Updates mousePosition whenever the mouse moves
-  document.addEventListener('mousemove', (event) => {
+  // Create named handler functions that can be referenced for removal
+  const handleMouseMove = (event: MouseEvent) => {
     mousePosition = { x: event.offsetX, y: event.offsetY };
-  });
+  };
 
-  // Event listener for Esc key to deselect all nodes and edges
-  document.addEventListener('keydown', (event) => {
+  const handleDeselectKey = (event: KeyboardEvent) => {
     if (event.code === keyboardShortcuts.deselect.code) {
       emptySelected(selectedNodes, selectedEdges);
     }
-  });
-  // Event listener for Enter key to create new nodes
-  document.addEventListener('keydown', (event) => {
-    // Return if the node input dialog is already open
-    // Prevents creating a new node while the dialog is open
+  };
+
+  const handleAddNodeKey = (event: KeyboardEvent) => {
     if (checkInputFieldShown()) return;
-    // Prevent creating a new node if the Ctrl key is pressed
-    // Ctrl + Enter is used for editing nodes
     if (event.ctrlKey) return;
     if (event.code === keyboardShortcuts.addNode.code) {
-      // Validate that graph component is initialized
       if (!graph.value) return;
-      // Set the position for the new node based on current mouse location
       newNodePosition.value = mousePosition;
-      // Show the node input dialog
       setShowingNodeInput(true);
-      // Prevent default space behavior (like scrolling)
       if (keyboardShortcuts.addNode.preventDefault) {
         event.preventDefault();
       }
     }
-  });
+  };
 
-  // Event listener for Space key to create edges between selected nodes - one source
-  document.addEventListener('keydown', (event) => {
-    // Return if the node input dialog is already open
+  const handleAddEdgeOneSourceKey = (event: KeyboardEvent) => {
     if (checkInputFieldShown()) return;
     if (event.ctrlKey) return;
     if (event.code === keyboardShortcuts.addEdgeOneSource.code && selectedNodes.value.length >= 2) {
@@ -97,24 +85,20 @@ onMounted(async () => {
       }
       addEgesOneSource(data, selectedNodes.value);
     }
-  });
-  // Event listener for Space + Ctrl key to create edges between selected nodes
-  document.addEventListener('keydown', (event) => {
-    // Return if the node input dialog is already open
+  };
+
+  const handleAddEdgeKey = (event: KeyboardEvent) => {
     if (checkInputFieldShown()) return;
-    // Check if the add edge shortcut + Ctrl is pressed and at least two nodes are selected
     if (event.code === keyboardShortcuts.addEdgeOneSource.code && event.ctrlKey && selectedNodes.value.length >= 2) {
       if (keyboardShortcuts.addEdgeOneSource.preventDefault) {
         event.preventDefault();
       }
       addEdges(data, selectedNodes.value);
     }
-  });
-  // Event listener for backspace to delete selected nodes or edges
-  document.addEventListener('keydown', (event) => {
-    // Return if the node input dialog is already open
+  };
+
+  const handleDeleteSelectedKey = (event: KeyboardEvent) => {
     if (checkInputFieldShown()) return;
-    // Prevent this event if the Ctrl key is pressed
     if (event.ctrlKey) return;
     if (event.code === keyboardShortcuts.deleteSelected.code) {
       if (keyboardShortcuts.deleteSelected.preventDefault) {
@@ -127,12 +111,10 @@ onMounted(async () => {
         deleteNodes(data, selectedNodes.value);
       }
     }
-  });
-  // Event listener for backspace + ctrl to delete selected all edges based on selected nodes
-  document.addEventListener('keydown', (event) => {
-    // Return if the node input dialog is already open
+  };
+
+  const handleDeleteEdgesFromSelectedNodesKey = (event: KeyboardEvent) => {
     if (checkInputFieldShown()) return;
-    // Backspace + Ctrl
     if (event.code === keyboardShortcuts.deleteEdgesFromSelectedNodes.code && event.ctrlKey) {
       if (keyboardShortcuts.deleteSelected.preventDefault) {
         event.preventDefault();
@@ -141,53 +123,66 @@ onMounted(async () => {
         deleeteEdgesBasedOnNodes(data, selectedNodes.value);
       }
     }
-  });
-  // Event listener for CTRL + Enter key to edit selected nodes
-  document.addEventListener('keydown', (event) => {
-    // Return if the node input dialog is already open
+  };
+
+  const handleEditNodeKey = (event: KeyboardEvent) => {
     if (checkInputFieldShown()) return;
-    // Check if the edit node shortcut is pressed and at least one node is selected
     if (event.code === keyboardShortcuts.editNode.code && event.ctrlKey && selectedNodes.value.length > 0) {
-      // Prevent default behavior of the key press
       if (keyboardShortcuts.editNode.preventDefault) {
         event.preventDefault();
       }
-      // Show the node edit dialog
       showNodeEdit.value = true;
     }
-  });
+  };
 
-  // Event listener for CTRL + Z to undo the last action
-  document.addEventListener('keydown', (event) => {
-    // Return if the node input dialog is already open
+  const handleUndoKey = (event: KeyboardEvent) => {
     if (checkInputFieldShown()) return;
-    // Check if the add edge shortcut + Ctrl is pressed and at least two nodes are selected
     if (event.code === keyboardShortcuts.undo.code && event.ctrlKey) {
       if (keyboardShortcuts.undo.preventDefault) {
         event.preventDefault();
       }
       moveBackward(data);
+      console.log("undo");
     }
-  });
+  };
 
-  // Event listener for CTRL + Y to redo the last undone action
-  document.addEventListener('keydown', (event) => {
-    // Return if the node input dialog is already open
+  const handleRedoKey = (event: KeyboardEvent) => {
     if (checkInputFieldShown()) return;
     if (event.code === keyboardShortcuts.redo.code && event.ctrlKey) {
       if (keyboardShortcuts.redo.preventDefault) {
         event.preventDefault();
       }
+      console.log("redo");
       moveForward(data);
     }
-  });
-  //TODO add all event listeners
+  };
+
+  // Add event listeners with named handlers
+  document.addEventListener('mousemove', handleMouseMove);
+  document.addEventListener('keydown', handleDeselectKey);
+  document.addEventListener('keydown', handleAddNodeKey);
+  document.addEventListener('keydown', handleAddEdgeOneSourceKey);
+  document.addEventListener('keydown', handleAddEdgeKey);
+  document.addEventListener('keydown', handleDeleteSelectedKey);
+  document.addEventListener('keydown', handleDeleteEdgesFromSelectedNodesKey);
+  document.addEventListener('keydown', handleEditNodeKey);
+  document.addEventListener('keydown', handleUndoKey);
+  document.addEventListener('keydown', handleRedoKey);
+
   // Remove event listeners when component is unmounted
   onUnmounted(() => {
-    document.removeEventListener('mousemove', (event) => { });
-    document.removeEventListener('keydown', (event) => { });
-    document.removeEventListener('keydown', (event) => { });
+    document.removeEventListener('mousemove', handleMouseMove);
+    document.removeEventListener('keydown', handleDeselectKey);
+    document.removeEventListener('keydown', handleAddNodeKey);
+    document.removeEventListener('keydown', handleAddEdgeOneSourceKey);
+    document.removeEventListener('keydown', handleAddEdgeKey);
+    document.removeEventListener('keydown', handleDeleteSelectedKey);
+    document.removeEventListener('keydown', handleDeleteEdgesFromSelectedNodesKey);
+    document.removeEventListener('keydown', handleEditNodeKey);
+    document.removeEventListener('keydown', handleUndoKey);
+    document.removeEventListener('keydown', handleRedoKey);
   });
+
   //TODO fetch the correct graph by id
   //Fetches grpah data from the database
   try {
