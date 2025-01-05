@@ -115,7 +115,7 @@ onMounted(async () => {
       }
     }
   };
-  // HandleDeleteEdgesFromSelectedNodesKey: Deletes all edges connected to selected nodes
+  // HandleDeleteEdgesFromSelectedNodesKey: Deletes all edges between selected nodes
   const handleDeleteEdgesFromSelectedNodesKey = (event: KeyboardEvent) => {
     if (checkInputFieldShown()) return;
     if (event.code === keyboardShortcuts.deleteEdgesFromSelectedNodes.code && event.ctrlKey) {
