@@ -76,7 +76,7 @@ export const keyboardShortcuts: KeyboardShortcutsConfig = {
         description: 'Undo the last action',
         preventDefault: true
     },
-    // This only activates with a ctrl key pressed as well
+    // This only activates with a ctrl key and shift key pressed as well
     redo: {
         code: 'KeyZ',
         key: 'z',
