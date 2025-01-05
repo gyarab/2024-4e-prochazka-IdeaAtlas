@@ -207,6 +207,18 @@ onMounted(async () => {
   }
 });
 
+// Function which will calculate the position of first selected node
+const calculateFirstSelectedNodePosition = () => {
+  if (selectedNodes.value.length > 0 && graph.value) {
+    const firstNodeId = selectedNodes.value[0];
+    const nodeLayout = data.layouts.nodes[firstNodeId];
+    const domPoint = graph.value.translateFromSvgToDomCoordinates({ x: nodeLayout.x, y: nodeLayout.y });
+    return domPoint;
+
+  }
+  return { x: 0, y: 0 };
+};
+
 // Handler for node name submission
 const handleNodeNameSubmit = (name: string) => {
   const svgPoint = graph.value?.translateFromDomToSvgCoordinates(newNodePosition.value);
@@ -286,7 +298,7 @@ const configs = reactive(
   <NodeInputDialog :is-open="getShowingNodeInput()" :position="newNodePosition" @close="setShowingNodeInput(false)"
     @submit="handleNodeNameSubmit" />
   <!-- TODO find a position of first selected node -->
-  <NodeEditDialog :is-open="getShowingNodeEdit()" :position="{ x: 500, y: 500 }" @close="setShowingNodeEdit(false)"
+  <NodeEditDialog :is-open="getShowingNodeEdit()" :position="calculateFirstSelectedNodePosition()" @close="setShowingNodeEdit(false)"
     @submit="handleNodeNameEdit" />
 </template>
 
