@@ -25,6 +25,9 @@ import {
   moveBackward
 } from "../utils/graphManager";
 
+const props = defineProps<{
+    graph_id: string;
+}>();
 
 const supabase = useSupabaseClient();
 
@@ -186,10 +189,10 @@ onMounted(async () => {
     document.removeEventListener('keydown', handleRedoKey);
   });
 
-  //TODO fetch the correct graph by id
+
   //Fetches grpah data from the database
   try {
-    const fetchedData = await service.fetchGraph(supabase, "8bedcacd-0049-4f32-a1e5-4fe72a2080d2");
+    const fetchedData = await service.fetchGraph(supabase, props.graph_id);
     if (fetchedData) {
       data.nodes = fetchedData.nodes || [];
       data.edges = fetchedData.edges || [];

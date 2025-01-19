@@ -12,16 +12,19 @@
 </template>
 
 <script setup lang="ts">
+// Define the Props interface for component properties
 interface Props {
     network: {
-        id: string;
-        name: string;
-        created_at: string;
+        id: string;        // Unique identifier for the network
+        name: string;      // Display name of the network
+        created_at: string; // Creation timestamp
     }
 }
 
+// Initialize props using Vue's defineProps with the Props interface
 const props = defineProps<Props>();
 
+// Helper function to format date strings to localized format
 const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString();
 };
