@@ -9,5 +9,15 @@ export default defineNuxtConfig({
   supabase: {
     redirect: false
   },
-  css: ["v-network-graph/lib/style.css"]
+  css: ["v-network-graph/lib/style.css"],
+  app: {
+    head: {
+      link: [
+        {
+          rel: 'stylesheet',
+          href: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css'
+        }
+      ]
+    }
+  }
 })

@@ -1,10 +1,16 @@
 <template>
     <div class="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow">
-        <div class="flex justify-between items-start mb-2">
+        <div class="flex items-center gap-2 mb-2">
             <h2 class="text-xl font-semibold">{{ network.name }}</h2>
-            <span v-if="network.bookmarked" class="text-yellow-500">
-                <i class="fas fa-bookmark"></i>
-            </span>
+            <button 
+                @click="toggleBookmark" 
+                class="text-xl focus:outline-none hover:scale-110 transition-transform cursor-pointer p-1"
+            >
+                <!-- Changed icon classes to ensure compatibility -->
+                <i class="fa-star" :class="[
+                    network.bookmarked ? 'fas text-yellow-500' : 'far text-gray-400'
+                ]"></i>
+            </button>
         </div>
         <p class="text-gray-600 mb-3 line-clamp-2">{{ network.description }}</p>
         <div class="flex flex-col gap-1 text-sm text-gray-500">
@@ -19,6 +25,7 @@
 </template>
 
 <script setup lang="ts">
+import { upsertBookMarked } from '~/utils/graphMetadataService';
 // Define the Props interface for component properties
 interface Props {
     network: {
@@ -38,8 +45,29 @@ const props = defineProps<Props>();
 const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString();
 };
+
+const supabase = useSupabaseClient();
+
+const toggleBookmark = async () => {
+    try {
+        const updatedNetwork = { ...props.network, bookmarked: !props.network.bookmarked };
+        await upsertBookMarked(supabase, updatedNetwork);
+        // Emit event to refresh parent component
+        emit('bookmark-updated', updatedNetwork);
+    } catch (error) {
+        console.error('Error updating bookmark:', error);
+    }
+};
+
+const emit = defineEmits<{
+    'bookmark-updated': [network: Props['network']]
+}>();
 </script>
 
 <style scoped>
-
+.fa-star {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+}
 </style>
