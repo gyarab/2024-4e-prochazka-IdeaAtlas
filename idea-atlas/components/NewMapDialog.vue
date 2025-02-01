@@ -58,6 +58,9 @@
 </template>
 
 <script setup lang="ts">
+import { insertNewGraph } from '~/utils/graphMetadataService';
+const supabase = useSupabaseClient();
+
 // Interface for form data structure
 interface FormData {
     name: string;
@@ -87,10 +90,21 @@ const closeDialog = () => {
 };
 
 // Handles form submission
-const handleSubmit = () => {
-    emit('submit', { ...formData });
-    formData.name = '';
-    formData.description = ''; // Reset form
-    closeDialog();
+const handleSubmit = async () => {
+    const newGraph = {
+        name: formData.name,
+        description: formData.description,
+        bookmarked: false,
+    };
+    
+    try {
+        await insertNewGraph(supabase, newGraph);
+        emit('submit', { ...formData });
+        formData.name = '';
+        formData.description = '';
+        closeDialog();
+    } catch (error) {
+        console.error('Error creating new graph:', error);
+    }
 };
 </script>

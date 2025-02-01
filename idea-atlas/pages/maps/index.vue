@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { fetchGraphMDataBasedOnUsr, insertNewGraph } from '~/utils/graphMetadataService';
+import { fetchGraphMDataBasedOnUsr } from '~/utils/graphMetadataService';
 const supabase = useSupabaseClient();
 
 interface GraphMetadata {
@@ -13,13 +13,10 @@ interface GraphMetadata {
 
 const networks = ref<GraphMetadata[]>([]);
 
-const testMetadata = {
-    id: '1',
-    name: 'Test Network',
-    created_at: '2021-09-01T12:00:00.000Z',
-    updated_at: '2021-09-01T12:00:00.000Z',
-    bookmarked: false,
-    description: 'This is a test network for demonstration purposes.'
+const showNewMapDialog = ref(false);
+
+const handleNewMap = () => {
+    networks.value = [...networks.value];
 };
 
 onMounted(async () => {
@@ -39,13 +36,16 @@ onMounted(async () => {
 
 <template>
     <div class="container mx-auto p-4">
-        <button @click="insertNewGraph(supabase, testMetadata)" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
-            Click Me
-        </button>
-        <h1 class="text-2xl font-bold mb-6">Your Mind Maps</h1>
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-2xl font-bold">Your Mind Maps</h1>
+            <button @click="showNewMapDialog = true" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+                Create New Map
+            </button>
+        </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <MapCard v-for="network in networks" :key="network.id" :network="network" />
         </div>
+        <NewMapDialog v-model="showNewMapDialog" @submit="handleNewMap" />
     </div>
 </template>
 
