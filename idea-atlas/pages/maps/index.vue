@@ -6,15 +6,21 @@
         id: string;
         name: string;
         created_at: string;
+        updated_at: string; 
+        bookmarked: boolean;
+        description: string;
     }
 
     const networks = ref<GraphMetadata[]>([]);
 
     onMounted(async () => {
+        // Try to fetch and sort graph metadata
         try {
+            // Fetch graph metadata for current user
             const data = await fetchGraphMDataBasedOnUsr(supabase);
+            // Sort networks by creation date (newest first)
             networks.value = data.sort((a: GraphMetadata, b: GraphMetadata) => 
-                new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
             );
         } catch (error) {
             console.error('Error fetching networks:', error);
@@ -28,7 +34,8 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <MapCard v-for="network in networks" 
                     :key="network.id"
-                    :network="network" />
+                    :network="network"
+                     />
         </div>
     </div>
 </template>

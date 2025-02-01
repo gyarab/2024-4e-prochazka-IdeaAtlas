@@ -5,7 +5,7 @@ async function fetchGraphMDataBasedOnUsr(supabase) {
         const { data: { user } } = await supabase.auth.getUser()
         const { data, error } = await supabase
             .from('graphs')
-            .select('id, name, created_at')
+            .select('id, name, created_at, updated_at, bookmarked, description')
             .eq('user_id', user.id); 
 
         if (error) {
