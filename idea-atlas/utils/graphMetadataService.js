@@ -18,5 +18,27 @@ async function fetchGraphMDataBasedOnUsr(supabase) {
         return [];
     }
 }
+// Inserts a new graph into the database
+async function insertNewGraph(supabase, metadata) {
+    try {
+        const { data: { user } } = await supabase.auth.getUser();
+        const { data, error } = await supabase
+            .from('graphs')
+            .insert([{
+                name: metadata.name,
+                description: metadata.description,
+                user_id: user.id
+            }])
+            .select();
 
-export { fetchGraphMDataBasedOnUsr };
+        if (error) {
+            throw error;
+        }
+        return data;
+    } catch (error) {
+        console.error('Error inserting new graph:', error);
+        return null;
+    }
+}
+
+export { fetchGraphMDataBasedOnUsr, insertNewGraph};
