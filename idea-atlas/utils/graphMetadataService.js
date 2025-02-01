@@ -40,5 +40,23 @@ async function insertNewGraph(supabase, metadata) {
         return null;
     }
 }
+// Upserts the bookmarked status of a graph
+async function upsertBookMarked(supabase, graph_id, bookmarked) {
+    try {
+        const { data, error } = await supabase
+            .from('graphs')
+            .upsert(bookmarked)
+            .eq('id', graph_id)
+            .select();
 
-export { fetchGraphMDataBasedOnUsr, insertNewGraph};
+        if (error) { 
+            throw error;
+        }
+
+        return data;
+    } catch (error) {
+        console.error('Error updating bookmarked:', error);
+        return null;
+    }
+}
+export { fetchGraphMDataBasedOnUsr, insertNewGraph, upsertBookMarked };
