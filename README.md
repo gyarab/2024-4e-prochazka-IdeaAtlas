@@ -55,33 +55,6 @@ install dependencies:
 ```bash
 bun install
 ```
-# Suppabse locally setup
-```bash
-# Get the code
-git clone --depth 1 https://github.com/supabase/supabase
-
-# Go to the docker folder
-cd supabase/docker
-
-# Copy the fake env vars
-cp .env.example .env
-
-# Pull the latest images
-docker compose pull
-
-# Start the services (in detached mode)
-docker compose up -d
-```
-Accessing Supabase Studio
-```bash
-localhost:8000
-```
-default login credentials
-```bash
-supabase
-this_password_is_insecure_and_should_be_updated
-```
-
 
 # Development Server
 
