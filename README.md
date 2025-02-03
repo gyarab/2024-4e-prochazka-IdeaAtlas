@@ -4,33 +4,8 @@ IdeaAtlas is (will be) Brain storming visualisation web tool for creating knowle
 ## About Project
 - School project for my final 2 semesters at Gymnasium Arabska
 - school year 2024/25
-- most likely in vue
+- Vue
 
-
-
-# Docker Setup
-
-
-clone this repo
-
-```bash
-git clone https://github.com/gyarab/2024-4e-prochazka-IdeaAtlas.git
-```
-
-go to project directory
-```bash
-cd 2024-4e-prochazka-IdeaAtlas
-cd idea-atlas
-```
-Build the Docker image
-```bash
-docker build -t idea-atlas .
-```
-
-Run the Docker container
-```bash
-docker run -p 3000:3000 idea-atlas
-```
 # Linux Setup
 
 clone this repo
