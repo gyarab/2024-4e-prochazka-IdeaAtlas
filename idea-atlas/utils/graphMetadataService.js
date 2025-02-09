@@ -1,4 +1,3 @@
-
 // Fetches all the metadata for all the graphs in the database
 async function fetchGraphMDataBasedOnUsr(supabase) {
     try {
@@ -6,7 +5,7 @@ async function fetchGraphMDataBasedOnUsr(supabase) {
         const { data, error } = await supabase
             .from('graphs')
             .select('id, name, created_at, updated_at, bookmarked, description')
-            .eq('user_id', user.id); 
+            .eq('user_id', user.id);
 
         if (error) {
             throw error;
@@ -40,23 +39,18 @@ async function insertNewGraph(supabase, metadata) {
         return null;
     }
 }
-// Upserts the bookmarked status of a graph
-async function upsertBookMarked(supabase, graph_id, bookmarked) {
-    try {
-        const { data, error } = await supabase
-            .from('graphs')
-            .upsert(bookmarked)
-            .eq('id', graph_id)
-            .select();
+// Updates the bookmarked status of a graph in the database
+async function updateBookMarked(supabase, graph) {
+    console.log(graph);
 
-        if (error) { 
-            throw error;
-        }
+    const { error } = await supabase
+        .from('graphs')
+        .update({ bookmarked: true })
+        .eq('id', graph.id);
 
-        return data;
-    } catch (error) {
+    if (error) {
         console.error('Error updating bookmarked:', error);
-        return null;
     }
 }
-export { fetchGraphMDataBasedOnUsr, insertNewGraph, upsertBookMarked };
+
+export { fetchGraphMDataBasedOnUsr, insertNewGraph, updateBookMarked };

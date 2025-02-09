@@ -43,7 +43,7 @@ onMounted(async () => {
             </button>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <MapCard v-for="network in networks" :key="network.id" :network="network" />
+            <MapCard v-for="network in networks" :key="network.id" :graph="network" />
         </div>
         <NewMapDialog v-model="showNewMapDialog" @submit="handleNewMap" />
     </div>
