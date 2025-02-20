@@ -12,6 +12,15 @@ interface GraphMetadata {
 }
 
 const networks = ref<GraphMetadata[]>([]);
+const bookmarkedNetworks = computed(() => 
+    networks.value
+        .filter(network => network.bookmarked)
+        .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())
+);
+const regularNetworks = computed(() => 
+    networks.value
+        .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())
+);
 
 const showNewMapDialog = ref(false);
 
@@ -20,14 +29,9 @@ const handleNewMap = () => {
 };
 
 onMounted(async () => {
-    // Try to fetch and sort graph metadata
     try {
-        // Fetch graph metadata for current user
         const data = await fetchGraphMDataBasedOnUsr(supabase);
-        // Sort networks by creation date (newest first)
-        networks.value = data.sort((a: GraphMetadata, b: GraphMetadata) =>
-            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-        );
+        networks.value = data;
     } catch (error) {
         console.error('Error fetching networks:', error);
     }
@@ -42,9 +46,23 @@ onMounted(async () => {
                 Create New Map
             </button>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <MapCard v-for="network in networks" :key="network.id" :graph="network" />
+
+        <!-- Bookmarked Maps Section -->
+        <div v-if="bookmarkedNetworks.length > 0" class="mb-8">
+            <h2 class="text-xl font-semibold mb-4">Bookmarked Maps</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <MapCard v-for="network in bookmarkedNetworks" :key="network.id" :graph="network" />
+            </div>
         </div>
+
+        <!-- All Maps Section -->
+        <div>
+            <h2 class="text-xl font-semibold mb-4">All Maps</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <MapCard v-for="network in regularNetworks" :key="network.id" :graph="network" />
+            </div>
+        </div>
+
         <NewMapDialog v-model="showNewMapDialog" @submit="handleNewMap" />
     </div>
 </template>
