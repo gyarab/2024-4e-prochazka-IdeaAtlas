@@ -45,7 +45,7 @@ async function updateBookMarked(supabase, graph) {
 
     const { error } = await supabase
         .from('graphs')
-        .update({ bookmarked: true })
+        .update({ bookmarked: graph.bookmarked })
         .eq('id', graph.id);
 
     if (error) {

@@ -1,5 +1,21 @@
 <template>
-    <div class="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow">
+    <div class="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow relative">
+        <div class="absolute top-2 right-2 flex gap-2">
+            <button 
+                @click.prevent="handleEdit"
+                class="text-gray-400 hover:text-blue-500 transition-colors"
+                title="Edit map"
+            >
+                <i class="fas fa-edit"></i>
+            </button>
+            <button 
+                @click.prevent="handleDelete"
+                class="text-gray-400 hover:text-red-500 transition-colors"
+                title="Delete map"
+            >
+                <i class="fas fa-trash"></i>
+            </button>
+        </div>
         <div class="flex items-center gap-2 mb-2">
             <h2 class="text-xl font-semibold">{{ graph.name }}</h2>
             <button 
@@ -86,8 +102,20 @@ watch(() => props.graph.bookmarked, (newVal) => {
 });
 
 const emit = defineEmits<{
-    'bookmark-updated': [network: Props['graph']]
+    'bookmark-updated': [network: Props['graph']],
+    'delete': [id: string],
+    'edit': [graph: Props['graph']]
 }>();
+
+const handleDelete = () => {
+    if (confirm('Are you sure you want to delete this map?')) {
+        emit('delete', props.graph.id);
+    }
+};
+
+const handleEdit = () => {
+    emit('edit', props.graph);
+};
 </script>
 
 <style scoped>
