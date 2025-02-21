@@ -9,7 +9,7 @@
                     <!-- TODO it should not be seen until log in -->
                     <li><NuxtLink to="/maps" class="btn">Maps</NuxtLink></li>
                     <!-- TODO it should not be seen until log in -->
-                    <li><NuxtLink to="/profile" class="btn">profile</NuxtLink></li>
+                    <li><NuxtLink to="/profile" class="btn">{{ userEmail || 'Profile' }}</NuxtLink></li>
                 </ul>
             </nav>
         </header>
@@ -20,6 +20,17 @@
     </div>
 
 </template>
+<script setup lang="ts">
+const supabase = useSupabaseClient();
+const userEmail = ref('');
+
+onMounted(async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+        userEmail.value = user.email || '';
+    }
+});
+</script>
 <style scoped>
     
 </style>
