@@ -81,7 +81,8 @@ watch(searchTerm, (newValue) => {
   selectedNodes.value = matchingNodes;
 });
 
-// Add function to get current node name
+
+// Function to get current node name
 const getCurrentNodeName = () => {
   if (selectedNodes.value.length > 0) {
     const firstNodeId = selectedNodes.value[0];
@@ -89,6 +90,26 @@ const getCurrentNodeName = () => {
   }
   return '';
 };
+
+// Function to get current node color
+const getCurrentNodeColor = () => {
+  if (selectedNodes.value.length > 0) {
+    const firstNodeId = selectedNodes.value[0];
+    return data.nodes[firstNodeId]?.color || '';
+  }
+  return '';
+};
+
+// Function to get current node size
+// Hartcoded default size to 20
+const getCurrentNodeSize = () => {
+  if (selectedNodes.value.length > 0) {
+    const firstNodeId = selectedNodes.value[0];
+    return data.nodes[firstNodeId]?.size || 20;
+  }
+  return 20;
+};
+
 
 onMounted(async () => {
 
@@ -383,6 +404,8 @@ const configs = reactive(
     :is-open="getShowingNodeEdit()" 
     :position="calculateFirstSelectedNodePosition()" 
     :current-name="getCurrentNodeName()"
+    :current-color="getCurrentNodeColor()"
+    :current-size="getCurrentNodeSize()"
     @close="setShowingNodeEdit(false)"
     @submit="handleNodeNameEdit" 
   />
