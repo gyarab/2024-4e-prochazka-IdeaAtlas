@@ -32,7 +32,7 @@ const props = defineProps<{
 const supabase = useSupabaseClient();
 
 const data = reactive({
-  nodes: {} as Record<string, { name: string }>,
+  nodes: {} as Record<string, { name: string; color: string; size: number }>,
   edges: {} as Record<string, { source: string; target: string }>,
   layouts: { nodes: {} } as { nodes: Record<string, { x: number; y: number }> },
 });
