@@ -45,6 +45,8 @@ const regularNetworks = computed(() =>
 );
 
 const showNewMapDialog = ref(false);
+const showEditMapDialog = ref(false);
+const selectedGraph = ref<GraphMetadata | null>(null);
 
 const handleNewMap = () => {
     networks.value = [...networks.value];
@@ -67,6 +69,26 @@ const handleDelete = async (graphId: string) => {
     } catch (error) {
         console.error('Error deleting network:', error);
     }
+};
+
+const handleEditMap = (graph: GraphMetadata) => {
+    selectedGraph.value = graph;
+    showEditMapDialog.value = true;
+};
+
+const handleEditSubmit = async (updatedGraph: GraphMetadata) => {
+    const index = networks.value.findIndex(n => n.id === updatedGraph.id);
+    if (index !== -1) {
+        networks.value[index] = {
+            ...networks.value[index],
+            name: updatedGraph.name,
+            description: updatedGraph.description,
+            updated_at: new Date().toISOString()
+        };
+        networks.value = [...networks.value]; // Trigger reactivity
+    }
+    showEditMapDialog.value = false; // Close the dialog after successful edit
+    selectedGraph.value = null; // Reset selected graph
 };
 
 onMounted(async () => {
@@ -111,6 +133,7 @@ onMounted(async () => {
                     :graph="network"
                     @bookmark-updated="handleBookmarkUpdate"
                     @delete="handleDelete"
+                    @edit="handleEditMap"
                 />
             </div>
         </div>
@@ -125,11 +148,19 @@ onMounted(async () => {
                     :graph="network"
                     @bookmark-updated="handleBookmarkUpdate"
                     @delete="handleDelete"
+                    @edit="handleEditMap"
                 />
             </div>
         </div>
 
         <NewMapDialog v-model="showNewMapDialog" @submit="handleNewMap" />
+        <EditMapDialog 
+            v-if="selectedGraph"
+            v-model="showEditMapDialog"
+            :graph="selectedGraph"
+            @update:modelValue="(val) => { if (!val) { selectedGraph = null; } }"
+            @submit="handleEditSubmit"
+        />
     </div>
 </template>
 

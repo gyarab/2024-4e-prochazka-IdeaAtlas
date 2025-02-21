@@ -71,18 +71,21 @@ interface GraphData {
     id: string;
     name: string;
     description: string;
+    created_at: string;
+    updated_at: string;
+    bookmarked: boolean;
 }
 
 // Props definition - controls dialog visibility
 const props = defineProps<{
     modelValue: boolean;
-    graph?: GraphData;
+    graph: GraphData; // Make graph required instead of optional
 }>();
 
 // Event emitters for v-model and form submission
 const emit = defineEmits<{
     'update:modelValue': [value: boolean];
-    'submit': [data: { id?: string; name: string; description: string; }];
+    'submit': [data: GraphData];
 }>();
 
 // Reactive form data object
@@ -107,20 +110,17 @@ const closeDialog = () => {
 // Handles form submission
 const handleSubmit = async () => {
     try {
-        if (props.graph?.id) {
-            // Update existing graph
-            await updateGraphMetadata(supabase, {
-                id: props.graph.id,
-                ...formData
-            });
-        } else {
-            // Create new graph
-            await insertNewGraph(supabase, formData);
-        }
-        emit('submit', { 
-            id: props.graph?.id,
-            ...formData 
+        await updateGraphMetadata(supabase, {
+            id: props.graph.id,
+            ...formData
         });
+        
+        emit('submit', {
+            ...props.graph,
+            ...formData,
+            updated_at: new Date().toISOString()
+        });
+        
         closeDialog();
     } catch (error) {
         console.error('Error updating graph:', error);
