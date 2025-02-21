@@ -68,5 +68,26 @@ async function deleteGraph(supabase, graphId) {
         return false;
     }
 }
+// Updates description and the name of a graph in the database
+async function updateGraphMetadata(supabase, graphData) {
+    try {
+        const { error } = await supabase
+            .from('graphs')
+            .update({
+                name: graphData.name,
+                description: graphData.description,
+                updated_at: new Date().toISOString()
+            })
+            .eq('id', graphData.id);
 
-export { fetchGraphMDataBasedOnUsr, insertNewGraph, updateBookMarked, deleteGraph };
+        if (error) {
+            throw error;
+        }
+        return true;
+    } catch (error) {
+        console.error('Error updating graph metadata:', error);
+        return false;
+    }
+}
+
+export { fetchGraphMDataBasedOnUsr, insertNewGraph, updateBookMarked, deleteGraph, updateGraphMetadata };
