@@ -7,6 +7,8 @@ const props = defineProps<{
     isOpen: boolean;
     position: { x: number; y: number };
     currentName: string;
+    currentColor: string;
+    currentSize: number;
 }>();
 
 // Event emitters for dialog actions
@@ -17,13 +19,15 @@ const nodeName = ref('');
 const inputRef = ref<HTMLInputElement | null>(null);
 
 // Add new refs for color and size
-const nodeColor = ref('#3498db'); // Default blue color
-const nodeSize = ref(20); // Default size
+const nodeColor = ref(props.currentColor);
+const nodeSize = ref(props.currentSize);
 
 // Watch for dialog open state to reset and focus input
 watch(() => props.isOpen, (newValue) => {
     if (newValue) {
         nodeName.value = props.currentName;
+        nodeColor.value = props.currentColor;
+        nodeSize.value = props.currentSize;
         // Using setTimeout to ensure DOM is updated before focusing
         setTimeout(() => {
             inputRef.value?.focus();
