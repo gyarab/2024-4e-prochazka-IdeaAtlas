@@ -5,6 +5,7 @@ import { ref, watch, onMounted, onUnmounted } from 'vue';
 const props = defineProps<{
     isOpen: boolean;
     position: { x: number; y: number };
+    currentName: string;
 }>();
 
 // Event emitters for dialog actions
@@ -35,7 +36,7 @@ const colorPalette = [
 // Watch for dialog open state to reset and focus input
 watch(() => props.isOpen, (newValue) => {
     if (newValue) {
-        nodeName.value = '';
+        nodeName.value = props.currentName;
         // Using setTimeout to ensure DOM is updated before focusing
         setTimeout(() => {
             inputRef.value?.focus();

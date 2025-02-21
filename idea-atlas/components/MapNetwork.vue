@@ -81,6 +81,15 @@ watch(searchTerm, (newValue) => {
   selectedNodes.value = matchingNodes;
 });
 
+// Add function to get current node name
+const getCurrentNodeName = () => {
+  if (selectedNodes.value.length > 0) {
+    const firstNodeId = selectedNodes.value[0];
+    return data.nodes[firstNodeId]?.name || '';
+  }
+  return '';
+};
+
 onMounted(async () => {
 
   // Object to store current mouse coordinates
@@ -360,8 +369,13 @@ const configs = reactive(
   <NodeInputDialog :is-open="getShowingNodeInput()" :position="newNodePosition" @close="setShowingNodeInput(false)"
     @submit="handleNodeNameSubmit" />
   <!-- TODO find a position of first selected node -->
-  <NodeEditDialog :is-open="getShowingNodeEdit()" :position="calculateFirstSelectedNodePosition()" @close="setShowingNodeEdit(false)"
-    @submit="handleNodeNameEdit" />
+  <NodeEditDialog 
+    :is-open="getShowingNodeEdit()" 
+    :position="calculateFirstSelectedNodePosition()" 
+    :current-name="getCurrentNodeName()"
+    @close="setShowingNodeEdit(false)"
+    @submit="handleNodeNameEdit" 
+  />
 </template>
 
 <style>
