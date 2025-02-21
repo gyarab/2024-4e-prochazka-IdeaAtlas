@@ -46,7 +46,7 @@
             })
         
             if(error) throw error
-        successMsg.value = "Zkontrolujte email pro aktivaci účtu"
+        successMsg.value = "check you email inbox for verification"
         errorMsg.value = null
         }
         catch (error) {
