@@ -56,13 +56,12 @@ onUnmounted(() => {
     <!-- Teleport allows to move the component arround -->
     <Teleport to="body">
         <!-- Modal backdrop and container -->
-        <div v-if="isOpen" class="fixed inset-0 pointer-events-none">
+        <div v-if="isOpen" class="fixed inset-0 pointer-events-none z-40">
             <!-- Dialog box with positioning -->
             <div class="absolute bg-white rounded-lg shadow-xl p-4 pointer-events-auto border-2 border-blue-200" :style="{
                 left: `${position.x}px`,
                 top: `${position.y}px`,
-                transform: 'translate(-50%, -50%)',
-                zIndex: 1000
+                transform: 'translate(-50%, -50%)'
             }">
                 <form @submit="handleSubmit" class="w-64">
                     <input ref="inputRef" v-model="nodeName" type="text" placeholder="Enter node name"

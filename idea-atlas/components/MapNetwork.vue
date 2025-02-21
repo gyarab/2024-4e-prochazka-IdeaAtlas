@@ -326,8 +326,8 @@ const configs = reactive(
   <div>
     <button @click="console.log(data)">console log data</button>
   </div> -->
-  <!-- Simplified search input -->
-  <div class="fixed top-4 left-1/2 transform -translate-x-1/2 z-20">
+  <!-- Simplified search input - increase z-index -->
+  <div class="fixed top-20 left-1/2 transform -translate-x-1/2 z-40">
     <input 
       type="text" 
       v-model="searchTerm"
@@ -340,8 +340,8 @@ const configs = reactive(
   </div>
   <client-only>
     <div v-if="loading" class="loading-indicator">Loading...</div>
-    <!-- v-model creates 2 way binding -->
-    <v-network-graph v-else class="fixed inset-0 w-screen h-screen" ref="graph" v-model:selected-nodes="selectedNodes"
+    <!-- Adjust map position -->
+    <v-network-graph v-else class="fixed inset-0 w-screen h-screen z-0" ref="graph" v-model:selected-nodes="selectedNodes"
       v-model:selected-edges="selectedEdges" :nodes="data.nodes" :edges="data.edges" :layouts="data.layouts"
       :configs="configs" />
   </client-only>

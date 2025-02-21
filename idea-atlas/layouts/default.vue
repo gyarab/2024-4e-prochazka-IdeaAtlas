@@ -1,6 +1,6 @@
 <template>
     <div>
-        <header class="shadow-sm bg-white">
+        <header class="shadow-sm bg-white fixed top-0 left-0 right-0 z-50">
             <nav class="container mx-auto p-4 flex justify-between">
                 <NuxtLink to="/" class="font-bold">Idea Atlas</NuxtLink>
                 <ul class="flex gap-4">
@@ -13,12 +13,11 @@
                 </ul>
             </nav>
         </header>
-        <!-- "container mx-auto p-4" -->
-        <div>
-        <slot /> <!-- page content -->
+        <!-- Add top padding to account for fixed header -->
+        <div class="pt-16">
+            <slot /> <!-- page content -->
         </div>
     </div>
-
 </template>
 <script setup lang="ts">
 const supabase = useSupabaseClient();
