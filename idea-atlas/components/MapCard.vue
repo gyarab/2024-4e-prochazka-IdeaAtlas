@@ -38,6 +38,10 @@
                  class="mt-4 inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
             Open Map
         </NuxtLink>
+        <DeleteConfirmDialog
+            v-model="showDeleteDialog"
+            @confirm="confirmDelete"
+        />
     </div>
 </template>
 
@@ -107,10 +111,14 @@ const emit = defineEmits<{
     'edit': [graph: Props['graph']]
 }>();
 
+const showDeleteDialog = ref(false);
+
 const handleDelete = () => {
-    if (confirm('Are you sure you want to delete this map?')) {
-        emit('delete', props.graph.id);
-    }
+    showDeleteDialog.value = true;
+};
+
+const confirmDelete = () => {
+    emit('delete', props.graph.id);
 };
 
 const handleEdit = () => {

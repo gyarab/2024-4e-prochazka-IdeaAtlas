@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { fetchGraphMDataBasedOnUsr } from '~/utils/graphMetadataService';
+import { fetchGraphMDataBasedOnUsr, deleteGraph } from '~/utils/graphMetadataService';
 const supabase = useSupabaseClient();
 
 interface GraphMetadata {
@@ -58,6 +58,17 @@ const handleBookmarkUpdate = (updatedNetwork: GraphMetadata) => {
     }
 };
 
+const handleDelete = async (graphId: string) => {
+    try {
+        const success = await deleteGraph(supabase, graphId);
+        if (success) {
+            networks.value = networks.value.filter(network => network.id !== graphId);
+        }
+    } catch (error) {
+        console.error('Error deleting network:', error);
+    }
+};
+
 onMounted(async () => {
     try {
         const data = await fetchGraphMDataBasedOnUsr(supabase);
@@ -99,6 +110,7 @@ onMounted(async () => {
                     :key="network.id" 
                     :graph="network"
                     @bookmark-updated="handleBookmarkUpdate"
+                    @delete="handleDelete"
                 />
             </div>
         </div>
@@ -112,6 +124,7 @@ onMounted(async () => {
                     :key="network.id" 
                     :graph="network"
                     @bookmark-updated="handleBookmarkUpdate"
+                    @delete="handleDelete"
                 />
             </div>
         </div>
