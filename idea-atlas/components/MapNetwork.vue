@@ -52,6 +52,23 @@ const selectedEdges = ref<string[]>([])
 // Position where the new node will be added
 const newNodePosition = ref({ x: 0, y: 0 });
 
+// Add new search term ref
+const searchTerm = ref('');
+
+// Add search function
+const handleSearch = () => {
+  if (!searchTerm.value) {
+    emptySelected(selectedNodes, selectedEdges);
+    return;
+  }
+  
+  const matchingNodes = Object.entries(data.nodes)
+    .filter(([_, node]) => node.name.toLowerCase().includes(searchTerm.value.toLowerCase()))
+    .map(([id, _]) => id);
+  
+  selectedNodes.value = matchingNodes;
+};
+
 onMounted(async () => {
 
   // Object to store current mouse coordinates
@@ -287,6 +304,22 @@ const configs = reactive(
   </div>
   <div>
     <button @click="console.log(data)">console log data</button>
+  </div>
+  <!-- Add search input -->
+  <div class="fixed top-4 right-4 z-10 flex gap-2">
+    <input 
+      type="text" 
+      v-model="searchTerm"
+      placeholder="Search nodes..."
+      class="px-3 py-2 border rounded-md"
+      @keyup.enter="handleSearch"
+    />
+    <button 
+      @click="handleSearch"
+      class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+    >
+      Search
+    </button>
   </div>
   <client-only>
     <div v-if="loading" class="loading-indicator">Loading...</div>
