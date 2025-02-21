@@ -20,6 +20,8 @@
                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         placeholder="Enter map name"
                     />
+                    <div v-if="errors.name" class="text-red-500 text-sm mt-1">{{ errors.name }}</div>
+                    <div class="text-gray-500 text-sm mt-1">{{ formData.name.length }}/{{ MAP_NAME_MAX_LENGTH }}</div>
                 </div>
 
                 <!-- Map description textarea -->
@@ -34,6 +36,10 @@
                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         placeholder="Enter map description"
                     ></textarea>
+                    <div v-if="errors.description" class="text-red-500 text-sm mt-1">{{ errors.description }}</div>
+                    <div class="text-gray-500 text-sm mt-1">
+                        {{ formData.description.length }}/{{ MAP_DESCRIPTION_MAX_LENGTH }}
+                    </div>
                 </div>
 
                 <!-- Action buttons container -->
@@ -59,6 +65,7 @@
 
 <script setup lang="ts">
 import { insertNewGraph } from '~/utils/graphMetadataService';
+import { MAP_NAME_MAX_LENGTH, MAP_NAME_MIN_LENGTH, MAP_DESCRIPTION_MAX_LENGTH } from '~/utils/constants';
 const supabase = useSupabaseClient();
 
 // Interface for form data structure
@@ -84,6 +91,33 @@ const formData = reactive<FormData>({
     description: ''
 });
 
+const errors = reactive({
+    name: '',
+    description: ''
+});
+
+const validateForm = (): boolean => {
+    errors.name = '';
+    errors.description = '';
+    
+    if (formData.name.length < MAP_NAME_MIN_LENGTH) {
+        errors.name = `Name must be at least ${MAP_NAME_MIN_LENGTH} characters`;
+        return false;
+    }
+    
+    if (formData.name.length > MAP_NAME_MAX_LENGTH) {
+        errors.name = `Name must be less than ${MAP_NAME_MAX_LENGTH} characters`;
+        return false;
+    }
+    
+    if (formData.description.length > MAP_DESCRIPTION_MAX_LENGTH) {
+        errors.description = `Description must be less than ${MAP_DESCRIPTION_MAX_LENGTH} characters`;
+        return false;
+    }
+    
+    return true;
+};
+
 // Handles dialog close
 const closeDialog = () => {
     emit('update:modelValue', false);
@@ -91,6 +125,7 @@ const closeDialog = () => {
 
 // Handles form submission
 const handleSubmit = async () => {
+    if (!validateForm()) return;
     const newGraph = {
         name: formData.name,
         description: formData.description,
