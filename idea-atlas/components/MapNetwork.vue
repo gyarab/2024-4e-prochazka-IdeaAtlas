@@ -328,6 +328,15 @@ const configs = reactive(
       maxZoomLevel: 16,
     },
     node: {
+      normal: {
+        type: "circle",
+        radius: node => node.size, // Use the value of each node object
+        color: node => node.color,
+      },
+      hover: {
+        radius: node => node.size + 4,
+        color: node => node.color,
+      },
       selectable: true,
     },
     edge: {
