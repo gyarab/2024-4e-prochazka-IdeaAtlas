@@ -24,11 +24,20 @@
 const supabase = useSupabaseClient();
 const userEmail = ref('');
 
-onMounted(async () => {
+// Function to update user email
+const updateUserEmail = async () => {
     const { data: { user } } = await supabase.auth.getUser();
-    if (user) {
-        userEmail.value = user.email || '';
-    }
+    userEmail.value = user?.email || '';
+};
+
+onMounted(async () => {
+    // Initial email check
+    await updateUserEmail();
+    
+    // Listen for auth state changes
+    supabase.auth.onAuthStateChange((_event, _session) => {
+        updateUserEmail();
+    });
 });
 </script>
 <style scoped>
