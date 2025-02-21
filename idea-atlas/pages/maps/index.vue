@@ -48,8 +48,10 @@ const showNewMapDialog = ref(false);
 const showEditMapDialog = ref(false);
 const selectedGraph = ref<GraphMetadata | null>(null);
 
-const handleNewMap = () => {
-    networks.value = [...networks.value];
+const handleNewMap = (newGraphData: any) => {
+    if (newGraphData) {
+        networks.value = [newGraphData, ...networks.value];
+    }
 };
 
 const handleBookmarkUpdate = (updatedNetwork: GraphMetadata) => {

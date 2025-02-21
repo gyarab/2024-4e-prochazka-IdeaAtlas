@@ -26,9 +26,11 @@ async function insertNewGraph(supabase, metadata) {
             .insert([{
                 name: metadata.name,
                 description: metadata.description,
-                user_id: user.id
+                user_id: user.id,
+                bookmarked: false
             }])
-            .select();
+            .select('*')  // Select all fields of the newly created graph
+            .single();    // Get single result
 
         if (error) {
             throw error;

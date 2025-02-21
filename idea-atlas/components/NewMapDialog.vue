@@ -133,11 +133,13 @@ const handleSubmit = async () => {
     };
     
     try {
-        await insertNewGraph(supabase, newGraph);
-        emit('submit', { ...formData });
-        formData.name = '';
-        formData.description = '';
-        closeDialog();
+        const createdGraph = await insertNewGraph(supabase, newGraph);
+        if (createdGraph) {
+            emit('submit', createdGraph);
+            formData.name = '';
+            formData.description = '';
+            closeDialog();
+        }
     } catch (error) {
         console.error('Error creating new graph:', error);
     }
