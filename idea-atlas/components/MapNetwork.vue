@@ -270,13 +270,14 @@ const calculateFirstSelectedNodePosition = () => {
 };
 
 // Handler for node name submission
-const handleNodeNameSubmit = (name: string) => {
+const handleNodeNameSubmit = (nodeProps: { name: string, color: string, size: number }) => {
   const svgPoint = graph.value?.translateFromDomToSvgCoordinates(newNodePosition.value);
   if (svgPoint) {
-    addNewNode(data, name, svgPoint.x, svgPoint.y);
+    addNewNode(data, nodeProps, svgPoint.x, svgPoint.y);
   }
   setShowingNodeInput(false);
 };
+
 const handleNodeNameEdit = (changes: { name: string, color: string, size: number }) => {
   const svgPoint = graph.value?.translateFromDomToSvgCoordinates(newNodePosition.value);
   if (svgPoint) {

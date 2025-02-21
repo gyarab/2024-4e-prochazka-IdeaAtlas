@@ -6,14 +6,18 @@ function initilizeHistory(data) {
     historyManager.addToHistory(data);
 }
 // adds a new node to the graph
-function addNewNode(data, newName, xMousePos, yMousePos) {
+function addNewNode(data, nodeProps, xMousePos, yMousePos) {
     // Find the largest numeric part of the existing keys
     const maxNodeId = findCurrentMaxNodeId(data);
     // Generate the next key
     const nextNodeId = `node${maxNodeId + 1}`;
     
-    // Add the new node
-    data.nodes[nextNodeId] = { name: newName };
+    // Add the new node with all properties
+    data.nodes[nextNodeId] = {
+        name: nodeProps.name,
+        color: nodeProps.color,
+        size: nodeProps.size
+    };
     // Adds the new node to the layouts so its position is tracked
     data.layouts.nodes[nextNodeId] = { x: xMousePos, y: yMousePos };
     
