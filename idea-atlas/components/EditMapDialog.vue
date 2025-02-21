@@ -65,7 +65,7 @@
 
 <script setup lang="ts">
 import { updateGraphMetadata } from '~/utils/graphMetadataService';
-import { MAP_NAME_MAX_LENGTH, MAP_NAME_MIN_LENGTH, MAP_DESCRIPTION_MAX_LENGTH } from '~/utils/constants';
+import { MAP_NAME_MAX_LENGTH, MAP_NAME_MIN_LENGTH, MAP_DESCRIPTION_MAX_LENGTH } from '~/config/constants';
 
 const supabase = useSupabaseClient();
 
