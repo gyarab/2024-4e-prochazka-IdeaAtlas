@@ -29,7 +29,7 @@ const emit = defineEmits<{
         <label class="block text-sm font-medium text-gray-700">
             Size: {{ size }}
         </label>
-        <input type="range" :value="size" @input="e => emit('update:size', +(e.target as HTMLInputElement).value)" min="1"
+        <input type="range" :value="size" @input="e => emit('update:size', +(e.target as HTMLInputElement).value)" min="10"
             max="100" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" />
     </div>
 </template>

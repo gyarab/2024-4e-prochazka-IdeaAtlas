@@ -17,14 +17,14 @@ const inputRef = ref<HTMLInputElement | null>(null);
 
 // Add new refs for color and size
 const nodeColor = ref('#3498db'); // Default blue color
-const nodeSize = ref(30); // Default size
+const nodeSize = ref(20); // Default size
 
 // Watch for dialog open state to reset and focus input
 watch(() => props.isOpen, (newValue) => {
     if (newValue) {
         nodeName.value = '';
         nodeColor.value = '#3498db'; // Reset to default color
-        nodeSize.value = 30; // Reset to default size
+        nodeSize.value = 20; // Reset to default size
         setTimeout(() => {
             inputRef.value?.focus();
         }, 0);
