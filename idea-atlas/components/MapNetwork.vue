@@ -55,6 +55,18 @@ const newNodePosition = ref({ x: 0, y: 0 });
 // Add new search term ref
 const searchTerm = ref('');
 
+// Add ref for search focus state
+const isSearchFocused = ref(false);
+
+// Add handlers for search focus
+const handleSearchFocus = () => {
+  isSearchFocused.value = true;
+};
+
+const handleSearchBlur = () => {
+  isSearchFocused.value = false;
+};
+
 // Add watch effect for searchTerm
 watch(searchTerm, (newValue) => {
   if (!newValue) {
@@ -81,12 +93,14 @@ onMounted(async () => {
 
   //handleDeselectKey: Deselects all currently selected nodes and edges when deselect key is pressed
   const handleDeselectKey = (event: KeyboardEvent) => {
+    if (isSearchFocused.value) return;
     if (event.code === keyboardShortcuts.deselect.code) {
       emptySelected(selectedNodes, selectedEdges);
     }
   };
   //handleAddNodeKey: Creates a new node at current mouse position when add node key is pressed
   const handleAddNodeKey = (event: KeyboardEvent) => {
+    if (isSearchFocused.value) return;
     if (checkInputFieldShown()) return;
     if (event.ctrlKey) return;
     if (event.code === keyboardShortcuts.addNode.code) {
@@ -100,6 +114,7 @@ onMounted(async () => {
   };
   // HandleAddEdgeOneSourceKey: Creates edges from first selected node to all other selected nodes
   const handleAddEdgeOneSourceKey = (event: KeyboardEvent) => {
+    if (isSearchFocused.value) return;
     if (checkInputFieldShown()) return;
     if (event.ctrlKey) return;
     if (event.code === keyboardShortcuts.addEdgeOneSource.code && selectedNodes.value.length >= 2) {
@@ -111,6 +126,7 @@ onMounted(async () => {
   };
   // handleAddEdgeKey: Creates edges between all selected nodes when Ctrl + add edge key is pressed
   const handleAddEdgeKey = (event: KeyboardEvent) => {
+    if (isSearchFocused.value) return;
     if (checkInputFieldShown()) return;
     if (event.code === keyboardShortcuts.addEdgeOneSource.code && event.ctrlKey && selectedNodes.value.length >= 2) {
       if (keyboardShortcuts.addEdgeOneSource.preventDefault) {
@@ -121,6 +137,7 @@ onMounted(async () => {
   };
   // HandleDeleteSelectedKey: Deletes all selected nodes and edges
   const handleDeleteSelectedKey = (event: KeyboardEvent) => {
+    if (isSearchFocused.value) return;
     if (checkInputFieldShown()) return;
     if (event.ctrlKey) return;
     if (event.code === keyboardShortcuts.deleteSelected.code) {
@@ -137,6 +154,7 @@ onMounted(async () => {
   };
   // HandleDeleteEdgesFromSelectedNodesKey: Deletes all edges between selected nodes
   const handleDeleteEdgesFromSelectedNodesKey = (event: KeyboardEvent) => {
+    if (isSearchFocused.value) return;
     if (checkInputFieldShown()) return;
     if (event.code === keyboardShortcuts.deleteEdgesFromSelectedNodes.code && event.ctrlKey) {
       if (keyboardShortcuts.deleteSelected.preventDefault) {
@@ -149,6 +167,7 @@ onMounted(async () => {
   };
   // HandleEditNodeKey: Opens node edit dialog for selected node
   const handleEditNodeKey = (event: KeyboardEvent) => {
+    if (isSearchFocused.value) return;
     if (checkInputFieldShown()) return;
     if (event.code === keyboardShortcuts.editNode.code && event.ctrlKey && selectedNodes.value.length > 0) {
       if (keyboardShortcuts.editNode.preventDefault) {
@@ -159,6 +178,7 @@ onMounted(async () => {
   };
   // HandleUndoKey: Undoes last action
   const handleUndoKey = (event: KeyboardEvent) => {
+    if (isSearchFocused.value) return;
     if (checkInputFieldShown()) return;
     if (event.code === keyboardShortcuts.undo.code && event.ctrlKey) {
       if (keyboardShortcuts.undo.preventDefault) {
@@ -170,6 +190,7 @@ onMounted(async () => {
   };
   // HandleRedoKey: Redoes last undone action
   const handleRedoKey = (event: KeyboardEvent) => {
+    if (isSearchFocused.value) return;
     if (checkInputFieldShown()) return;
     if (event.code === keyboardShortcuts.redo.code && event.ctrlKey && event.shiftKey) {
       if (keyboardShortcuts.redo.preventDefault) {
@@ -312,6 +333,9 @@ const configs = reactive(
       v-model="searchTerm"
       placeholder="Search nodes..."
       class="px-4 py-2 border rounded-md shadow-md w-64 focus:outline-none focus:ring-2 focus:ring-blue-500"
+
+      @focus="handleSearchFocus"
+      @blur="handleSearchBlur"
     />
   </div>
   <client-only>
