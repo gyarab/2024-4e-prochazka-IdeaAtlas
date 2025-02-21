@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import * as vNG from "v-network-graph";
-import { reactive, ref, onMounted, onUnmounted } from "vue"; // Added onUnmounted
+import { reactive, ref, onMounted, onUnmounted, watch } from "vue"; // Add watch
 import service from "../utils/graphService";
 import NodeInputDialog from './NodeInputDialog.vue';
 import { keyboardShortcuts } from '../config/keyboardShortcuts';
@@ -55,19 +55,19 @@ const newNodePosition = ref({ x: 0, y: 0 });
 // Add new search term ref
 const searchTerm = ref('');
 
-// Add search function
-const handleSearch = () => {
-  if (!searchTerm.value) {
+// Add watch effect for searchTerm
+watch(searchTerm, (newValue) => {
+  if (!newValue) {
     emptySelected(selectedNodes, selectedEdges);
     return;
   }
   
   const matchingNodes = Object.entries(data.nodes)
-    .filter(([_, node]) => node.name.toLowerCase().includes(searchTerm.value.toLowerCase()))
+    .filter(([_, node]) => node.name.toLowerCase().includes(newValue.toLowerCase()))
     .map(([id, _]) => id);
   
   selectedNodes.value = matchingNodes;
-};
+});
 
 onMounted(async () => {
 
@@ -299,27 +299,20 @@ const configs = reactive(
 </script>
 
 <template>
-  <div>
+  <!-- <div>
     <button @click="service.upsertGraphData(supabase, data)">Upsert whole graph</button>
   </div>
   <div>
     <button @click="console.log(data)">console log data</button>
-  </div>
-  <!-- Add search input -->
-  <div class="fixed top-4 right-4 z-10 flex gap-2">
+  </div> -->
+  <!-- Simplified search input -->
+  <div class="fixed top-4 left-1/2 transform -translate-x-1/2 z-20">
     <input 
       type="text" 
       v-model="searchTerm"
       placeholder="Search nodes..."
-      class="px-3 py-2 border rounded-md"
-      @keyup.enter="handleSearch"
+      class="px-4 py-2 border rounded-md shadow-md w-64 focus:outline-none focus:ring-2 focus:ring-blue-500"
     />
-    <button 
-      @click="handleSearch"
-      class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-    >
-      Search
-    </button>
   </div>
   <client-only>
     <div v-if="loading" class="loading-indicator">Loading...</div>
