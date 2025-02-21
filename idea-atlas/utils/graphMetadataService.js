@@ -76,6 +76,7 @@ async function updateGraphMetadata(supabase, graphData) {
             .update({
                 name: graphData.name,
                 description: graphData.description,
+                // Hope it is the correct date format
                 updated_at: new Date().toISOString()
             })
             .eq('id', graphData.id);
