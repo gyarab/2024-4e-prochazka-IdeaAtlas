@@ -41,8 +41,6 @@ async function insertNewGraph(supabase, metadata) {
 }
 // Updates the bookmarked status of a graph in the database
 async function updateBookMarked(supabase, graph) {
-    console.log(graph);
-
     const { error } = await supabase
         .from('graphs')
         .update({ bookmarked: graph.bookmarked })
@@ -53,4 +51,22 @@ async function updateBookMarked(supabase, graph) {
     }
 }
 
-export { fetchGraphMDataBasedOnUsr, insertNewGraph, updateBookMarked };
+// Deletes a graph from the database
+async function deleteGraph(supabase, graphId) {
+    try {
+        const { error } = await supabase
+            .from('graphs')
+            .delete()
+            .eq('id', graphId);
+
+        if (error) {
+            throw error;
+        }
+        return true;
+    } catch (error) {
+        console.error('Error deleting graph:', error);
+        return false;
+    }
+}
+
+export { fetchGraphMDataBasedOnUsr, insertNewGraph, updateBookMarked, deleteGraph };
