@@ -16,6 +16,8 @@ async function upsertNodes(supabase, nodes) {
     id: graph_id + key,
     node_id_in_graph: key,
     name: node.name,
+    color: node.color,
+    size: node.size,
     graph_id: graph_id,
   }));
   
