@@ -116,7 +116,7 @@ async function fetchData(supabase, graph_id) {
 function reconstructData(nodesData, edgesData, layoutsData) {
   // Reconstruct nodes
   const nodes = nodesData.reduce((acc, node) => {
-    acc[node.node_id_in_graph] = { name: node.name };
+    acc[node.node_id_in_graph] = { name: node.name, color: node.color, size: node.size};
     return acc;
   }, {});
 
