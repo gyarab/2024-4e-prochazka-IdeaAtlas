@@ -14,11 +14,11 @@ async function upsertNodes(supabase, nodes) {
   // Extract node values and map them to an array of objects for insertion
   const nodesToInsert = Object.entries(nodes).map(([key, node]) => ({
     id: graph_id + key,
+    graph_id: graph_id,
     node_id_in_graph: key,
     name: node.name,
     color: node.color,
-    size: node.size,
-    graph_id: graph_id,
+    size: node.size
   }));
   
   const { error } = await supabase
@@ -39,10 +39,12 @@ async function upsertEdges(supabase, edges) {
   // Extract edge values and map them to an array of objects for insertion
   const edgesToInsert = Object.entries(edges).map(([key, edge]) => ({
     id: graph_id + key,
+    graph_id: graph_id,
     edge_id_in_graph: key,
     source: edge.source,
     target: edge.target,
-    graph_id: graph_id
+    color: edge.color,
+    width: edge.width
   }));
   // Insert edges into the table
   const { error } = await supabase

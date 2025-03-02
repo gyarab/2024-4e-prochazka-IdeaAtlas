@@ -112,6 +112,14 @@ const getCurrentNodeSize = () => {
   return 20;
 };
 
+// Add save handler function
+const handleSave = async () => {
+  try {
+    await service.upsertGraphData(supabase, data);
+  } catch (error) {
+    console.error('Error saving graph:', error);
+  }
+};
 
 onMounted(async () => {
 
@@ -322,16 +330,21 @@ const configs = mainConfig;
     <button @click="console.log(data)">console log data</button>
   </div> -->
   <!-- Simplified search input - increase z-index -->
-  <div class="fixed top-20 left-1/2 transform -translate-x-1/2 z-40">
+  <div class="fixed top-20 left-1/2 transform -translate-x-1/2 z-40 flex gap-2">
     <input 
       type="text" 
       v-model="searchTerm"
       placeholder="Search nodes..."
       class="px-4 py-2 border rounded-md shadow-md w-64 focus:outline-none focus:ring-2 focus:ring-blue-500"
-
       @focus="handleSearchFocus"
       @blur="handleSearchBlur"
     />
+    <button 
+      @click="handleSave"
+      class="px-4 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+    >
+      Save
+    </button>
   </div>
   <client-only>
     <div v-if="loading" class="loading-indicator">Loading...</div>
