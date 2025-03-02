@@ -77,9 +77,13 @@ function addEgesOneSource(data, selectedNodes) {
             
             // Creates a new edge id
             const nextEdgeId = `edge${maxEdgeId + i}`;
-            const edgeColor = getLargerNodeColor(data, source, target);
-            // Adds the new edge to the data
-            data.edges[nextEdgeId] = { source, target, color: edgeColor };
+            const edgeProps = getLargerNodeProperties(data, source, target);
+            data.edges[nextEdgeId] = { 
+                source, 
+                target, 
+                color: edgeProps.color,
+                width: edgeProps.width
+            };
         }
     }
     historyManager.addToHistory(data);
@@ -107,9 +111,13 @@ function addEdges(data, selectedNodes) {
                 
                 // Creates a new edge id
                 const nextEdgeId = `edge${maxEdgeId + newEdgeCounter}`;
-                const edgeColor = getLargerNodeColor(data, source, target);
-                // Adds the new edge to the data
-                data.edges[nextEdgeId] = { source, target, color: edgeColor };
+                const edgeProps = getLargerNodeProperties(data, source, target);
+                data.edges[nextEdgeId] = { 
+                    source, 
+                    target, 
+                    color: edgeProps.color,
+                    width: edgeProps.width
+                };
             }
         }
     }
@@ -206,9 +214,27 @@ function updateEdgeColors(data, nodeId) {
             // Get the connected node (the one that's not being edited)
             const otherNodeId = edge.source === nodeId ? edge.target : edge.source;
             // Update edge color based on the larger node
-            data.edges[edgeId].color = getLargerNodeColor(data, nodeId, otherNodeId);
+            const edgeProps = getLargerNodeProperties(data, nodeId, otherNodeId);
+            data.edges[edgeId].color = edgeProps.color;
+            data.edges[edgeId].width = edgeProps.width;
         }
     });
+}
+
+// Add this helper function to calculate edge width based on node size
+function calculateEdgeWidth(nodeSize) {
+    // Convert node size (10-100) to edge width (1-5)
+    return 1 + (nodeSize / 25);
+}
+
+function getLargerNodeProperties(data, source, target) {
+    const sourceSize = data.nodes[source].size;
+    const targetSize = data.nodes[target].size;
+    const largerNode = sourceSize >= targetSize ? data.nodes[source] : data.nodes[target];
+    return {
+        color: largerNode.color,
+        width: calculateEdgeWidth(largerNode.size)
+    };
 }
 
 export {
