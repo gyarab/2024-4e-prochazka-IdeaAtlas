@@ -77,8 +77,9 @@ function addEgesOneSource(data, selectedNodes) {
             
             // Creates a new edge id
             const nextEdgeId = `edge${maxEdgeId + i}`;
+            const edgeColor = getLargerNodeColor(data, source, target);
             // Adds the new edge to the data
-            data.edges[nextEdgeId] = { source, target };
+            data.edges[nextEdgeId] = { source, target, color: edgeColor };
         }
     }
     historyManager.addToHistory(data);
@@ -106,8 +107,9 @@ function addEdges(data, selectedNodes) {
                 
                 // Creates a new edge id
                 const nextEdgeId = `edge${maxEdgeId + newEdgeCounter}`;
+                const edgeColor = getLargerNodeColor(data, source, target);
                 // Adds the new edge to the data
-                data.edges[nextEdgeId] = { source, target };
+                data.edges[nextEdgeId] = { source, target, color: edgeColor };
             }
         }
     }
@@ -183,6 +185,13 @@ function moveBackward(data){
     historyManager.moveBackward();
     const newdata = historyManager.getCurrentData();
     Object.assign(data, newdata);
+}
+
+// Add this helper function to get color of the larger node
+function getLargerNodeColor(data, source, target) {
+    const sourceSize = data.nodes[source].size;
+    const targetSize = data.nodes[target].size;
+    return sourceSize >= targetSize ? data.nodes[source].color : data.nodes[target].color;
 }
 
 export {

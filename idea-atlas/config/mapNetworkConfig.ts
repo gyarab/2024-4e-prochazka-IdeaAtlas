@@ -46,6 +46,10 @@ export const mainConfig = reactive(
       },
       edge: {
         selectable: true,
+        normal: {
+          width: edge => edge.width, // Use the value of each edge object
+          color: edge => edge.color,
+        },
       },
     })
   );
