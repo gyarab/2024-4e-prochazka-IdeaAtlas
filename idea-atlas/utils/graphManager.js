@@ -141,10 +141,15 @@ function deleteEdges(data, edgesToDelete) {
     historyManager.addToHistory(data);
 }
 // This function will change the name of selected nodes
-function editNodes(data, selectedNodes, newName) {
-    for (const nodeId of selectedNodes) {
-        data.nodes[nodeId].name = newName;
-    }
+function editNodes(data, selectedNodes, changes) {
+    selectedNodes.forEach(nodeId => {
+        data.nodes[nodeId] = {
+            ...data.nodes[nodeId],
+            ...changes
+        };
+        // Update colors of all edges connected to this node
+        updateEdgeColors(data, nodeId);
+    });
     historyManager.addToHistory(data);
 }
 // This function will empty the selected nodes and edges
@@ -194,6 +199,18 @@ function getLargerNodeColor(data, source, target) {
     return sourceSize >= targetSize ? data.nodes[source].color : data.nodes[target].color;
 }
 
+// Add this new function to update edge colors based on connected nodes
+function updateEdgeColors(data, nodeId) {
+    Object.entries(data.edges).forEach(([edgeId, edge]) => {
+        if (edge.source === nodeId || edge.target === nodeId) {
+            // Get the connected node (the one that's not being edited)
+            const otherNodeId = edge.source === nodeId ? edge.target : edge.source;
+            // Update edge color based on the larger node
+            data.edges[edgeId].color = getLargerNodeColor(data, nodeId, otherNodeId);
+        }
+    });
+}
+
 export {
     initilizeHistory,
     addNewNode,
@@ -205,5 +222,6 @@ export {
     emptySelected,
     deleeteEdgesBasedOnNodes,
     moveForward,
-    moveBackward
+    moveBackward,
+    updateEdgeColors // Add this to exports
 };

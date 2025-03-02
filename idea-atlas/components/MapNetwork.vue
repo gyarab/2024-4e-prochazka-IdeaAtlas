@@ -304,17 +304,7 @@ const handleNodeNameSubmit = (nodeProps: { name: string, color: string, size: nu
 const handleNodeNameEdit = (changes: { name: string, color: string, size: number }) => {
   const svgPoint = graph.value?.translateFromDomToSvgCoordinates(newNodePosition.value);
   if (svgPoint) {
-    // Update all selected nodes with the new properties
-    selectedNodes.value.forEach(nodeId => {
-      data.nodes[nodeId] = {
-        ...data.nodes[nodeId],
-        name: changes.name,
-        color: changes.color,
-        size: changes.size
-      };
-    });
-    // Add to history after making changes
-    historyManager.addToHistory(data);
+    editNodes(data, selectedNodes.value, changes);
   }
   setShowingNodeEdit(false);
 };
