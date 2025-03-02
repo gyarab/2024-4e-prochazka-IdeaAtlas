@@ -1,17 +1,10 @@
 //this file is responsible for fetching and upserting graph data to the database
 
-//TODO - hardcoded
-const graph_id = "8bedcacd-0049-4f32-a1e5-4fe72a2080d2";
-
-
 //exports the functions so they can be used in other files
 export default {upsertGraphData, fetchGraph}
 
-
 // Upsert nodes into the 'nodes' table in the Supabase database
-//supabse must be passed from somhwere where it is part of nuxt life cycle
-async function upsertNodes(supabase, nodes) {
-  // Extract node values and map them to an array of objects for insertion
+async function upsertNodes(supabase, nodes, graph_id) {
   const nodesToInsert = Object.entries(nodes).map(([key, node]) => ({
     id: graph_id + key,
     graph_id: graph_id,
@@ -32,11 +25,8 @@ async function upsertNodes(supabase, nodes) {
   }
 }
 
-
 // Upsert edges into the 'edges' table in the Supabase database
-//supabse must be passed from somhwere where it is part of nuxt life cycle
-async function upsertEdges(supabase, edges) {
-  // Extract edge values and map them to an array of objects for insertion
+async function upsertEdges(supabase, edges, graph_id) {
   const edgesToInsert = Object.entries(edges).map(([key, edge]) => ({
     id: graph_id + key,
     graph_id: graph_id,
@@ -46,7 +36,7 @@ async function upsertEdges(supabase, edges) {
     color: edge.color,
     width: edge.width
   }));
-  // Insert edges into the table
+  
   const { error } = await supabase
     .from('edges')
     .upsert(edgesToInsert);
@@ -56,14 +46,10 @@ async function upsertEdges(supabase, edges) {
   } else {
     console.log('Edges inserted successfully');
   }
-
 }
 
-
 // Upsert layouts into the 'layouts' table in the Supabase database
-//supabse must be passed from somhwere where it is part of nuxt life cycle
-async function upsertLayouts(supabase, layouts) {
-  // Extract layout values and map them to an array of objects for insertion
+async function upsertLayouts(supabase, layouts, graph_id) {
   const layoutsToInsert = Object.entries(layouts.nodes).map(([key, layout]) => ({
     id: graph_id + key,
     node_id_in_graph: key,
@@ -82,13 +68,13 @@ async function upsertLayouts(supabase, layouts) {
     console.log('Layouts inserted successfully');
   }
 }
-//upserts whole graph data
-async function upsertGraphData(supabase, data){
-  upsertNodes(supabase, data.nodes);
-  upsertEdges(supabase, data.edges);
-  upsertLayouts(supabase, data.layouts);
-}
 
+//upserts whole graph data
+async function upsertGraphData(supabase, data, graph_id){
+  upsertNodes(supabase, data.nodes, graph_id);
+  upsertEdges(supabase, data.edges, graph_id);
+  upsertLayouts(supabase, data.layouts, graph_id);
+}
 
 async function fetchData(supabase, graph_id) {
   // Fetch nodes
@@ -114,7 +100,6 @@ async function fetchData(supabase, graph_id) {
 
   return { nodesData, edgesData, layoutsData };
 }
-
 
 //acc = accumulator - reduces the incoming data
 function reconstructData(nodesData, edgesData, layoutsData) {
