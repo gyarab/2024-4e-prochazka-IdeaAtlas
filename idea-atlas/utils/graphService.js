@@ -124,7 +124,7 @@ function reconstructData(nodesData, edgesData, layoutsData) {
 
   // Reconstruct edges
   const edges = edgesData.reduce((acc, edge) => {
-    acc[edge.edge_id_in_graph] = { source: edge.source, target: edge.target };
+    acc[edge.edge_id_in_graph] = { source: edge.source, target: edge.target, color: edge.color, width: edge.size};
     return acc;
   }, {});
 

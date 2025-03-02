@@ -28,13 +28,14 @@ import {
 
 const props = defineProps<{
     graph_id: string;
+    
 }>();
 
 const supabase = useSupabaseClient();
 
 const data = reactive({
   nodes: {} as Record<string, { name: string; color: string; size: number }>,
-  edges: {} as Record<string, { source: string; target: string }>,
+  edges: {} as Record<string, { source: string; target: string; color: string; }>,
   layouts: { nodes: {} } as { nodes: Record<string, { x: number; y: number }> },
 });
 
