@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref, watch, onMounted, onUnmounted } from 'vue';
-import NodeStyleControls from './NodeStyleControls.vue';
 
 // Props definition for dialog visibility and position
 const props = defineProps<{

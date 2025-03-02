@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { colorPalette } from '../config/colors';
+import { NODE_MAX_SIZE, NODE_MIN_SIZE } from '~/config/constants';
+
 
 const props = defineProps<{
     color: string;
@@ -29,7 +31,8 @@ const emit = defineEmits<{
         <label class="block text-sm font-medium text-gray-700">
             Size: {{ size }}
         </label>
-        <input type="range" :value="size" @input="e => emit('update:size', +(e.target as HTMLInputElement).value)" min="10"
-            max="100" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" />
+        <input type="range" :value="size" @input="e => emit('update:size', +(e.target as HTMLInputElement).value)" 
+            :min="NODE_MIN_SIZE" :max="NODE_MAX_SIZE" 
+            class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" />
     </div>
 </template>
