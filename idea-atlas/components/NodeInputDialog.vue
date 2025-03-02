@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, watch, onMounted, onUnmounted } from 'vue';
-import NodeStyleControls from './NodeStyleControls.vue';
+import {defaultColor} from '~/config/colors';
+import { NODE_DEFAULT_SIZE } from '~/config/constants';
 
 // Props definition for dialog visibility and position
 const props = defineProps<{
@@ -23,8 +24,8 @@ const nodeSize = ref(20); // Default size
 watch(() => props.isOpen, (newValue) => {
     if (newValue) {
         nodeName.value = '';
-        nodeColor.value = '#3498db'; // Reset to default color
-        nodeSize.value = 20; // Reset to default size
+        nodeColor.value = defaultColor; // Reset to default color
+        nodeSize.value = NODE_DEFAULT_SIZE; // Reset to default size
         setTimeout(() => {
             inputRef.value?.focus();
         }, 0);
