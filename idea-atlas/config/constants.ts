@@ -12,3 +12,4 @@ export const NODE_MAX_SIZE = 100;
 
 // Edges constants
 export const EDGE_DEFAULT_WIDTH = 2;
+export const EDGE_NOTE_RATIO = 25;

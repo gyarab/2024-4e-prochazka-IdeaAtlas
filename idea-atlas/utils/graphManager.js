@@ -1,6 +1,6 @@
 // This file contains the functions that are used to manage the graph data structure
 import { historyManager } from "./graphHistory";
-
+import { EDGE_NOTE_RATIO } from "~/config/constants";
 
 function initilizeHistory(data) {
     historyManager.addToHistory(data);
@@ -224,7 +224,7 @@ function updateEdgeColors(data, nodeId) {
 // Add this helper function to calculate edge width based on node size
 function calculateEdgeWidth(nodeSize) {
     // Convert node size (10-100) to edge width (1-5)
-    return 1 + (nodeSize / 25);
+    return 1 + (nodeSize / EDGE_NOTE_RATIO);
 }
 
 function getLargerNodeProperties(data, source, target) {
