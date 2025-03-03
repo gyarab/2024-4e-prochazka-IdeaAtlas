@@ -200,7 +200,7 @@ function moveBackward(data){
     Object.assign(data, newdata);
 }
 
-// Add this new function to update edge colors based on connected nodes
+// Function to update edge colors based on connected nodes
 function updateEdgeColors(data, nodeId) {
     Object.entries(data.edges).forEach(([edgeId, edge]) => {
         if (edge.source === nodeId || edge.target === nodeId) {
@@ -214,7 +214,7 @@ function updateEdgeColors(data, nodeId) {
     });
 }
 
-// Add this helper function to calculate edge width based on node size
+// Helper function to calculate edge width based on node size
 function calculateEdgeWidth(nodeSize) {
     // Convert node size (10-100) to edge width (1-5)
     return 1 + (nodeSize / EDGE_NOTE_RATIO);
