@@ -115,7 +115,7 @@ const getCurrentNodeSize = () => {
 // Add save handler function
 const handleSave = async () => {
   try {
-    await service.upsertGraphData(supabase, data, props.graph_id);
+    await service.saveGraph(supabase, data, props.graph_id);
   } catch (error) {
     console.error('Error saving graph:', error);
   }

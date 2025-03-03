@@ -1,7 +1,7 @@
 //this file is responsible for fetching and upserting graph data to the database
 
 //exports the functions so they can be used in other files
-export default {upsertGraphData, fetchGraph}
+export default {saveGraph, fetchGraph}
 
 // Upsert nodes into the 'nodes' table in the Supabase database
 async function upsertNodes(supabase, nodes, graph_id) {
@@ -74,6 +74,126 @@ async function upsertGraphData(supabase, data, graph_id){
   upsertNodes(supabase, data.nodes, graph_id);
   upsertEdges(supabase, data.edges, graph_id);
   upsertLayouts(supabase, data.layouts, graph_id);
+}
+
+// Fetch all ids of specific graph from the database
+async function fetchAllIds(supabase, graph_id) {
+  try {
+    // Fetch node IDs
+    const { data: nodeIds, error: nodesError } = await supabase
+      .from('nodes')
+      .select('node_id_in_graph')
+      .eq('graph_id', graph_id);
+    if (nodesError) throw nodesError;
+
+    // Fetch edge IDs
+    const { data: edgeIds, error: edgesError } = await supabase
+      .from('edges')
+      .select('edge_id_in_graph')
+      .eq('graph_id', graph_id);
+    if (edgesError) throw edgesError;
+
+    // Fetch layout IDs
+    const { data: layoutIds, error: layoutsError } = await supabase
+      .from('layouts')
+      .select('node_id_in_graph')
+      .eq('graph_id', graph_id);
+    if (layoutsError) throw layoutsError;
+
+    return {
+      nodeIds: nodeIds.map(node => node.node_id_in_graph),
+      edgeIds: edgeIds.map(edge => edge.edge_id_in_graph),
+      layoutIds: layoutIds.map(layout => layout.node_id_in_graph)
+    };
+  } catch (error) {
+    console.error('Error fetching IDs:', error);
+    throw error;
+  }
+}
+
+// Filters out data that exists in DB but not in current graph
+async function filterDeletedData(data, ids_in_db) {
+  const nodesToDelete = ids_in_db.nodeIds.filter(id => !Object.keys(data.nodes).includes(id));
+  const edgesToDelete = ids_in_db.edgeIds.filter(id => !Object.keys(data.edges || {}).includes(id));
+  const layoutsToDelete = ids_in_db.layoutIds.filter(id => !Object.keys(data.layouts.nodes).includes(id));
+  return { nodesToDelete, edgesToDelete, layoutsToDelete };
+}
+
+// Deletes nodes from the database
+async function deleteNodes(supabase, nodesToDelete, graph_id) {
+  if (nodesToDelete.length === 0) return;
+  
+  const ids = nodesToDelete.map(nodeId => graph_id + nodeId);
+  const { error } = await supabase
+    .from('nodes')
+    .delete()
+    .in('id', ids);
+  
+  if (error) {
+    console.error('Error deleting nodes:', error);
+    throw error;
+  }
+  console.log('Nodes deleted successfully');
+}
+
+// Deletes edges from the database
+async function deleteEdges(supabase, edgesToDelete, graph_id) {
+  if (edgesToDelete.length === 0) return;
+  
+  const ids = edgesToDelete.map(edgeId => graph_id + edgeId);
+  const { error } = await supabase
+    .from('edges')
+    .delete()
+    .in('id', ids);
+  
+  if (error) {
+    console.error('Error deleting edges:', error);
+    throw error;
+  }
+  console.log('Edges deleted successfully');
+}
+
+// Deletes layouts from the database
+async function deleteLayouts(supabase, layoutsToDelete, graph_id) {
+  if (layoutsToDelete.length === 0) return;
+  
+  const ids = layoutsToDelete.map(layoutId => graph_id + layoutId);
+  const { error } = await supabase
+    .from('layouts')
+    .delete()
+    .in('id', ids);
+  
+  if (error) {
+    console.error('Error deleting layouts:', error);
+    throw error;
+  }
+  console.log('Layouts deleted successfully');
+}
+
+// Saves the graph data to the database
+async function saveGraph(supabase, data, graph_id) {
+  try {
+    // Get current IDs from database
+    const ids_in_db = await fetchAllIds(supabase, graph_id);
+    
+    // Find items to delete
+    const { nodesToDelete, edgesToDelete, layoutsToDelete } = await filterDeletedData(data, ids_in_db);
+    
+    // Delete items that no longer exist in the graph
+    await Promise.all([
+      deleteNodes(supabase, nodesToDelete, graph_id),
+      deleteEdges(supabase, edgesToDelete, graph_id),
+      deleteLayouts(supabase, layoutsToDelete, graph_id)
+    ]);
+    
+    // Upsert current graph data
+    await upsertGraphData(supabase, data, graph_id);
+    
+    console.log('Graph saved successfully');
+  } catch (error) {
+    console.error('Error saving graph:', error);
+    throw error;
+  }
 }
 
 async function fetchData(supabase, graph_id) {
