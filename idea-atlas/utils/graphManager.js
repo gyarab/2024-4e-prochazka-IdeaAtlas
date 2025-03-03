@@ -200,13 +200,6 @@ function moveBackward(data){
     Object.assign(data, newdata);
 }
 
-// Add this helper function to get color of the larger node
-function getLargerNodeColor(data, source, target) {
-    const sourceSize = data.nodes[source].size;
-    const targetSize = data.nodes[target].size;
-    return sourceSize >= targetSize ? data.nodes[source].color : data.nodes[target].color;
-}
-
 // Add this new function to update edge colors based on connected nodes
 function updateEdgeColors(data, nodeId) {
     Object.entries(data.edges).forEach(([edgeId, edge]) => {
