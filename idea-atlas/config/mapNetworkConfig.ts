@@ -86,6 +86,10 @@ export const mainConfig = reactive(
         width: edge => edge.width, // Use the value of each edge object
         color: edge => convertToRGBA(edge.color),
       },
+      hover: {
+        width: edge => edge.width,
+        color: edge => edge.color, // Use original color without transparency
+      },
     },
   })
 );
