@@ -46,7 +46,7 @@ export const mainConfig = reactive(
       label: {
         visible: true,
         fontFamily: undefined,
-        fontSize: 25,
+        fontSize: node => node.size * 0.75,
         lineHeight: 1.1,
         color: "#000000",
         margin: 4,
