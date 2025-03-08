@@ -237,14 +237,37 @@ function getLargerNodeProperties(data, source, target) {
  * @param {Object} data - The graph data containing nodes and edges
  */
 function adjustNodeLayouts(data) {
-    // Constants that control the force simulation
-    const REPULSION = 5000;  // Strength of repulsive force between nodes
-    const ATTRACTION = 0.1;  // Strength of attractive force along edges (spring force)
-    const DAMPING = 0.9;     // Reduces velocity over time to prevent infinite oscillation
-    const MIN_DISTANCE = 100; // Minimum distance threshold for repulsion calculation
+    // Find the biggest node
+    let biggestNodeId = null;
+    let maxSize = -1;
     
-    // Initialize velocity vectors for each node if they don't exist
-    // Velocity is used to create smooth animations and prevent sudden movements
+    Object.entries(data.nodes).forEach(([nodeId, node]) => {
+        if (node.size > maxSize) {
+            maxSize = node.size;
+            biggestNodeId = nodeId;
+        }
+    });
+
+    // First time setup: move biggest node to [0,0] and all others relative to it
+    if (biggestNodeId && !data.layouts.initialized) {
+        const biggestNodePos = data.layouts.nodes[biggestNodeId];
+        const offsetX = biggestNodePos.x;
+        const offsetY = biggestNodePos.y;
+
+        Object.keys(data.layouts.nodes).forEach(nodeId => {
+            data.layouts.nodes[nodeId].x -= offsetX;
+            data.layouts.nodes[nodeId].y -= offsetY;
+        });
+        data.layouts.initialized = true;
+    }
+
+    // Constants for force simulation
+    const REPULSION = 5000;
+    const ATTRACTION = 0.1;
+    const DAMPING = 0.9;
+    const MIN_DISTANCE = 100;
+    
+    // Initialize velocity vectors
     if (!data.layouts.velocity) {
         data.layouts.velocity = {};
         Object.keys(data.layouts.nodes).forEach(nodeId => {
@@ -255,21 +278,27 @@ function adjustNodeLayouts(data) {
     const nodes = data.layouts.nodes;
     const edges = data.edges;
 
-    // Iterate through each node to calculate net forces acting on it
+    // Calculate and apply forces to all nodes except the biggest one
     Object.keys(nodes).forEach(nodeId1 => {
-        let forceX = 0;  // Net force in X direction
-        let forceY = 0;  // Net force in Y direction
+        // Skip force calculation for biggest node - it stays at [0,0]
+        if (nodeId1 === biggestNodeId) {
+            data.layouts.velocity[nodeId1] = { x: 0, y: 0 };
+            nodes[nodeId1].x = 0;
+            nodes[nodeId1].y = 0;
+            return;
+        }
 
-        // Calculate repulsive forces between current node and all other nodes
-        // Nodes push away from each other using inverse square law (like electromagnetic repulsion)
+        let forceX = 0;
+        let forceY = 0;
+
+        // Calculate repulsive forces
         Object.keys(nodes).forEach(nodeId2 => {
-            if (nodeId1 === nodeId2) return; // Skip self-interaction
+            if (nodeId1 === nodeId2) return;
 
             const dx = nodes[nodeId1].x - nodes[nodeId2].x;
             const dy = nodes[nodeId1].y - nodes[nodeId2].y;
             const distance = Math.sqrt(dx * dx + dy * dy);
             
-            // Only apply repulsion if nodes are closer than minimum distance
             if (distance < MIN_DISTANCE) {
                 const force = REPULSION / (distance * distance);
                 forceX += (dx / distance) * force;
@@ -277,31 +306,26 @@ function adjustNodeLayouts(data) {
             }
         });
 
-        // Calculate attractive forces along edges (like springs)
-        // Connected nodes are pulled together
+        // Calculate attractive forces along edges
         Object.values(edges).forEach(edge => {
             if (edge.source === nodeId1 || edge.target === nodeId1) {
                 const otherNodeId = edge.source === nodeId1 ? edge.target : edge.source;
                 const dx = nodes[nodeId1].x - nodes[otherNodeId].x;
                 const dy = nodes[nodeId1].y - nodes[otherNodeId].y;
-                const distance = Math.sqrt(dx * dx + dy * dy);
 
                 forceX -= (dx * ATTRACTION);
                 forceY -= (dy * ATTRACTION);
             }
         });
 
-        // Update node velocity using forces and damping
-        // Damping prevents the system from becoming too energetic
+        // Update velocity and position
         data.layouts.velocity[nodeId1].x = (data.layouts.velocity[nodeId1].x + forceX) * DAMPING;
         data.layouts.velocity[nodeId1].y = (data.layouts.velocity[nodeId1].y + forceY) * DAMPING;
-
-        // Update node position based on velocity
+        
         nodes[nodeId1].x += data.layouts.velocity[nodeId1].x;
         nodes[nodeId1].y += data.layouts.velocity[nodeId1].y;
     });
 
-    // Save the new state to history
     historyManager.addToHistory(data);
 }
 
