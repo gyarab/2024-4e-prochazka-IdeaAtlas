@@ -23,7 +23,8 @@ import {
   emptySelected,
   deleeteEdgesBasedOnNodes,
   moveForward,
-  moveBackward
+  moveBackward,
+  adjustNodeLayouts
 } from "../utils/graphManager";
 
 // Id of Graph to be fetched and displayed
@@ -120,6 +121,11 @@ const handleSave = async () => {
   } catch (error) {
     console.error('Error saving graph:', error);
   }
+};
+
+// Add handler for auto-layout
+const handleAutoLayout = () => {
+  adjustNodeLayouts(data);
 };
 
 onMounted(async () => {
@@ -345,6 +351,12 @@ const configs = mainConfig;
       class="px-4 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
     >
       Save
+    </button>
+    <button 
+      @click="handleAutoLayout"
+      class="px-4 py-2 bg-purple-500 text-white rounded-md shadow-md hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-500"
+    >
+      Auto Layout
     </button>
   </div>
   <client-only>

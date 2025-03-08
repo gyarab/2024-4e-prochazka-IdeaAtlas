@@ -230,6 +230,69 @@ function getLargerNodeProperties(data, source, target) {
     };
 }
 
+// Force Algorithm to adjust node layouts
+function adjustNodeLayouts(data) {
+    const REPULSION = 5000; // Repulsive force constant
+    const ATTRACTION = 0.1; // Attractive force constant
+    const DAMPING = 0.9;    // Damping factor to prevent oscillation
+    const MIN_DISTANCE = 100; // Minimum distance between nodes
+    
+    // Initialize velocity if it doesn't exist
+    if (!data.layouts.velocity) {
+        data.layouts.velocity = {};
+        Object.keys(data.layouts.nodes).forEach(nodeId => {
+            data.layouts.velocity[nodeId] = { x: 0, y: 0 };
+        });
+    }
+
+    const nodes = data.layouts.nodes;
+    const edges = data.edges;
+
+    // Calculate forces for each node
+    Object.keys(nodes).forEach(nodeId1 => {
+        let forceX = 0;
+        let forceY = 0;
+
+        // Repulsive forces from other nodes
+        Object.keys(nodes).forEach(nodeId2 => {
+            if (nodeId1 === nodeId2) return;
+
+            const dx = nodes[nodeId1].x - nodes[nodeId2].x;
+            const dy = nodes[nodeId1].y - nodes[nodeId2].y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            
+            if (distance < MIN_DISTANCE) {
+                const force = REPULSION / (distance * distance);
+                forceX += (dx / distance) * force;
+                forceY += (dy / distance) * force;
+            }
+        });
+
+        // Attractive forces along edges
+        Object.values(edges).forEach(edge => {
+            if (edge.source === nodeId1 || edge.target === nodeId1) {
+                const otherNodeId = edge.source === nodeId1 ? edge.target : edge.source;
+                const dx = nodes[nodeId1].x - nodes[otherNodeId].x;
+                const dy = nodes[nodeId1].y - nodes[otherNodeId].y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                forceX -= (dx * ATTRACTION);
+                forceY -= (dy * ATTRACTION);
+            }
+        });
+
+        // Update velocity with damping
+        data.layouts.velocity[nodeId1].x = (data.layouts.velocity[nodeId1].x + forceX) * DAMPING;
+        data.layouts.velocity[nodeId1].y = (data.layouts.velocity[nodeId1].y + forceY) * DAMPING;
+
+        // Update position
+        nodes[nodeId1].x += data.layouts.velocity[nodeId1].x;
+        nodes[nodeId1].y += data.layouts.velocity[nodeId1].y;
+    });
+
+    historyManager.addToHistory(data);
+}
+
 export {
     initilizeHistory,
     addNewNode,
@@ -242,5 +305,6 @@ export {
     deleeteEdgesBasedOnNodes,
     moveForward,
     moveBackward,
-    updateEdgeColors // Add this to exports
+    updateEdgeColors,
+    adjustNodeLayouts
 };
