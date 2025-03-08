@@ -68,6 +68,7 @@ export const mainConfig = reactive(
         color: "#000000",
         margin: 4,
         direction: "south",
+        directionAutoAdjustment: true,
         background: {
           visible: false,
           color: "#ffffff",
