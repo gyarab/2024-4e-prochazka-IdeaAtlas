@@ -309,7 +309,7 @@ const handleNodeNameSubmit = (nodeProps: { name: string, color: string, size: nu
   setShowingNodeInput(false);
 };
 
-const handleNodeNameEdit = (changes: { name: string, color: string, size: number }) => {
+const handleNodeEdit = (changes: { name: string, color: string, size: number }) => {
   const svgPoint = graph.value?.translateFromDomToSvgCoordinates(newNodePosition.value);
   if (svgPoint) {
     editNodes(data, selectedNodes.value, changes);
@@ -366,7 +366,7 @@ const configs = mainConfig;
     :current-color="getCurrentNodeColor()"
     :current-size="getCurrentNodeSize()"
     @close="setShowingNodeEdit(false)"
-    @submit="handleNodeNameEdit" 
+    @submit="handleNodeEdit" 
   />
 </template>
 
