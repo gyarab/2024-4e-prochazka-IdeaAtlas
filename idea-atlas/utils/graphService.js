@@ -179,14 +179,17 @@ async function saveGraph(supabase, data, graph_id) {
     // Find items to delete
     const { nodesToDelete, edgesToDelete, layoutsToDelete } = await filterDeletedData(data, ids_in_db);
     
-    // Delete items that no longer exist in the graph
-    await Promise.all([
-      deleteNodes(supabase, nodesToDelete, graph_id),
-      deleteEdges(supabase, edgesToDelete, graph_id),
-      deleteLayouts(supabase, layoutsToDelete, graph_id)
-    ]);
+    // Delete items in correct order to handle foreign key constraints
+    // First delete edges
+    await deleteEdges(supabase, edgesToDelete, graph_id);
     
-    // Upsert current graph data
+    // Then delete layouts for the nodes that will be deleted
+    await deleteLayouts(supabase, nodesToDelete, graph_id);
+    
+    // Finally delete the nodes
+    await deleteNodes(supabase, nodesToDelete, graph_id);
+    
+    // Now upsert all current data
     await upsertGraphData(supabase, data, graph_id);
     
     console.log('Graph saved successfully');

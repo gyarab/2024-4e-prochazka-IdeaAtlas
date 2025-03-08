@@ -301,7 +301,7 @@ const calculateFirstSelectedNodePosition = () => {
 };
 
 // Handler for node name submission
-const handleNodeNameSubmit = (nodeProps: { name: string, color: string, size: number }) => {
+const handleNodeSubmit = (nodeProps: { name: string, color: string, size: number }) => {
   const svgPoint = graph.value?.translateFromDomToSvgCoordinates(newNodePosition.value);
   if (svgPoint) {
     addNewNode(data, nodeProps, svgPoint.x, svgPoint.y);
@@ -357,7 +357,7 @@ const configs = mainConfig;
   <!-- Shows when showNodeInput is true, positioned at newNodePosition -->
   <!-- Emits 'close' event to hide dialog and 'submit' event with node name -->
   <NodeInputDialog :is-open="getShowingNodeInput()" :position="newNodePosition" @close="setShowingNodeInput(false)"
-    @submit="handleNodeNameSubmit" />
+    @submit="handleNodeSubmit" />
   <!-- TODO find a position of first selected node -->
   <NodeEditDialog 
     :is-open="getShowingNodeEdit()" 
