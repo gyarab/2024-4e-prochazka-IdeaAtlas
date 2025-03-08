@@ -230,14 +230,21 @@ function getLargerNodeProperties(data, source, target) {
     };
 }
 
-// Force Algorithm to adjust node layouts
+/**
+ * Force-directed layout algorithm to adjust node positions based on repulsive and attractive forces.
+ * Uses a physics-based approach where nodes repel each other and edges act like springs.
+ * 
+ * @param {Object} data - The graph data containing nodes and edges
+ */
 function adjustNodeLayouts(data) {
-    const REPULSION = 5000; // Repulsive force constant
-    const ATTRACTION = 0.1; // Attractive force constant
-    const DAMPING = 0.9;    // Damping factor to prevent oscillation
-    const MIN_DISTANCE = 100; // Minimum distance between nodes
+    // Constants that control the force simulation
+    const REPULSION = 5000;  // Strength of repulsive force between nodes
+    const ATTRACTION = 0.1;  // Strength of attractive force along edges (spring force)
+    const DAMPING = 0.9;     // Reduces velocity over time to prevent infinite oscillation
+    const MIN_DISTANCE = 100; // Minimum distance threshold for repulsion calculation
     
-    // Initialize velocity if it doesn't exist
+    // Initialize velocity vectors for each node if they don't exist
+    // Velocity is used to create smooth animations and prevent sudden movements
     if (!data.layouts.velocity) {
         data.layouts.velocity = {};
         Object.keys(data.layouts.nodes).forEach(nodeId => {
@@ -248,19 +255,21 @@ function adjustNodeLayouts(data) {
     const nodes = data.layouts.nodes;
     const edges = data.edges;
 
-    // Calculate forces for each node
+    // Iterate through each node to calculate net forces acting on it
     Object.keys(nodes).forEach(nodeId1 => {
-        let forceX = 0;
-        let forceY = 0;
+        let forceX = 0;  // Net force in X direction
+        let forceY = 0;  // Net force in Y direction
 
-        // Repulsive forces from other nodes
+        // Calculate repulsive forces between current node and all other nodes
+        // Nodes push away from each other using inverse square law (like electromagnetic repulsion)
         Object.keys(nodes).forEach(nodeId2 => {
-            if (nodeId1 === nodeId2) return;
+            if (nodeId1 === nodeId2) return; // Skip self-interaction
 
             const dx = nodes[nodeId1].x - nodes[nodeId2].x;
             const dy = nodes[nodeId1].y - nodes[nodeId2].y;
             const distance = Math.sqrt(dx * dx + dy * dy);
             
+            // Only apply repulsion if nodes are closer than minimum distance
             if (distance < MIN_DISTANCE) {
                 const force = REPULSION / (distance * distance);
                 forceX += (dx / distance) * force;
@@ -268,7 +277,8 @@ function adjustNodeLayouts(data) {
             }
         });
 
-        // Attractive forces along edges
+        // Calculate attractive forces along edges (like springs)
+        // Connected nodes are pulled together
         Object.values(edges).forEach(edge => {
             if (edge.source === nodeId1 || edge.target === nodeId1) {
                 const otherNodeId = edge.source === nodeId1 ? edge.target : edge.source;
@@ -281,15 +291,17 @@ function adjustNodeLayouts(data) {
             }
         });
 
-        // Update velocity with damping
+        // Update node velocity using forces and damping
+        // Damping prevents the system from becoming too energetic
         data.layouts.velocity[nodeId1].x = (data.layouts.velocity[nodeId1].x + forceX) * DAMPING;
         data.layouts.velocity[nodeId1].y = (data.layouts.velocity[nodeId1].y + forceY) * DAMPING;
 
-        // Update position
+        // Update node position based on velocity
         nodes[nodeId1].x += data.layouts.velocity[nodeId1].x;
         nodes[nodeId1].y += data.layouts.velocity[nodeId1].y;
     });
 
+    // Save the new state to history
     historyManager.addToHistory(data);
 }
 
