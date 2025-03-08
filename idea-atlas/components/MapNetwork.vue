@@ -26,6 +26,7 @@ import {
   moveBackward
 } from "../utils/graphManager";
 
+// Id of Graph to be fetched and displayed
 const props = defineProps<{
     graph_id: string;
     
