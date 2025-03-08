@@ -248,26 +248,15 @@ function adjustNodeLayouts(data) {
         }
     });
 
-    // First time setup: move biggest node to [0,0] and all others relative to it
-    if (biggestNodeId && !data.layouts.initialized) {
-        const biggestNodePos = data.layouts.nodes[biggestNodeId];
-        const offsetX = biggestNodePos.x;
-        const offsetY = biggestNodePos.y;
-
-        Object.keys(data.layouts.nodes).forEach(nodeId => {
-            data.layouts.nodes[nodeId].x -= offsetX;
-            data.layouts.nodes[nodeId].y -= offsetY;
-        });
-        data.layouts.initialized = true;
-    }
-
-    // Constants for force simulation
-    const REPULSION = 5000;
-    const ATTRACTION = 0.1;
-    const DAMPING = 0.9;
-    const MIN_DISTANCE = 100;
+    // Refined constants for more stable simulation
+    const BASE_REPULSION = 50;     // Reduced base repulsion
+    const BASE_MIN_DISTANCE = 300; // Increased minimum distance
+    const ATTRACTION = 0.05;       // Reduced attraction
+    const DAMPING = 0.7;          // Increased damping
+    const MAX_FORCE = 10;         // Maximum force cap
+    const MIN_FORCE = 0.01;       // Minimum force threshold
     
-    // Initialize velocity vectors
+    // Initialize velocity vectors if needed
     if (!data.layouts.velocity) {
         data.layouts.velocity = {};
         Object.keys(data.layouts.nodes).forEach(nodeId => {
@@ -278,9 +267,21 @@ function adjustNodeLayouts(data) {
     const nodes = data.layouts.nodes;
     const edges = data.edges;
 
+    // Helper function to cap force
+    const capForce = (force) => {
+        const magnitude = Math.sqrt(force.x * force.x + force.y * force.y);
+        if (magnitude > MAX_FORCE) {
+            const scale = MAX_FORCE / magnitude;
+            return { x: force.x * scale, y: force.y * scale };
+        }
+        if (magnitude < MIN_FORCE) {
+            return { x: 0, y: 0 };
+        }
+        return force;
+    };
+
     // Calculate and apply forces to all nodes except the biggest one
     Object.keys(nodes).forEach(nodeId1 => {
-        // Skip force calculation for biggest node - it stays at [0,0]
         if (nodeId1 === biggestNodeId) {
             data.layouts.velocity[nodeId1] = { x: 0, y: 0 };
             nodes[nodeId1].x = 0;
@@ -288,21 +289,33 @@ function adjustNodeLayouts(data) {
             return;
         }
 
-        let forceX = 0;
-        let forceY = 0;
+        let force = { x: 0, y: 0 };
 
-        // Calculate repulsive forces
+        // Calculate repulsive forces with size consideration
         Object.keys(nodes).forEach(nodeId2 => {
             if (nodeId1 === nodeId2) return;
+
+            const node1Size = data.nodes[nodeId1].size;
+            const node2Size = data.nodes[nodeId2].size;
+            
+            const sizeScale = (node1Size + node2Size) / 100;
+            const minDistance = BASE_MIN_DISTANCE * sizeScale;
 
             const dx = nodes[nodeId1].x - nodes[nodeId2].x;
             const dy = nodes[nodeId1].y - nodes[nodeId2].y;
             const distance = Math.sqrt(dx * dx + dy * dy);
             
-            if (distance < MIN_DISTANCE) {
-                const force = REPULSION / (distance * distance);
-                forceX += (dx / distance) * force;
-                forceY += (dy / distance) * force;
+            if (distance < minDistance) {
+                // Exponential repulsion for close nodes
+                const repulsion = BASE_REPULSION * Math.exp(minDistance / Math.max(distance, 1));
+                const repulsionForce = repulsion * sizeScale;
+                
+                // Normalize direction vector
+                const normalizedDx = dx / distance;
+                const normalizedDy = dy / distance;
+                
+                force.x += normalizedDx * repulsionForce;
+                force.y += normalizedDy * repulsionForce;
             }
         });
 
@@ -312,18 +325,31 @@ function adjustNodeLayouts(data) {
                 const otherNodeId = edge.source === nodeId1 ? edge.target : edge.source;
                 const dx = nodes[nodeId1].x - nodes[otherNodeId].x;
                 const dy = nodes[nodeId1].y - nodes[otherNodeId].y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                // Skip if nodes are too close
+                if (distance < BASE_MIN_DISTANCE / 2) return;
 
-                forceX -= (dx * ATTRACTION);
-                forceY -= (dy * ATTRACTION);
+                const nodeSize = data.nodes[nodeId1].size;
+                const sizeFactor = nodeSize / 100;
+                const scaledAttraction = ATTRACTION * sizeFactor;
+
+                force.x -= (dx * scaledAttraction);
+                force.y -= (dy * scaledAttraction);
             }
         });
 
-        // Update velocity and position
-        data.layouts.velocity[nodeId1].x = (data.layouts.velocity[nodeId1].x + forceX) * DAMPING;
-        data.layouts.velocity[nodeId1].y = (data.layouts.velocity[nodeId1].y + forceY) * DAMPING;
+        // Cap and apply forces
+        force = capForce(force);
         
-        nodes[nodeId1].x += data.layouts.velocity[nodeId1].x;
-        nodes[nodeId1].y += data.layouts.velocity[nodeId1].y;
+        // Update velocity with capped force
+        data.layouts.velocity[nodeId1].x = (data.layouts.velocity[nodeId1].x + force.x) * DAMPING;
+        data.layouts.velocity[nodeId1].y = (data.layouts.velocity[nodeId1].y + force.y) * DAMPING;
+        
+        // Apply capped velocity to position
+        const velocity = capForce(data.layouts.velocity[nodeId1]);
+        nodes[nodeId1].x += velocity.x;
+        nodes[nodeId1].y += velocity.y;
     });
 
     historyManager.addToHistory(data);
