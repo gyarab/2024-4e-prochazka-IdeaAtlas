@@ -65,7 +65,7 @@ const isSearchFocused = ref(false);
 const handleSearchFocus = () => {
   isSearchFocused.value = true;
 };
-
+// Add handlers for search blur
 const handleSearchBlur = () => {
   isSearchFocused.value = false;
 };
