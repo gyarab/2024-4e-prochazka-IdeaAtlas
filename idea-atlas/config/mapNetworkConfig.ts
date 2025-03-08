@@ -11,6 +11,12 @@ const convertToRGBA = (color: string, opacity: number = 0.5): string => {
   return color;
 };
 
+// Helper function to calculate font size with minimum of 12px
+const calculateFontSize = (nodeSize: number): number => {
+  const calculatedSize = nodeSize * 0.75;
+  return Math.max(12, calculatedSize);
+};
+
 export const mainConfig = reactive(
   vNG.defineConfigs({
     view: {
@@ -57,7 +63,7 @@ export const mainConfig = reactive(
       label: {
         visible: true,
         fontFamily: undefined,
-        fontSize: node => node.size * 0.75,
+        fontSize: node => calculateFontSize(node.size),
         lineHeight: 1.1,
         color: "#000000",
         margin: 4,
