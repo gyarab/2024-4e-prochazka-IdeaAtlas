@@ -1,7 +1,7 @@
 //this file is responsible for fetching and upserting graph data to the database
 
 //exports the functions so they can be used in other files
-export default {saveGraph, fetchGraph}
+export default {saveGraph, fetchGraph, deleteEntireGraph}
 
 // Upsert nodes into the 'nodes' table in the Supabase database
 async function upsertNodes(supabase, nodes, graph_id) {
@@ -261,5 +261,59 @@ async function fetchGraph(supabase, graph_id) {
     return { nodes, edges, layouts };
   } catch (error) {
     console.error('Error fetching or reconstructing data:', error);
+  }
+}
+
+/**
+ * Deletes an entire graph and all its associated nodes, edges, and layouts from the database.
+ */
+async function deleteEntireGraph(supabase, graph_id) {
+  try {
+    console.log(`Deleting all data for graph: ${graph_id}`);
+    
+    // Delete in the correct order to avoid foreign key constraint issues
+    // First, delete all edges associated with this graph
+    const { error: edgesError } = await supabase
+      .from('edges')
+      .delete()
+      .eq('graph_id', graph_id);
+    
+    if (edgesError) {
+      console.error('Error deleting edges:', edgesError);
+      throw edgesError;
+    }
+    console.log('All edges deleted successfully');
+    
+    // Then, delete all layouts for this graph
+    const { error: layoutsError } = await supabase
+      .from('layouts')
+      .delete()
+      .eq('graph_id', graph_id);
+    
+    if (layoutsError) {
+      console.error('Error deleting layouts:', layoutsError);
+      throw layoutsError;
+    }
+    console.log('All layouts deleted successfully');
+    
+    // Finally, delete all nodes for this graph
+    const { error: nodesError } = await supabase
+      .from('nodes')
+      .delete()
+      .eq('graph_id', graph_id);
+    
+    if (nodesError) {
+      console.error('Error deleting nodes:', nodesError);
+      throw nodesError;
+    }
+    console.log('All nodes deleted successfully');
+    
+    // Note: This function doesn't delete the graph record itself,
+    // assuming it's in a separate table and should be handled by the caller
+    
+    console.log(`Graph ${graph_id} data completely deleted`);
+  } catch (error) {
+    console.error('Error during graph deletion:', error);
+    throw error;
   }
 }
