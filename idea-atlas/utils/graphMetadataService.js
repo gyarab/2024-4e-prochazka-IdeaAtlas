@@ -1,3 +1,5 @@
+import {deleteEntireGraph} from './graphService.js';
+
 // Fetches all the metadata for all the graphs in the database
 async function fetchGraphMDataBasedOnUsr(supabase) {
     try {
@@ -55,6 +57,7 @@ async function updateBookMarked(supabase, graph) {
 
 // Deletes a graph from the database
 async function deleteGraph(supabase, graphId) {
+    await deleteEntireGraph(supabase, graphId);
     try {
         const { error } = await supabase
             .from('graphs')

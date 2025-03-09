@@ -1,7 +1,7 @@
 //this file is responsible for fetching and upserting graph data to the database
 
 //exports the functions so they can be used in other files
-export default {saveGraph, fetchGraph, deleteEntireGraph}
+export default {saveGraph, fetchGraph}
 
 // Upsert nodes into the 'nodes' table in the Supabase database
 async function upsertNodes(supabase, nodes, graph_id) {
@@ -317,3 +317,4 @@ async function deleteEntireGraph(supabase, graph_id) {
     throw error;
   }
 }
+export {deleteEntireGraph}
