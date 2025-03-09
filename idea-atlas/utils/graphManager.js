@@ -1,6 +1,7 @@
 // This file contains the functions that are used to manage the graph data structure
 import { historyManager } from "./graphHistory";
 import { EDGE_NOTE_RATIO } from "~/config/constants";
+import { BASE_REPULSION, BASE_MIN_DISTANCE, ATTRACTION, DAMPING, MAX_FORCE, MIN_FORCE} from "~/config/constants";
 
 function initilizeHistory(data) {
     historyManager.addToHistory(data);
@@ -234,7 +235,6 @@ function getLargerNodeProperties(data, source, target) {
  * Force-directed layout algorithm to adjust node positions based on repulsive and attractive forces.
  * Uses a physics-based approach where nodes repel each other and edges act like springs.
  * 
- * @param {Object} data - The graph data containing nodes and edges
  */
 function adjustNodeLayouts(data) {
     // Find the biggest node
@@ -247,14 +247,6 @@ function adjustNodeLayouts(data) {
             biggestNodeId = nodeId;
         }
     });
-
-    // Refined constants for more stable simulation
-    const BASE_REPULSION = 50;     // Reduced base repulsion
-    const BASE_MIN_DISTANCE = 300; // Increased minimum distance
-    const ATTRACTION = 0.05;       // Reduced attraction
-    const DAMPING = 0.7;          // Increased damping
-    const MAX_FORCE = 10;         // Maximum force cap
-    const MIN_FORCE = 0.01;       // Minimum force threshold
     
     // Initialize velocity vectors if needed
     if (!data.layouts.velocity) {
