@@ -25,7 +25,7 @@ import {
   moveForward,
   moveBackward,
   adjustNodeLayouts
-} from "../utils/graphManager";
+} from "../utils/graphManager.js";
 
 // Id of Graph to be fetched and displayed
 const props = defineProps<{
