@@ -267,6 +267,13 @@ function adjustNodeLayouts(data) {
     const nodes = data.layouts.nodes;
     const edges = data.edges;
 
+    // Position the biggest node in the center first
+    if (biggestNodeId) {
+        data.layouts.velocity[biggestNodeId] = { x: 0, y: 0 };
+        nodes[biggestNodeId].x = -600;
+        nodes[biggestNodeId].y = -400;
+    }
+
     // Helper function to cap force
     const capForce = (force) => {
         const magnitude = Math.sqrt(force.x * force.x + force.y * force.y);
@@ -283,10 +290,7 @@ function adjustNodeLayouts(data) {
     // Calculate and apply forces to all nodes except the biggest one
     Object.keys(nodes).forEach(nodeId1 => {
         if (nodeId1 === biggestNodeId) {
-            data.layouts.velocity[nodeId1] = { x: 0, y: 0 };
-            nodes[nodeId1].x = -600;
-            nodes[nodeId1].y = -400;
-            return;
+            return; // Skip the biggest node as it's already positioned
         }
 
         let force = { x: 0, y: 0 };
