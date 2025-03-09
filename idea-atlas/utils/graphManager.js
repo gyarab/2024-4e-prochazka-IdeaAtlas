@@ -284,8 +284,8 @@ function adjustNodeLayouts(data) {
     Object.keys(nodes).forEach(nodeId1 => {
         if (nodeId1 === biggestNodeId) {
             data.layouts.velocity[nodeId1] = { x: 0, y: 0 };
-            nodes[nodeId1].x = 0;
-            nodes[nodeId1].y = 0;
+            nodes[nodeId1].x = -600;
+            nodes[nodeId1].y = -400;
             return;
         }
 
