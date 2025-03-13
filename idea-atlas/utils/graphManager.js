@@ -27,7 +27,10 @@ function addNewNode(data, nodeProps, xMousePos, yMousePos) {
 }
 //Deletes multiple nodes from the graph
 function deleteNodes(data, nodesToDelete) {
-    
+    console.log("Nodes to delete:");
+    console.log(nodesToDelete);
+    console.log("Data before deletion:");
+    console.log(data);
     const nodes = data.nodes;
     // Nodes which will remain after deletion 
     const remainingNodes = {};
@@ -52,11 +55,15 @@ function deleteNodes(data, nodesToDelete) {
         }
     }
     data.edges = remainingEdges;
-    
+
     // Clean up layouts
+    // BUG TODO
     for (const nodeId of nodesToDelete) {
         delete data.layouts.nodes[nodeId];
     }
+
+    console.log("Data after deletion:");
+    console.log(data);
     historyManager.addToHistory(data);
 }
 // Function which will add to edges:
@@ -139,6 +146,10 @@ function deleeteEdgesBasedOnNodes(data, nodesToDeleteEdgesFrom) {
 
 
 function deleteEdges(data, edgesToDelete) {
+    console.log("Edges to delete:");
+    console.log(edgesToDelete);
+    console.log("Data before deletion:");
+    console.log(data);
     const edges = data.edges;
     const remainingEdges = {};
     for (const [key, edge] of Object.entries(edges)) {
