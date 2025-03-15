@@ -59,7 +59,8 @@ function deleteNodes(data, nodesToDelete) {
     // Clean up layouts
     // BUG TODO
     for (const nodeId of nodesToDelete) {
-        delete data.layouts.nodes[nodeId];
+        console.log(nodeId);
+        //delete data.layouts.nodes[nodeId];
     }
 
     console.log("Data after deletion:");
