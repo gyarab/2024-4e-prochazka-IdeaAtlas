@@ -1,4 +1,9 @@
 import * as vNG from "v-network-graph";
+import {
+  ForceLayout,
+  type ForceNodeDatum,
+  type ForceEdgeDatum,
+} from "v-network-graph/lib/force-layout"
 
 // Helper function to convert color to rgba with opacity
 const convertToRGBA = (color: string, opacity: number = 0.5): string => {
@@ -17,6 +22,28 @@ const calculateFontSize = (nodeSize: number): number => {
   return Math.max(12, calculatedSize);
 };
 
+export const ForceConfig = new ForceLayout({
+  positionFixedByDrag: false,        // Nodes continue simulation after being dragged
+  positionFixedByClickWithAltKey: true,  // Alt+Click fixes node position
+  createSimulation: (d3, nodes, edges) => {
+    // Create links between nodes with specified parameters
+    const forceLink = d3.forceLink<ForceNodeDatum, ForceEdgeDatum>(edges)
+      .id((d: { id: any; }) => d.id)  // Use node's id property to establish connections
+    
+    return d3
+      .forceSimulation(nodes)
+      // Edge force: maintains distance between connected nodes
+      .force("edge", forceLink.distance(400).strength(0.5))  // 400px ideal distance, 0.5 strength
+      // Charge force: makes nodes repel each other
+      .force("charge", d3.forceManyBody().strength(-8000))   // Strong repulsion for better spread
+      // Center force: pulls nodes toward canvas center
+      .force("center", d3.forceCenter().strength(0.01))      // Weak centering force
+      .alphaMin(0.001)  // Minimum energy level before simulation stops
+  }
+});
+
+
+export const GridConfig = new vNG.GridLayout({ grid: 10 });
 export const mainConfig = reactive(
   vNG.defineConfigs({
     view: {

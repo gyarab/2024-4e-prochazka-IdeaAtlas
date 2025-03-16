@@ -4,7 +4,7 @@ import { reactive, ref, onMounted, onUnmounted, watch } from "vue";
 import service from "../utils/graphService";
 import NodeInputDialog from './NodeInputDialog.vue';
 import { keyboardShortcuts } from '../config/keyboardShortcuts';
-import { mainConfig } from "~/config/mapNetworkConfig";
+import { mainConfig, GridConfig, ForceConfig } from "~/config/mapNetworkConfig";
 import {
   setShowingNodeInput,
   getShowingNodeInput,
@@ -405,6 +405,17 @@ const handleNodeEdit = (changes: { name: string, color: string, size: number }) 
 
 // Configuration object for the graph
 const configs = mainConfig;
+
+// Add new ref for layout type
+const isGridLayout = ref(true);
+
+// Add handler for layout toggle
+const handleLayoutToggle = () => {
+  isGridLayout.value = !isGridLayout.value;
+  // Prevents 'configs.view' is possibly 'undefined'. error
+  //@ts-ignore
+  configs.view.layoutHandler = isGridLayout.value ? GridConfig : ForceConfig;
+};
 </script>
 
 <template>
@@ -433,6 +444,12 @@ const configs = mainConfig;
         <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
         <span class="relative inline-flex rounded-full h-3 w-3 bg-sky-500"></span>
       </span>
+    </button>
+    <button 
+      @click="handleLayoutToggle"
+      class="px-4 py-2 bg-green-500 text-white rounded-md shadow-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"
+    >
+      {{ isGridLayout ? 'Use Force Layout' : 'Use Grid Layout' }}
     </button>
     <button 
       @click="handleAutoLayout"
