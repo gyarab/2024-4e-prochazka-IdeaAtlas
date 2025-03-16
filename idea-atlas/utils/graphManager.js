@@ -74,7 +74,7 @@ async function deleteNodes(data, nodesToDelete) {
         delete layouts.nodes[nodeId];
     }
     data.layouts = layouts;
-    
+
     // Adds the new data to the history
     historyManager.addToHistory(data);
 }
@@ -259,6 +259,8 @@ function getLargerNodeProperties(data, source, target) {
  * Uses a physics-based approach where nodes repel each other and edges act like springs.
  * 
  */
+
+// BUG
 function adjustNodeLayouts(data) {
     // Find the biggest node
     let biggestNodeId = null;
