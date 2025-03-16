@@ -409,16 +409,20 @@ const eventHandlers: vNG.EventHandlers = {
   "node:dblclick": ({ node }) => {
     selectedNodes.value = [node];
     setShowingNodeEdit(true);
+    setShowingNodeInput(false);
   },
   "node:click": ({ node }) => {
     selectedNodes.value = [node];
     setShowingNodeEdit(false);
+    setShowingNodeInput(false);
   },
   "edge:click": ({}) => {
     setShowingNodeEdit(false);
+    setShowingNodeInput(false);
   },
   "view:click": ({}) => {
     setShowingNodeEdit(false);
+    setShowingNodeInput(false);
   },
 }
 
