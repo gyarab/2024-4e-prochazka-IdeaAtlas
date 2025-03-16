@@ -76,6 +76,7 @@ export const mainConfig = reactive(
       scalingObjects: true,
       minZoomLevel: 0.1,
       maxZoomLevel: 16,
+      doubleClickZoomEnabled: false,
     },
     node: {
       normal: {
