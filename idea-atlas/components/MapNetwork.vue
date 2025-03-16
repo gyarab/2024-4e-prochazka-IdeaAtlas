@@ -382,21 +382,31 @@ const calculateFirstSelectedNodePosition = () => {
     const nodeLayout = data.layouts.nodes[firstNodeId];
     const domPoint = graph.value.translateFromSvgToDomCoordinates({ x: nodeLayout.x, y: nodeLayout.y });
     
-    // Get window width
+    // Get window dimensions
     const windowWidth = window.innerWidth;
-    // Calculate offset based on screen position
-    // On the right part of the screen the offset is to left
-    // On the left part of the screen the offset is to right
-    let offset;
-    if (domPoint.x < windowWidth / 2) {
-      offset = 300;
-    } else {
-      offset = -300;
+    const windowHeight = window.innerHeight;
+    
+    // Dialog dimensions (approximate)
+    const dialogHeight = 300; // height of the dialog
+    const dialogWidth = 300;  // width of the dialog
+    const padding = 100;       // minimum padding from screen edges
+    
+    // Calculate horizontal offset
+    let xOffset = domPoint.x < windowWidth / 2 ? dialogWidth/2 + padding : -(dialogWidth/2 + padding);
+    
+    // Calculate vertical offset
+    let yOffset = 0;
+    if (domPoint.y < dialogHeight + padding) {
+      // Too close to top - move down
+      yOffset = (dialogHeight/2 + padding) - domPoint.y;
+    } else if (domPoint.y > windowHeight - dialogHeight - padding) {
+      // Too close to bottom - move up
+      yOffset = (windowHeight - dialogHeight/2 - padding) - domPoint.y;
     }
     
     return {
-      x: domPoint.x + offset,
-      y: domPoint.y
+      x: domPoint.x + xOffset,
+      y: domPoint.y + yOffset
     };
   }
   return { x: 0, y: 0 };
