@@ -33,11 +33,12 @@ export const ForceConfig = new ForceLayout({
     return d3
       .forceSimulation(nodes)
       // Edge force: maintains distance between connected nodes
-      .force("edge", forceLink.distance(400).strength(0.5))  // 400px ideal distance, 0.5 strength
+      .force("edge", forceLink.distance(300).strength(0.2))  // 400px ideal distance, 0.5 strength
       // Charge force: makes nodes repel each other
       .force("charge", d3.forceManyBody().strength(-8000))   // Strong repulsion for better spread
+      // .force("collide", d3.forceCollide(50).strength(0.1))
       // Center force: pulls nodes toward canvas center
-      .force("center", d3.forceCenter().strength(0.01))      // Weak centering force
+      .force("center", d3.forceCenter().strength(0.001))      // Weak centering force
       .alphaMin(0.001)  // Minimum energy level before simulation stops
   }
 });
