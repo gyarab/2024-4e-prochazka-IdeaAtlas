@@ -26,7 +26,7 @@ function addNewNode(data, nodeProps, xMousePos, yMousePos) {
     
 }
 //Deletes multiple nodes from the graph
-function deleteNodes(data, nodesToDelete) {
+async function deleteNodes(data, nodesToDelete) {
     // console.log("Nodes to delete:");
     // console.log(nodesToDelete);
     // console.log("Data before deletion:");
@@ -55,16 +55,27 @@ function deleteNodes(data, nodesToDelete) {
         }
     }
     data.edges = remainingEdges;
-
+    
+    // WTF
+    // From some uknown reason the layouts are bugged
+    // But make sure to add a delay 
+    // Helps to avoid the bug
+    /*
+    Have no idea what is the correct solution
+    But this works for now
+    */
+    const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+    await sleep(100); // Add a small delay for debugging
+    
+    
     // Clean up layouts
-    // BUG TODO
-    // for (const nodeId of nodesToDelete) {
-    //     console.log(nodeId);
-    //     delete data.layouts.nodes[nodeId];
-    // }
-
-    // console.log("Data after deletion:");
-    // console.log(data);
+    const layouts = data.layouts;
+    for (const nodeId of nodesToDelete) {
+        delete layouts.nodes[nodeId];
+    }
+    data.layouts = layouts;
+    
+    // Adds the new data to the history
     historyManager.addToHistory(data);
 }
 // Function which will add to edges:
