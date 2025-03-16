@@ -17,6 +17,7 @@ export interface KeyboardShortcutsConfig {
     deleteEdgesFromSelectedNodes: KeyboardShortcut;
     undo: KeyboardShortcut;
     redo: KeyboardShortcut;
+    wave: KeyboardShortcut;
     // Add more shortcut configurations here as needed
 }
 // What is code ?
@@ -84,4 +85,10 @@ export const keyboardShortcuts: KeyboardShortcutsConfig = {
         preventDefault: true
     },
     // Add more shortcuts here as needed
+    wave: {
+        code: 'KeyW',
+        key: 'w',
+        description: 'Wave the selected node(s)',
+        preventDefault: true
+    },
 };

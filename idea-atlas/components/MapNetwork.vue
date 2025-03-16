@@ -24,7 +24,8 @@ import {
   deleeteEdgesBasedOnNodes,
   moveForward,
   moveBackward,
-  adjustNodeLayouts
+  adjustNodeLayouts,
+  waveNodeSelect
 } from "../utils/graphManager.js";
 
 // Id of Graph to be fetched and displayed
@@ -248,6 +249,33 @@ onMounted(async () => {
     }
   };
 
+  const handleWaveKey = (event: KeyboardEvent) => {
+    if (isSearchFocused.value) return;
+    if (checkInputFieldShown()) return;
+    if (event.code === keyboardShortcuts.wave.code) {
+        if (keyboardShortcuts.wave.preventDefault) {
+            event.preventDefault();
+        }
+        
+        // Recursive function to keep selecting while key is held
+        const recursiveSelect = async () => {
+            if (event.repeat || selectedNodes.value.length === 0) return;
+            
+            const newNodes = await waveNodeSelect(data, selectedNodes.value, (newlySelected: string[]) => {
+                // Merge existing selections with new ones
+                selectedNodes.value = [...new Set([...selectedNodes.value, ...newlySelected])];
+            });
+            
+            // If new nodes were found and key is still pressed, continue selecting
+            if (newNodes.length > 0) {
+                setTimeout(recursiveSelect, 600); // Adjust delay as needed
+            }
+        };
+        
+        recursiveSelect();
+    }
+};
+
   // Add event listeners with named handlers
   document.addEventListener('mousemove', handleMouseMove);
   document.addEventListener('keydown', handleDeselectKey);
@@ -259,6 +287,7 @@ onMounted(async () => {
   document.addEventListener('keydown', handleEditNodeKey);
   document.addEventListener('keydown', handleUndoKey);
   document.addEventListener('keydown', handleRedoKey);
+  document.addEventListener('keydown', handleWaveKey);
 
   // Remove event listeners when component is unmounted
   onUnmounted(() => {
@@ -272,6 +301,7 @@ onMounted(async () => {
     document.removeEventListener('keydown', handleEditNodeKey);
     document.removeEventListener('keydown', handleUndoKey);
     document.removeEventListener('keydown', handleRedoKey);
+    document.removeEventListener('keydown', handleWaveKey);
   });
 
 

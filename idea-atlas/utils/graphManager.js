@@ -377,30 +377,35 @@ function adjustNodeLayouts(data) {
 }
 
 // Function which will recusively select all the nodes connected to the selected node
-async function waveNodeSelect(data, selectedNodes) {
+/**
+ * @param {Object} data - The graph data object
+ * @param {string[]} selectedNodes - Array of selected node IDs
+ * @param {(newlySelected: string[]) => void} callback - Callback function for handling newly selected nodes
+ * @returns {Promise<string[]>} Array of newly selected node IDs
+ */
+async function waveNodeSelect(data, selectedNodes, callback) {
     const visited = new Set(selectedNodes);
     const newlySelected = [];
     
-    // Reuse existing sleep function or define if not available
-    const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+    // Get connected nodes that haven't been visited
+    Object.values(data.edges).forEach(edge => {
+        const source = edge.source;
+        const target = edge.target;
+        
+        if (selectedNodes.includes(source) && !visited.has(target)) {
+            visited.add(target);
+            newlySelected.push(target);
+        }
+        if (selectedNodes.includes(target) && !visited.has(source)) {
+            visited.add(source);
+            newlySelected.push(source);
+        }
+    });
 
-    // For each selected node
-    for (const nodeId of selectedNodes) {
-        // Find all edges connected to this node
-        Object.values(data.edges).forEach(edge => {
-            if (edge.source === nodeId || edge.target === nodeId) {
-                const connectedNode = edge.source === nodeId ? edge.target : edge.source;
-                if (!visited.has(connectedNode)) {
-                    visited.add(connectedNode);
-                    newlySelected.push(connectedNode);
-                }
-            }
-        });
-        // Add a small delay between each wave
-        //TODO make delay smaller with each new wave
-        await sleep(100);
+    if (newlySelected.length > 0) {
+        callback(newlySelected);
     }
-
+    
     return newlySelected;
 }
 
