@@ -20,11 +20,14 @@ const sizePresets = [20, 50, 75, 100];
     <!-- Color palette -->
     <div class="space-y-2">
         <label class="block text-sm font-medium text-gray-700">Color</label>
-        <div class="flex flex-wrap gap-2">
+        <div class="flex flex-wrap items-center gap-2">
             <button v-for="colorOption in colorPalette" :key="colorOption" type="button"
                 class="w-6 h-6 rounded-full border-2 cursor-pointer"
                 :class="{ 'border-black': color === colorOption, 'border-transparent': color !== colorOption }"
                 :style="{ backgroundColor: colorOption }" @click="emit('update:color', colorOption)" />
+            <input type="color" :value="color" 
+                @input="e => emit('update:color', (e.target as HTMLInputElement).value)"
+                class="w-6 h-6 rounded cursor-pointer border-2 border-transparent hover:border-gray-300" />
         </div>
     </div>
 
