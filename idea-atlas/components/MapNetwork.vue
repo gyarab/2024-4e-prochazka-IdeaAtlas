@@ -166,6 +166,42 @@ const handleWaveKeyUp = (event: KeyboardEvent) => {
     }
 };
 
+const AUTO_SAVE_DELAY = 2000; // 2 seconds delay
+const saveTimeout = ref<NodeJS.Timeout | null>(null);
+const isSaving = ref(false);
+
+// Debounced auto-save function
+const debouncedSave = () => {
+  if (saveTimeout.value) {
+    clearTimeout(saveTimeout.value);
+  }
+  
+  saveTimeout.value = setTimeout(async () => {
+    isSaving.value = true;
+    try {
+      await handleSave();
+    } finally {
+      isSaving.value = false;
+    }
+  }, AUTO_SAVE_DELAY);
+};
+
+// Watch for changes in data and trigger auto-save
+watch(
+  () => [data.nodes, data.edges, data.layouts],
+  () => {
+    debouncedSave();
+  },
+  { deep: true }
+);
+
+// Clean up timeout on unmount
+onUnmounted(() => {
+  if (saveTimeout.value) {
+    clearTimeout(saveTimeout.value);
+  }
+});
+
 onMounted(async () => {
 
   // Object to store current mouse coordinates
@@ -390,9 +426,13 @@ const configs = mainConfig;
     />
     <button 
       @click="handleSave"
-      class="px-4 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      class="px-4 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 relative"
     >
       Save
+      <span v-if="isSaving" class="absolute -top-1 -right-1 w-3 h-3">
+        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
+        <span class="relative inline-flex rounded-full h-3 w-3 bg-sky-500"></span>
+      </span>
     </button>
     <button 
       @click="handleAutoLayout"
