@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import * as vNG from "v-network-graph";
-import { reactive, ref, onMounted, onUnmounted, watch } from "vue"; // Add watch
+import { reactive, ref, onMounted, onUnmounted, watch } from "vue";
 import service from "../utils/graphService";
 import NodeInputDialog from './NodeInputDialog.vue';
 import { keyboardShortcuts } from '../config/keyboardShortcuts';
@@ -27,6 +27,7 @@ import {
   adjustNodeLayouts,
   waveNodeSelect
 } from "../utils/graphManager.js";
+import { INITIAL_WAVE_SELECTION_DELAY, NETXT_WAVE_MODIFIER, MIN_WAVE_DELAY } from "~/config/constants";
 
 // Id of Graph to be fetched and displayed
 const props = defineProps<{
@@ -257,7 +258,7 @@ onMounted(async () => {
             event.preventDefault();
         }
         
-        let currentDelay = 600; // Starting delay
+        let currentDelay = INITIAL_WAVE_SELECTION_DELAY // Starting delay
         
         // Recursive function to keep selecting while key is held
         const recursiveSelect = async () => {
@@ -270,7 +271,7 @@ onMounted(async () => {
             
             // If new nodes were found and key is still pressed, continue selecting
             if (newNodes.length > 0) {
-                currentDelay = Math.max(100, currentDelay * 0.75); // Reduce delay by 25%, but not below 100ms
+                currentDelay = Math.max(MIN_WAVE_DELAY, currentDelay * NETXT_WAVE_MODIFIER); // Modifies delay in %, but not below minimal delay
                 setTimeout(recursiveSelect, currentDelay);
             }
         };
