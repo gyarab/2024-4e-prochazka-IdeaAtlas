@@ -130,6 +130,42 @@ const handleAutoLayout = () => {
   adjustNodeLayouts(data);
 };
 
+const isWaveKeyHeld = ref(false);
+
+const handleWaveKey = (event: KeyboardEvent) => {
+    if (isSearchFocused.value) return;
+    if (checkInputFieldShown()) return;
+    if (event.code === keyboardShortcuts.wave.code) {
+        if (keyboardShortcuts.wave.preventDefault) {
+            event.preventDefault();
+        }
+        
+        isWaveKeyHeld.value = true;
+        let currentDelay = INITIAL_WAVE_SELECTION_DELAY
+        
+        const recursiveSelect = async () => {
+            if (event.repeat || selectedNodes.value.length === 0 || !isWaveKeyHeld.value) return;
+            
+            const newNodes = await waveNodeSelect(data, selectedNodes.value, (newlySelected: string[]) => {
+                selectedNodes.value = [...new Set([...selectedNodes.value, ...newlySelected])];
+            });
+            
+            if (newNodes.length > 0 && isWaveKeyHeld.value) {
+                currentDelay = Math.max(MIN_WAVE_DELAY, currentDelay * NETXT_WAVE_MODIFIER);
+                setTimeout(recursiveSelect, currentDelay);
+            }
+        };
+        
+        recursiveSelect();
+    }
+};
+
+const handleWaveKeyUp = (event: KeyboardEvent) => {
+    if (event.code === keyboardShortcuts.wave.code) {
+        isWaveKeyHeld.value = false;
+    }
+};
+
 onMounted(async () => {
 
   // Object to store current mouse coordinates
@@ -250,36 +286,6 @@ onMounted(async () => {
     }
   };
 
-  const handleWaveKey = (event: KeyboardEvent) => {
-    if (isSearchFocused.value) return;
-    if (checkInputFieldShown()) return;
-    if (event.code === keyboardShortcuts.wave.code) {
-        if (keyboardShortcuts.wave.preventDefault) {
-            event.preventDefault();
-        }
-        
-        let currentDelay = INITIAL_WAVE_SELECTION_DELAY // Starting delay
-        
-        // Recursive function to keep selecting while key is held
-        const recursiveSelect = async () => {
-            if (event.repeat || selectedNodes.value.length === 0) return;
-            
-            const newNodes = await waveNodeSelect(data, selectedNodes.value, (newlySelected: string[]) => {
-                // Merge existing selections with new ones
-                selectedNodes.value = [...new Set([...selectedNodes.value, ...newlySelected])];
-            });
-            
-            // If new nodes were found and key is still pressed, continue selecting
-            if (newNodes.length > 0) {
-                currentDelay = Math.max(MIN_WAVE_DELAY, currentDelay * NETXT_WAVE_MODIFIER); // Modifies delay in %, but not below minimal delay
-                setTimeout(recursiveSelect, currentDelay);
-            }
-        };
-        
-        recursiveSelect();
-    }
-};
-
   // Add event listeners with named handlers
   document.addEventListener('mousemove', handleMouseMove);
   document.addEventListener('keydown', handleDeselectKey);
@@ -292,6 +298,7 @@ onMounted(async () => {
   document.addEventListener('keydown', handleUndoKey);
   document.addEventListener('keydown', handleRedoKey);
   document.addEventListener('keydown', handleWaveKey);
+  document.addEventListener('keyup', handleWaveKeyUp);
 
   // Remove event listeners when component is unmounted
   onUnmounted(() => {
@@ -306,6 +313,7 @@ onMounted(async () => {
     document.removeEventListener('keydown', handleUndoKey);
     document.removeEventListener('keydown', handleRedoKey);
     document.removeEventListener('keydown', handleWaveKey);
+    document.removeEventListener('keyup', handleWaveKeyUp);
   });
 
 
