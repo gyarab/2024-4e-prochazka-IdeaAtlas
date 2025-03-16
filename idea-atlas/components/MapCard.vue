@@ -17,7 +17,9 @@
             </button>
         </div>
         <div class="flex items-center gap-2 mb-2">
-            <h2 class="text-xl font-semibold">{{ graph.name }}</h2>
+            <NuxtLink :to="`/maps/${graph.id}`" class="hover:text-blue-600 transition-colors">
+                <h2 class="text-xl font-semibold">{{ graph.name }}</h2>
+            </NuxtLink>
             <button 
                 @click="toggleBookmark" 
                 class="text-xl focus:outline-none hover:scale-110 transition-transform cursor-pointer p-1"
