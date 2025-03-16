@@ -410,6 +410,16 @@ const eventHandlers: vNG.EventHandlers = {
     selectedNodes.value = [node];
     setShowingNodeEdit(true);
   },
+  "node:click": ({ node }) => {
+    selectedNodes.value = [node];
+    setShowingNodeEdit(false);
+  },
+  "edge:click": ({}) => {
+    setShowingNodeEdit(false);
+  },
+  "view:click": ({}) => {
+    setShowingNodeEdit(false);
+  },
 }
 
 // Configuration object for the graph
