@@ -381,8 +381,23 @@ const calculateFirstSelectedNodePosition = () => {
     const firstNodeId = selectedNodes.value[0];
     const nodeLayout = data.layouts.nodes[firstNodeId];
     const domPoint = graph.value.translateFromSvgToDomCoordinates({ x: nodeLayout.x, y: nodeLayout.y });
-    return domPoint;
-
+    
+    // Get window width
+    const windowWidth = window.innerWidth;
+    // Calculate offset based on screen position
+    // On the right part of the screen the offset is to left
+    // On the left part of the screen the offset is to right
+    let offset;
+    if (domPoint.x < windowWidth / 2) {
+      offset = 300;
+    } else {
+      offset = -300;
+    }
+    
+    return {
+      x: domPoint.x + offset,
+      y: domPoint.y
+    };
   }
   return { x: 0, y: 0 };
 };
