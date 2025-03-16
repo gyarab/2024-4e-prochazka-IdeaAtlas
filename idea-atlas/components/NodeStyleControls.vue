@@ -12,6 +12,8 @@ const emit = defineEmits<{
     'update:color': [value: string];
     'update:size': [value: number];
 }>();
+
+const sizePresets = [20, 50, 75, 100];
 </script>
 
 <template>
@@ -28,9 +30,20 @@ const emit = defineEmits<{
 
     <!-- Size slider -->
     <div class="space-y-2">
-        <label class="block text-sm font-medium text-gray-700">
-            Size: {{ size }}
-        </label>
+        <div class="flex items-center gap-4">
+            <label class="text-sm font-medium text-gray-700">
+                Size: {{ size }}
+            </label>
+            <div class="flex gap-2">
+                <button v-for="preset in sizePresets" :key="preset"
+                    class="px-2 py-1 text-sm rounded border"
+                    :class="{ 'bg-gray-200 border-gray-400': size === preset, 'border-gray-300': size !== preset }"
+                    @click="emit('update:size', preset)"
+                    >
+                    {{ preset }}
+                </button>
+            </div>
+        </div>
         <input type="range" :value="size" @input="e => emit('update:size', +(e.target as HTMLInputElement).value)" 
             :min="NODE_MIN_SIZE" :max="NODE_MAX_SIZE" 
             class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" />
