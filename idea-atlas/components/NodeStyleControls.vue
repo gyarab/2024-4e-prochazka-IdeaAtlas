@@ -38,8 +38,7 @@ const sizePresets = [20, 50, 75, 100];
                 <button v-for="preset in sizePresets" :key="preset"
                     class="px-2 py-1 text-sm rounded border"
                     :class="{ 'bg-gray-200 border-gray-400': size === preset, 'border-gray-300': size !== preset }"
-                    @click="emit('update:size', preset)"
-                    >
+                    @click="emit('update:size', preset)">
                     {{ preset }}
                 </button>
             </div>
