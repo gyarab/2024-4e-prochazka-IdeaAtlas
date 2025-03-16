@@ -27,8 +27,8 @@ import {
   adjustNodeLayouts,
   waveNodeSelect
 } from "../utils/graphManager.js";
+import { historyManager } from "../utils/graphHistory";
 import { INITIAL_WAVE_SELECTION_DELAY, NETXT_WAVE_MODIFIER, MIN_WAVE_DELAY } from "~/config/constants";
-
 // Id of Graph to be fetched and displayed
 const props = defineProps<{
     graph_id: string;
@@ -449,6 +449,9 @@ const eventHandlers: vNG.EventHandlers = {
     setShowingNodeEdit(false);
     setShowingNodeInput(false);
   },
+  "node:dragend":({})=>{
+    historyManager.addToHistory(data);
+  }
 }
 
 // Configuration object for the graph
