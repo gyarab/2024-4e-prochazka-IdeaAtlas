@@ -403,7 +403,14 @@ const handleNodeEdit = (changes: { name: string, color: string, size: number }) 
   }
   setShowingNodeEdit(false);
 };
-
+// double click event handler
+// show edit dialog for selected node
+const eventHandlers: vNG.EventHandlers = {
+  "node:dblclick": ({ node }) => {
+    selectedNodes.value = [node];
+    setShowingNodeEdit(true);
+  },
+}
 
 // Configuration object for the graph
 const configs = mainConfig;
@@ -464,7 +471,7 @@ const handleLayoutToggle = () => {
     <div v-if="loading" class="loading-indicator">Loading...</div>
     <!-- Adjust map position -->
     <v-network-graph v-else class="fixed inset-0 w-screen h-screen z-0" ref="graph" v-model:selected-nodes="selectedNodes"
-      v-model:selected-edges="selectedEdges" :nodes="data.nodes" :edges="data.edges" :layouts="data.layouts"
+      v-model:selected-edges="selectedEdges" :nodes="data.nodes" :edges="data.edges" :layouts="data.layouts" :event-handlers="eventHandlers"
       :configs="configs" />
   </client-only>
   <!-- Node input dialog component for creating new nodes -->
