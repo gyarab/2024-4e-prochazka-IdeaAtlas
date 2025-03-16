@@ -376,6 +376,34 @@ function adjustNodeLayouts(data) {
     historyManager.addToHistory(data);
 }
 
+// Function which will recusively select all the nodes connected to the selected node
+async function waveNodeSelect(data, selectedNodes) {
+    const visited = new Set(selectedNodes);
+    const newlySelected = [];
+    
+    // Reuse existing sleep function or define if not available
+    const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+    // For each selected node
+    for (const nodeId of selectedNodes) {
+        // Find all edges connected to this node
+        Object.values(data.edges).forEach(edge => {
+            if (edge.source === nodeId || edge.target === nodeId) {
+                const connectedNode = edge.source === nodeId ? edge.target : edge.source;
+                if (!visited.has(connectedNode)) {
+                    visited.add(connectedNode);
+                    newlySelected.push(connectedNode);
+                }
+            }
+        });
+        // Add a small delay between each wave
+        //TODO make delay smaller with each new wave
+        await sleep(100);
+    }
+
+    return newlySelected;
+}
+
 export {
     initilizeHistory,
     addNewNode,
@@ -389,5 +417,6 @@ export {
     moveForward,
     moveBackward,
     updateEdgeColors,
-    adjustNodeLayouts
+    adjustNodeLayouts,
+    waveNodeSelect
 };
