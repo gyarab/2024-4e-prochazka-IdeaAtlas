@@ -203,7 +203,9 @@ onUnmounted(() => {
 });
 
 onMounted(async () => {
-
+  if (configs.view) {
+  configs.view.layoutHandler = GridConfig;
+}
   // Object to store current mouse coordinates
   let mousePosition = { x: 0, y: 0 };
 
