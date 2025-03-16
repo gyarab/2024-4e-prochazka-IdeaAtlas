@@ -257,6 +257,8 @@ onMounted(async () => {
             event.preventDefault();
         }
         
+        let currentDelay = 600; // Starting delay
+        
         // Recursive function to keep selecting while key is held
         const recursiveSelect = async () => {
             if (event.repeat || selectedNodes.value.length === 0) return;
@@ -268,7 +270,8 @@ onMounted(async () => {
             
             // If new nodes were found and key is still pressed, continue selecting
             if (newNodes.length > 0) {
-                setTimeout(recursiveSelect, 600); // Adjust delay as needed
+                currentDelay = Math.max(100, currentDelay * 0.75); // Reduce delay by 25%, but not below 100ms
+                setTimeout(recursiveSelect, currentDelay);
             }
         };
         
