@@ -26,6 +26,9 @@ export const ATTRACTION = 0.05;       // Reduced attraction
 export const DAMPING = 0.7;          // Increased damping
 export const MAX_FORCE = 10;         // Maximum force cap
 export const MIN_FORCE = 0.01;       // Minimum force threshold
+// TODO
+export const BIGGEST_NODE_X = -500;
+export const BIGGEST_NODE_Y = 500;
 
 // Wave constants
 export const INITIAL_WAVE_SELECTION_DELAY = 600 // delay in ms before the first wave starts
