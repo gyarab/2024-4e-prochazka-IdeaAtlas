@@ -296,7 +296,7 @@ onMounted(async () => {
       if (keyboardShortcuts.editNode.preventDefault) {
         event.preventDefault();
       }
-      showNodeEdit.value = true;
+      setShowingNodeEdit(true);
     }
   };
   // HandleUndoKey: Undoes last action
