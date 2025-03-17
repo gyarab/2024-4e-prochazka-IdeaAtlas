@@ -50,6 +50,12 @@ class HistoryManager {
     getCurrentData() {
         return this.history[this.currentIndex];
     }
+    // Usecase: When loading a new map
+    // Empty the history array and set currentIndex to -1
+    clearHistory() {
+        this.history = [];
+        this.currentIndex = -1;
+    }
 
 }
 // Export the HistoryManager class
