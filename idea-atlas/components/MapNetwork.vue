@@ -24,7 +24,6 @@ import {
   deleeteEdgesBasedOnNodes,
   moveForward,
   moveBackward,
-  adjustNodeLayouts,
   waveNodeSelect
 } from "../utils/graphManager.js";
 import { historyManager } from "../utils/graphHistory";
@@ -125,10 +124,6 @@ const handleSave = async () => {
   }
 };
 
-// Add handler for auto-layout
-const handleAutoLayout = () => {
-  adjustNodeLayouts(data);
-};
 
 const isWaveKeyHeld = ref(false);
 
@@ -501,12 +496,6 @@ const handleLayoutToggle = () => {
       class="px-4 py-2 bg-green-500 text-white rounded-md shadow-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"
     >
       {{ isGridLayout ? 'Use Force Layout' : 'Use Grid Layout' }}
-    </button>
-    <button 
-      @click="handleAutoLayout"
-      class="px-4 py-2 bg-purple-500 text-white rounded-md shadow-md hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-500"
-    >
-      Auto Layout
     </button>
   </div>
   <client-only>
