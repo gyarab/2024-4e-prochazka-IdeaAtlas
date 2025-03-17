@@ -377,12 +377,6 @@ function adjustNodeLayouts(data) {
 }
 
 // Function which will recusively select all the nodes connected to the selected node
-/**
- * @param {Object} data - The graph data object
- * @param {string[]} selectedNodes - Array of selected node IDs
- * @param {(newlySelected: string[]) => void} callback - Callback function for handling newly selected nodes
- * @returns {Promise<string[]>} Array of newly selected node IDs
- */
 async function waveNodeSelect(data, selectedNodes, callback) {
     const visited = new Set(selectedNodes);
     const newlySelected = [];
