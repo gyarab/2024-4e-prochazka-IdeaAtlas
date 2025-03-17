@@ -100,6 +100,11 @@ const validateForm = (): boolean => {
     errors.name = '';
     errors.description = '';
     
+    if (!formData.name.trim()) {
+        errors.name = 'Name is required';
+        return false;
+    }
+    
     if (formData.name.length < MAP_NAME_MIN_LENGTH) {
         errors.name = `Name must be at least ${MAP_NAME_MIN_LENGTH} characters`;
         return false;
