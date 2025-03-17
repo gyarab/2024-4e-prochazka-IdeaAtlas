@@ -297,6 +297,9 @@ onMounted(async () => {
   const handleUndoKey = (event: KeyboardEvent) => {
     if (isSearchFocused.value) return;
     if (checkInputFieldShown()) return;
+    // returns when shift key is pressed
+    // so it is not triggered on redo
+    if (event.shiftKey) return;
     if (event.code === keyboardShortcuts.undo.code && event.ctrlKey) {
       if (keyboardShortcuts.undo.preventDefault) {
         event.preventDefault();
@@ -497,11 +500,11 @@ const handleLayoutToggle = () => {
       @click="handleLayoutToggle"
       :class="{
         'px-4 py-2 text-white rounded-md shadow-md focus:outline-none focus:ring-2': true,
-        'bg-teal-500 hover:bg-teal-600 focus:ring-teal-500': isGridLayout,
-        'bg-purple-500 hover:bg-purple-600 focus:ring-purple-500': !isGridLayout
+        'bg-teal-500 hover:bg-teal-600 focus:ring-teal-500': !isGridLayout,
+        'bg-purple-500 hover:bg-purple-600 focus:ring-purple-500': isGridLayout
       }"
     >
-      {{ isGridLayout ? 'Grid Layout' : 'Force Layout' }}
+      {{ isGridLayout ? 'Force Layout' : 'Grid Layout'}}
     </button>
   </div>
   <client-only>

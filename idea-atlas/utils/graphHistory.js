@@ -36,6 +36,7 @@ class HistoryManager {
         if (this.currentIndex >= this.history.length) {
             this.currentIndex = this.history.length - 1;
         }
+        console.log(this.currentIndex)
     }
     // Decrement the currentIndex by 1
     // If currentIndex is less than 0, set currentIndex to 0
@@ -45,6 +46,7 @@ class HistoryManager {
         if (this.currentIndex < 0) {
             this.currentIndex = 0;
         }
+        console.log(this.currentIndex)
     }
     // Returns the current data
     getCurrentData() {
