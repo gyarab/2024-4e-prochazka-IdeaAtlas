@@ -52,4 +52,7 @@ class HistoryManager {
     }
 
 }
+// Export the HistoryManager class
+// Different scripts can import this class and use it
+// Will use the same instance of the class
 export const historyManager = new HistoryManager();
