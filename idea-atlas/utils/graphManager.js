@@ -23,54 +23,38 @@ function addNewNode(data, nodeProps, xMousePos, yMousePos) {
 }
 //Deletes multiple nodes from the graph
 async function deleteNodes(data, nodesToDelete) {
-    // console.log("Nodes to delete:");
-    // console.log(nodesToDelete);
-    // console.log("Data before deletion:");
-    // console.log(data);
-    const nodes = data.nodes;
-    // Nodes which will remain after deletion 
-    const remainingNodes = {};
+    // Creating copies to avoid direct mutation
+    const remainingNodes = { ...data.nodes };
+    const remainingEdges = { ...data.edges };
+    const layouts = { ...data.layouts };
     
-    // Spares only the nodes which are not contained in the nodesToDelete array
-    for (const [key, value] of Object.entries(nodes)) {
-        if (!nodesToDelete.includes(key)) {
-            remainingNodes[key] = value;
+    // Delete nodes
+    for (const nodeId of nodesToDelete) {
+        delete remainingNodes[nodeId];
+    }
+    
+    // Remove edges which contain any of the nodes to be deleted
+    for (const [key, edge] of Object.entries(data.edges)) {
+        if (nodesToDelete.includes(edge.source) || nodesToDelete.includes(edge.target)) {
+            delete remainingEdges[key];
         }
     }
     
-    // Updates the nodes object
-    data.nodes = remainingNodes;
-    
-    // Removes the edges which contain any of the nodes to be deleted
-    const edges = data.edges;
-    const remainingEdges = {};
-    for (const [key, edge] of Object.entries(edges)) {
-        // Check for the source and target nodes in the nodesToDelete array
-        if (!nodesToDelete.includes(edge.source) && !nodesToDelete.includes(edge.target)) {
-            remainingEdges[key] = edge;
+    // Clean up layouts
+    for (const nodeId of nodesToDelete) {
+        if (layouts[nodeId]) {
+            delete layouts[nodeId];
         }
     }
-    data.edges = remainingEdges;
     
-    /* WTF
-     From some uknown reason the layouts are bugged
-     But make sure to add a delay 
-     Helps to avoid the bug
-    
-    Have no idea what is the correct solution
-    But this works for now
-    */
     const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
     await sleep(100); // Add a small delay for debugging
     
-    
-    // Clean up layouts
-    const layouts = data.layouts;
-    for (const nodeId of nodesToDelete) {
-        delete layouts.nodes[nodeId];
-    }
+    // Apply all changes at once
+    data.nodes = remainingNodes;
+    data.edges = remainingEdges;
     data.layouts = layouts;
-
+    
     // Adds the new data to the history
     historyManager.addToHistory(data);
 }
@@ -208,48 +192,47 @@ function findCurrentMaxEdgeId(data) {
     );
 }
 // This function will move the history forward
-async function moveForward(data){
+function moveForward(data) {
     historyManager.moveForward();
     const newdata = historyManager.getCurrentData();
     
-
-    data.layouts = JSON.parse(JSON.stringify(newdata.layouts));
-    /* WTF
-    From some uknown reason the layouts are bugged
-    But make sure to add a delay 
-    Helps to avoid the bug
+    // First clear the existing data
+    data.nodes = {};
+    data.edges = {};
+    data.layouts = {};
     
-    Have no idea what is the correct solution
-    But this works for now
-    */
-   
-   const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
-   await sleep(10); // Add a small delay for debugging
-   Object.assign(data.nodes, newdata.nodes);
-   Object.assign(data.edges, newdata.edges);
+    // Then apply the new data
+    if (newdata.nodes) Object.assign(data.nodes, newdata.nodes);
+    if (newdata.edges) Object.assign(data.edges, newdata.edges);
+    
+    
+    // Then update layouts after delay (ensure it's not undefined)
+    if (newdata.layouts) {
+        data.layouts = JSON.parse(JSON.stringify(newdata.layouts));
+    } else {
+        data.layouts = {}; // Provide an empty object if layouts is undefined
+    }
 }
-// This function will move the history backward
-async function moveBackward(data){
+
+function moveBackward(data) {
     historyManager.moveBackward();
     const newdata = historyManager.getCurrentData();
-
-
-    data.layouts = JSON.parse(JSON.stringify(newdata.layouts));
-    /* WTF
-     From some uknown reason the layouts are bugged
-     But make sure to add a delay 
-     Helps to avoid the bug
     
-    Have no idea what is the correct solution
-    But this works for now
-    */
-
-    const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
-    await sleep(10); // Add a small delay for debugging
+    // First clear the existing data
+    data.nodes = {};
+    data.edges = {};
+    data.layouts = {};
     
-    Object.assign(data.nodes, newdata.nodes);
-    Object.assign(data.edges, newdata.edges);
+    // Then apply the new data
+    if (newdata.nodes) Object.assign(data.nodes, newdata.nodes);
+    if (newdata.edges) Object.assign(data.edges, newdata.edges);
     
+    // Then update layouts after delay (ensure it's not undefined)
+    if (newdata.layouts) {
+        data.layouts = JSON.parse(JSON.stringify(newdata.layouts));
+    } else {
+        data.layouts = {}; // Provide an empty object if layouts is undefined
+    }
 }
 
 // Function to update edge colors based on connected nodes

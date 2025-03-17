@@ -28,6 +28,7 @@ class HistoryManager {
             this.history.shift();
             this.currentIndex--;
         }
+        console.log(this.history);
     }
     // Increment the currentIndex by 1
     // If currentIndex is greater than the length of history, set currentIndex to the length of history -
@@ -51,7 +52,7 @@ class HistoryManager {
     }
     // Returns the current data
     getCurrentData() {
-        return this.history[this.currentIndex];
+        return structuredClone(this.history[this.currentIndex]);
     }
     // Usecase: When loading a new map
     // Empty the history array and set currentIndex to -1
