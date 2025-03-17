@@ -11,9 +11,10 @@ class HistoryManager {
     addToHistory(data) {
         // Create deep copy using structuredClone
         const dataCopy = {
+            layouts: JSON.parse(JSON.stringify(data.layouts)),
             nodes: JSON.parse(JSON.stringify(data.nodes)),
             edges: JSON.parse(JSON.stringify(data.edges)),
-            layouts: JSON.parse(JSON.stringify(data.layouts))
+
         };
         
         // Remove any future history entries
