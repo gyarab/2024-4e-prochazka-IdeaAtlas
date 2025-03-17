@@ -52,11 +52,11 @@ async function deleteNodes(data, nodesToDelete) {
     }
     data.edges = remainingEdges;
     
-    // WTF
-    // From some uknown reason the layouts are bugged
-    // But make sure to add a delay 
-    // Helps to avoid the bug
-    /*
+    /* WTF
+     From some uknown reason the layouts are bugged
+     But make sure to add a delay 
+     Helps to avoid the bug
+    
     Have no idea what is the correct solution
     But this works for now
     */
@@ -208,16 +208,48 @@ function findCurrentMaxEdgeId(data) {
     );
 }
 // This function will move the history forward
-function moveForward(data){
+async function moveForward(data){
     historyManager.moveForward();
     const newdata = historyManager.getCurrentData();
-    Object.assign(data, newdata);
+    
+
+    data.layouts = JSON.parse(JSON.stringify(newdata.layouts));
+    /* WTF
+    From some uknown reason the layouts are bugged
+    But make sure to add a delay 
+    Helps to avoid the bug
+    
+    Have no idea what is the correct solution
+    But this works for now
+    */
+   
+   const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+   await sleep(10); // Add a small delay for debugging
+   Object.assign(data.nodes, newdata.nodes);
+   Object.assign(data.edges, newdata.edges);
 }
 // This function will move the history backward
-function moveBackward(data){
+async function moveBackward(data){
     historyManager.moveBackward();
     const newdata = historyManager.getCurrentData();
-    Object.assign(data, newdata);
+
+
+    data.layouts = JSON.parse(JSON.stringify(newdata.layouts));
+    /* WTF
+     From some uknown reason the layouts are bugged
+     But make sure to add a delay 
+     Helps to avoid the bug
+    
+    Have no idea what is the correct solution
+    But this works for now
+    */
+
+    const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+    await sleep(10); // Add a small delay for debugging
+    
+    Object.assign(data.nodes, newdata.nodes);
+    Object.assign(data.edges, newdata.edges);
+    
 }
 
 // Function to update edge colors based on connected nodes
