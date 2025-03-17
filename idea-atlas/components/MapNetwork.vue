@@ -446,6 +446,7 @@ const eventHandlers: vNG.EventHandlers = {
     setShowingNodeInput(false);
   },
   "node:dragend":({})=>{
+    console.log("dragend");
     historyManager.addToHistory(data);
   }
 }
