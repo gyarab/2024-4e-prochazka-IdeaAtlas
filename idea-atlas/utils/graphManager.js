@@ -1,7 +1,6 @@
 // This file contains the functions that are used to manage the graph data structure
 import { historyManager } from "./graphHistory";
 import { EDGE_NOTE_RATIO } from "~/config/constants";
-import { BASE_REPULSION, BASE_MIN_DISTANCE, ATTRACTION, DAMPING, MAX_FORCE, MIN_FORCE} from "~/config/constants";
 
 function initilizeHistory(data) {
     historyManager.addToHistory(data);
