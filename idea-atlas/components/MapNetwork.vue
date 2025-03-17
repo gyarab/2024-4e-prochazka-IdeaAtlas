@@ -493,9 +493,13 @@ const handleLayoutToggle = () => {
     </button>
     <button 
       @click="handleLayoutToggle"
-      class="px-4 py-2 bg-green-500 text-white rounded-md shadow-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"
+      :class="{
+        'px-4 py-2 text-white rounded-md shadow-md focus:outline-none focus:ring-2': true,
+        'bg-teal-500 hover:bg-teal-600 focus:ring-teal-500': isGridLayout,
+        'bg-purple-500 hover:bg-purple-600 focus:ring-purple-500': !isGridLayout
+      }"
     >
-      {{ isGridLayout ? 'Use Force Layout' : 'Use Grid Layout' }}
+      {{ isGridLayout ? 'Grid Layout' : 'Force Layout' }}
     </button>
   </div>
   <client-only>
