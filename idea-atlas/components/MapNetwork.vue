@@ -13,7 +13,6 @@ import {
   checkInputFieldShown
 } from '../utils/uiTracker';
 import {
-  initilizeHistory,
   addNewNode,
   deleteNodes,
   addEgesOneSource,
@@ -358,8 +357,10 @@ onMounted(async () => {
       data.edges = fetchedData.edges || [];
       data.layouts = fetchedData.layouts || [];
 
+      historyManager.clearHistory();
       // Initialize history for undo/redo functionality
-      initilizeHistory(data);
+      historyManager.addToHistory(data);
+      
     } else {
       console.warn("No data returned from fetchGraph");
     }

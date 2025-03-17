@@ -2,9 +2,6 @@
 import { historyManager } from "./graphHistory";
 import { EDGE_NOTE_RATIO } from "~/config/constants";
 
-function initilizeHistory(data) {
-    historyManager.addToHistory(data);
-}
 // adds a new node to the graph
 function addNewNode(data, nodeProps, xMousePos, yMousePos) {
     // Find the largest numeric part of the existing keys
@@ -281,7 +278,6 @@ async function waveNodeSelect(data, selectedNodes, callback) {
 }
 
 export {
-    initilizeHistory,
     addNewNode,
     deleteNodes,
     addEgesOneSource,
