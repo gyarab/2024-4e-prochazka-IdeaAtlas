@@ -20,8 +20,6 @@ async function upsertNodes(supabase, nodes, graph_id) {
 
   if (error) {
     console.error('Error inserting nodes:', error);
-  } else {
-    console.log('Nodes inserted successfully');
   }
 }
 
@@ -43,8 +41,6 @@ async function upsertEdges(supabase, edges, graph_id) {
 
   if (error) {
     console.error('Error inserting edges:', error);
-  } else {
-    console.log('Edges inserted successfully');
   }
 }
 
@@ -64,8 +60,6 @@ async function upsertLayouts(supabase, layouts, graph_id) {
 
   if (error) {
     console.error('Error inserting layouts:', error);
-  } else {
-    console.log('Layouts inserted successfully');
   }
 }
 
@@ -192,7 +186,6 @@ async function saveGraph(supabase, data, graph_id) {
     // Now upsert all current data
     await upsertGraphData(supabase, data, graph_id);
     
-    console.log('Graph saved successfully');
   } catch (error) {
     console.error('Error saving graph:', error);
     throw error;
