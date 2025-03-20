@@ -1,115 +1,59 @@
+<script setup lang="js">
+const prompt = ref('');
+const idea = ref('');
+const error = ref('');
+const loading = ref(false);
+
+const generateIdea = async () => {
+  if (!prompt.value.trim()) {
+    error.value = 'Please enter a prompt';
+    return;
+  }
+
+  loading.value = true;
+  error.value = '';
+  
+  try {
+    const { data } = await useFetch('/api/generate-ideas', {
+      method: 'POST',
+      body: { prompt: prompt.value },
+    });
+
+    if (data.value?.error) {
+      error.value = data.value.error;
+    } else {
+      idea.value = data.value;
+    }
+  } catch (err) {
+    error.value = 'Failed to generate idea. Please try again.';
+    console.error(err);
+  } finally {
+    loading.value = false;
+  }
+};
+</script>
+
+
 <template>
-  <div class="about-container">
-    <div class="hero-section">
-      <h1 class="animated-title">
-        <span class="text-gradient">Idea</span>
-        <span class="text-separator">-</span>
-        <span class="text-gradient">Atlas</span>
-      </h1>
-      <p class="subtitle">Mapping the Universe of Innovation</p>
-    </div>
-    <div class="content-section">
-      <p class="description">Your gateway to organizing and exploring boundless ideas</p>
-    </div>
+  <div class="p-4">
+    <input v-model="prompt" placeholder="Enter your idea prompt" class="border p-2 rounded w-full" />
+    <button @click="generateIdea" :disabled="loading" class="bg-blue-500 text-white px-4 py-2 rounded mt-2">
+      Generate Idea
+    </button>
+
+    <div v-if="loading" class="mt-2">Generating...</div>
+    <div v-if="idea" class="mt-2 text-green-600">Generated Idea: {{ idea }}</div>
+    <div v-if="error" class="mt-2 text-red-600">Error: {{ error }}</div>
   </div>
 </template>
 
-<script setup lang="ts">
-// No script needed for this animation
-</script>
 
 <style scoped>
-.about-container {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: #0f0f1a;
-  color: white;
-}
-
-.hero-section {
-  height: 80vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-}
-
-.animated-title {
-  font-size: 5rem;
-  font-weight: 800;
-  display: flex;
-  gap: 0.5rem;
-  animation: float 6s ease-in-out infinite;
-}
-
-.text-gradient {
-  background: linear-gradient(45deg, #00ff87, #60efff);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  text-shadow: 0 0 30px rgba(0, 255, 135, 0.3);
-  transition: all 0.3s ease;
-}
-
-.text-gradient:hover {
-  transform: scale(1.1);
-  text-shadow: 0 0 50px rgba(0, 255, 135, 0.5);
-}
-
-.text-separator {
-  color: #60efff;
-}
-
-.subtitle {
-  font-size: 1.5rem;
-  margin-top: 2rem;
-  opacity: 0;
-  animation: fadeIn 1s ease-out forwards 1s;
-}
-
-.content-section {
+.about-page {
   padding: 2rem;
-  text-align: center;
 }
 
-.description {
-  font-size: 1.2rem;
-  opacity: 0;
-  animation: slideUp 1s ease-out forwards 1.5s;
-}
-
-@keyframes float {
-  0% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-20px);
-  }
-  100% {
-    transform: translateY(0px);
-  }
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.content {
+  margin-top: 1rem;
 }
 </style>
