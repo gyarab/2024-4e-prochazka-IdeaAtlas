@@ -17,4 +17,4 @@ logs
 .DS_Store
 .fleet
 .idea
-idea-atlas/.env
+.env
