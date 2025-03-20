@@ -466,6 +466,9 @@ const handleLayoutToggle = () => {
   // Prevents 'configs.view' is possibly 'undefined'. error
   //@ts-ignore
   configs.view.layoutHandler = isGridLayout.value ? GridConfig : ForceConfig;
+  if (isGridLayout.value) {
+    historyManager.addToHistory(data);
+  }
 };
 </script>
 
