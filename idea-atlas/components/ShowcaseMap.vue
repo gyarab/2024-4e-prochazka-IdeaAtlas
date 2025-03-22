@@ -149,7 +149,6 @@ let mousePosition = { x: 0, y: 0 };
 onMounted(async () => {
   if (configs.view) {
     configs.view.layoutHandler = GridConfig;
-    configs.view.autoPanAndZoomOnLoad = false;
   }
 
   // Create named handler functions that can be referenced for removal
@@ -388,21 +387,6 @@ const eventHandlers: vNG.EventHandlers = {
     console.log("dragend");
     historyManager.addToHistory(data);
   },
-  "view:load": () => {
-    if (!graph.value) return
-    // Pan the target node position to the center.
-    // const sizes = graph.value.getSizes()
-    // graph.value.panTo({
-    //   x: sizes.width / 2 - data.layouts.nodes['node1'].x,
-    //   y: sizes.height / 2 - data.layouts.nodes['node1'].y,
-    // })
-    graph.value?.setViewBox({
-    left: -150,
-    top: -300,
-    right: 750,
-    bottom: 800,
-    })
-  },
 }
 
 // Configuration object for the graph
@@ -434,70 +418,82 @@ const toggleControls = () => {
 </script>
 
 <template>
-  <!-- Add controls button in top-left corner -->
-  <div class="fixed top-20 right-4 z-40">
-    <button 
-      @click="toggleControls"
-      class="px-4 py-2 bg-gray-500 text-white rounded-md shadow-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500"
-    >
-      Controls
-    </button>
-  </div>
+  <!-- Replace fixed positioning with relative positioning -->
+  <div class="relative w-full h-full min-h-[500px]">
+    <!-- Move controls to relative positioning -->
+    <div class="absolute top-4 right-4 z-40">
+      <button 
+        @click="toggleControls"
+        class="px-4 py-2 bg-gray-500 text-white rounded-md shadow-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500"
+      >
+        Controls
+      </button>
+    </div>
 
-  <!-- Central toolbar with search and other controls -->
-  <div class="fixed top-20 left-1/2 transform -translate-x-1/2 z-40 flex gap-2">
-    <input 
-      type="text" 
-      v-model="searchTerm"
-      placeholder="Search nodes..."
-      class="px-4 py-2 border rounded-md shadow-md w-64 focus:outline-none focus:ring-2 focus:ring-blue-500"
-      @focus="handleSearchFocus"
-      @blur="handleSearchBlur"
+    <!-- Adjust toolbar positioning -->
+    <div class="absolute top-4 left-1/2 transform -translate-x-1/2 z-40 flex gap-2">
+      <input 
+        type="text" 
+        v-model="searchTerm"
+        placeholder="Search nodes..."
+        class="px-4 py-2 border rounded-md shadow-md w-64 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        @focus="handleSearchFocus"
+        @blur="handleSearchBlur"
+      />
+      <button 
+        @click="handleLayoutToggle"
+        :class="{
+          'px-4 py-2 text-white rounded-md shadow-md focus:outline-none focus:ring-2': true,
+          'bg-teal-500 hover:bg-teal-600 focus:ring-teal-500': !isGridLayout,
+          'bg-purple-500 hover:bg-purple-600 focus:ring-purple-500': isGridLayout
+        }"
+      >
+        {{ isGridLayout ? 'Force Layout' : 'Grid Layout'}}
+      </button>
+    </div>
+
+    <ControllsHint 
+      :is-open="showControls"
+      @close="showControls = false"
     />
-    <button 
-      @click="handleLayoutToggle"
-      :class="{
-        'px-4 py-2 text-white rounded-md shadow-md focus:outline-none focus:ring-2': true,
-        'bg-teal-500 hover:bg-teal-600 focus:ring-teal-500': !isGridLayout,
-        'bg-purple-500 hover:bg-purple-600 focus:ring-purple-500': isGridLayout
-      }"
-    >
-      {{ isGridLayout ? 'Force Layout' : 'Grid Layout'}}
-    </button>
-  </div>
-  
-  <ControllsHint 
-    :is-open="showControls"
-    @close="showControls = false"
-  />
 
-  <client-only>
-    <div v-if="loading" class="loading-indicator">Loading...</div>
-    <!-- Adjust map position -->
-    <v-network-graph v-else class="fixed inset-0 w-screen h-screen z-0" ref="graph" v-model:selected-nodes="selectedNodes"
-      v-model:selected-edges="selectedEdges" :nodes="data.nodes" :edges="data.edges" :layouts="data.layouts" :event-handlers="eventHandlers"
-      :configs="configs" />
-  </client-only>
-  <!-- Node input dialog component for creating new nodes -->
-  <!-- Shows when showNodeInput is true, positioned at newNodePosition -->
-  <!-- Emits 'close' event to hide dialog and 'submit' event with node name -->
-  <NodeInputDialog :is-open="getShowingNodeInput()" :position="newNodePosition" @close="setShowingNodeInput(false)"
-    @submit="handleNodeSubmit" />
-  <!-- TODO find a position of first selected node -->
-  <NodeEditDialog 
-    :is-open="getShowingNodeEdit()" 
-    :position="calculateFirstSelectedNodePosition()" 
-    :current-name="getCurrentNodeName()"
-    :current-color="getCurrentNodeColor()"
-    :current-size="getCurrentNodeSize()"
-    @close="setShowingNodeEdit(false)"
-    @submit="handleNodeEdit" 
-  />
+    <client-only>
+      <div v-if="loading" class="absolute inset-0 flex items-center justify-center">Loading...</div>
+      <v-network-graph v-else 
+        class="w-full h-full" 
+        ref="graph" 
+        v-model:selected-nodes="selectedNodes"
+        v-model:selected-edges="selectedEdges" 
+        :nodes="data.nodes" 
+        :edges="data.edges" 
+        :layouts="data.layouts" 
+        :event-handlers="eventHandlers"
+        :configs="configs" 
+      />
+    </client-only>
+
+    <NodeInputDialog 
+      :is-open="getShowingNodeInput()" 
+      :position="newNodePosition" 
+      @close="setShowingNodeInput(false)"
+      @submit="handleNodeSubmit" 
+    />
+
+    <NodeEditDialog 
+      :is-open="getShowingNodeEdit()" 
+      :position="calculateFirstSelectedNodePosition()" 
+      :current-name="getCurrentNodeName()"
+      :current-color="getCurrentNodeColor()"
+      :current-size="getCurrentNodeSize()"
+      @close="setShowingNodeEdit(false)"
+      @submit="handleNodeEdit" 
+    />
+  </div>
 </template>
 
 <style>
 .loading-indicator {
-  position: fixed;
+  position: absolute;
   inset: 0;
   display: flex;
   justify-content: center;
