@@ -6,10 +6,10 @@
           <span class="text-separator">-</span>
           <span class="text-gradient">Atlas</span>
         </h1>
-        <p class="subtitle">Mapping the Universe of Innovation</p>
+        <p class="subtitle">simple brain-storming tool</p>
       </div>
       <div class="content-section">
-        <p class="description">Your gateway to organizing and exploring boundless ideas</p>
+        <p class="description">Created by Vítězsav Procházka 4.E 2024/2025</p>
       </div>
     </div>
   </template>
