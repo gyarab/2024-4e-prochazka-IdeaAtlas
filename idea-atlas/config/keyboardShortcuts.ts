@@ -8,6 +8,7 @@ export interface KeyboardShortcut {
     ctrlKey?: boolean;
     shiftKey?: boolean;
     preventWithShift?: boolean;
+    special?: string;
 }
 
 export interface KeyboardShortcutsConfig {
@@ -34,7 +35,8 @@ export const keyboardShortcuts: KeyboardShortcutsConfig = {
         description: 'Add a new node at cursor position',
         preventDefault: true,
         ctrlKey: false,
-        shiftKey: false
+        shiftKey: false,
+        special: 'double left click'
     },
     deleteSelected: {
         code: 'Backspace',
@@ -77,11 +79,12 @@ export const keyboardShortcuts: KeyboardShortcutsConfig = {
         description: 'Rename selected node(s)',
         preventDefault: true,
         ctrlKey: true,
-        shiftKey: false
+        shiftKey: false,
+        special: 'double left click'
     },
     deselect: {
         code: 'Escape',
-        key: '',
+        key: 'Esc',
         description: 'Deselect all selected nodes and edges',
         preventDefault: true,
         ctrlKey: false,
@@ -110,7 +113,7 @@ export const keyboardShortcuts: KeyboardShortcutsConfig = {
     wave: {
         code: 'KeyW',
         key: 'w',
-        description: 'Wave the selected node(s)',
+        description: 'Wave selecet nodes',
         preventDefault: true,
         shiftKey: false
     },
