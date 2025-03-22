@@ -149,6 +149,7 @@ let mousePosition = { x: 0, y: 0 };
 onMounted(async () => {
   if (configs.view) {
     configs.view.layoutHandler = GridConfig;
+    configs.view.mouseWheelZoomEnabled = false;
   }
 
   // Create named handler functions that can be referenced for removal
