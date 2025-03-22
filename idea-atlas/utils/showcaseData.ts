@@ -7,7 +7,7 @@ const nodes: Nodes = {
   node4: { name: "Java Script", color: "#f1c40f", size: 30  },
   node5: { name: "Type Script", color: "#3498db", size: 30  },
   node6: { name: "Supabase", color: "#2ecc71", size: 50  },
-  node7: { name: "Brainstorming", color: "#1abc9c", size: 75  },
+  node7: { name: "Brainstorming", color: "#9b59b6", size: 75  },
 }
 
 const edges: Edges = {
