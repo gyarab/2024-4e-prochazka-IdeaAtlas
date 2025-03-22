@@ -10,7 +10,7 @@ export default defineNuxtConfig({
   supabase: {
     redirect: false
   },
-  css: ["v-network-graph/lib/style.css"],
+  css: ['~/assets/css/main.css'],
   app: {
     head: {
       link: [

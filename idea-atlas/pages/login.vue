@@ -1,6 +1,6 @@
 <template>
-    <div class="flex items-center justify-center min-h-screen bg-gray-100">
-      <div class="bg-white p-8 rounded-lg shadow-md w-96">
+    <div class="flex items-center justify-center min-h-screen bg-gray-50">
+      <div class="card w-96">
         <h2 class="text-2xl font-bold mb-6 text-center">Login</h2>
         <form @submit.prevent="signIn">
           <!-- Email Input -->
@@ -16,7 +16,7 @@
           </div>
           
           <!-- Submit Button -->
-          <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600">Login</button>
+          <button type="submit" class="btn-primary w-full">Login</button>
         </form>
         
         <!-- Message Container -->

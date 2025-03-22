@@ -123,7 +123,7 @@ onMounted(async () => {
                     >
                     <i class="fas fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
                 </div>
-                <button @click="showNewMapDialog = true" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+                <button @click="showNewMapDialog = true" class="btn-primary">
                     Create New Map
                 </button>
             </div>
@@ -173,5 +173,6 @@ onMounted(async () => {
 <style scoped>
 .container {
     min-height: calc(100vh - 4rem);
+    background-color: var(--secondary-bg);
 }
 </style>
