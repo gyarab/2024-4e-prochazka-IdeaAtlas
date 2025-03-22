@@ -195,13 +195,13 @@ onUnmounted(() => {
     clearTimeout(saveTimeout.value);
   }
 });
+// Object to store current mouse coordinates
+let mousePosition = { x: 0, y: 0 };
 
 onMounted(async () => {
   if (configs.view) {
   configs.view.layoutHandler = GridConfig;
 }
-  // Object to store current mouse coordinates
-  let mousePosition = { x: 0, y: 0 };
 
   // Create named handler functions that can be referenced for removal
   const handleMouseMove = (event: MouseEvent) => {
@@ -447,6 +447,12 @@ const eventHandlers: vNG.EventHandlers = {
   "view:click": ({}) => {
     setShowingNodeEdit(false);
     setShowingNodeInput(false);
+  },
+  "view:dblclick": ({}) => {
+    setShowingNodeEdit(false);
+    newNodePosition.value = mousePosition;
+    setShowingNodeInput(true);
+    console.log("dblclick");
   },
   "node:dragend":({})=>{
     console.log("dragend");
