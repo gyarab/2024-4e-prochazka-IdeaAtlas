@@ -2,7 +2,7 @@
 import { ref, watch, onMounted, onUnmounted } from 'vue';
 import {defaultColor} from '~/config/colors';
 import { NODE_DEFAULT_SIZE } from '~/config/constants';
-import { useDraggable } from '~/composables/useDraggable';
+import { useDraggable } from '~/utils/useDraggable';
 
 // Props definition for dialog visibility and position
 const props = defineProps<{

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watch, onMounted, onUnmounted } from 'vue';
-import { useDraggable } from '~/composables/useDraggable';
+import { useDraggable } from '~/utils/useDraggable';
 
 // Props definition for dialog visibility and position
 const props = defineProps<{
