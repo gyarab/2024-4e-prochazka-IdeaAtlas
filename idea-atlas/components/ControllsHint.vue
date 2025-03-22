@@ -9,14 +9,16 @@ defineEmits(['close']);
 
 const shortcuts = Object.entries(keyboardShortcuts).map(([key, shortcut]) => {
   const modifiers = [];
-  if (key.includes('ctrl')) modifiers.push('Ctrl');
-  if (key.includes('shift')) modifiers.push('Shift');
+  if (shortcut.ctrlKey) modifiers.push('Ctrl');
+  if (shortcut.shiftKey) modifiers.push('Shift');
   
   const displayKey = shortcut.key === ' ' ? 'Space' : shortcut.key;
   const keyCombo = [...modifiers, displayKey].join(' + ');
   
   return {
-    combo: keyCombo,
+    combos: shortcut.special 
+      ? [keyCombo, shortcut.special]
+      : [keyCombo],
     description: shortcut.description
   };
 });
@@ -36,9 +38,14 @@ const shortcuts = Object.entries(keyboardShortcuts).map(([key, shortcut]) => {
       <div v-for="(shortcut, index) in shortcuts" :key="index" 
            class="flex justify-between items-center py-1 border-b border-gray-100 last:border-0">
         <span class="text-sm text-gray-600">{{ shortcut.description }}</span>
-        <kbd class="px-2 py-1 text-sm font-semibold text-gray-700 bg-gray-100 border border-gray-300 rounded">
-          {{ shortcut.combo }}
-        </kbd>
+        <div class="flex items-center gap-2">
+          <template v-for="(combo, comboIndex) in shortcut.combos" :key="comboIndex">
+            <kbd class="px-2 py-1 text-sm font-semibold text-gray-700 bg-gray-100 border border-gray-300 rounded">
+              {{ combo }}
+            </kbd>
+            <span v-if="comboIndex < shortcut.combos.length - 1" class="text-gray-500">or</span>
+          </template>
+        </div>
       </div>
     </div>
   </div>
