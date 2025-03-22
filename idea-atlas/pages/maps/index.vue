@@ -1,5 +1,9 @@
 <script setup lang="ts">
 import { fetchGraphMDataBasedOnUsr, deleteGraph } from '~/utils/graphMetadataService';
+
+definePageMeta({
+    middleware: ["auth"],
+});
 const supabase = useSupabaseClient();
 
 interface GraphMetadata {
