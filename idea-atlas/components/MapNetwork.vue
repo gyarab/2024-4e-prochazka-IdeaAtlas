@@ -476,16 +476,30 @@ const handleLayoutToggle = () => {
     historyManager.addToHistory(data);
   }
 };
+
+import ControllsHint from './ControllsHint.vue';
+
+// Add state for controls hint visibility
+const showControls = ref(false);
+
+// Add toggle function for controls
+const toggleControls = () => {
+  showControls.value = !showControls.value;
+};
 </script>
 
 <template>
-  <!-- <div>
-    <button @click="service.upsertGraphData(supabase, data)">Upsert whole graph</button>
+  <!-- Add controls button in top-left corner -->
+  <div class="fixed top-20 right-4 z-40">
+    <button 
+      @click="toggleControls"
+      class="px-4 py-2 bg-gray-500 text-white rounded-md shadow-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500"
+    >
+      Controls
+    </button>
   </div>
-  <div>
-    <button @click="console.log(data)">console log data</button>
-  </div> -->
-  <!-- Simplified search input - increase z-index -->
+
+  <!-- Central toolbar with search and other controls -->
   <div class="fixed top-20 left-1/2 transform -translate-x-1/2 z-40 flex gap-2">
     <input 
       type="text" 
@@ -516,6 +530,12 @@ const handleLayoutToggle = () => {
       {{ isGridLayout ? 'Force Layout' : 'Grid Layout'}}
     </button>
   </div>
+  
+  <ControllsHint 
+    :is-open="showControls"
+    @close="showControls = false"
+  />
+
   <client-only>
     <div v-if="loading" class="loading-indicator">Loading...</div>
     <!-- Adjust map position -->
