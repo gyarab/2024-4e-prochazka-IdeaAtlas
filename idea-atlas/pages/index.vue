@@ -19,14 +19,6 @@
   </script>
   
   <style scoped>
-  .about-container {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background: var(--secondary-bg);
-    color: #2d3748;
-  }
   
   .hero-section {
     height: 80vh;
@@ -46,17 +38,17 @@
   }
   
   .text-gradient {
-    background: linear-gradient(45deg, #3b82f6, #60a5fa);
+    background: linear-gradient(45deg, #2371ed, #60a5fa);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    text-shadow: 0 0 30px rgba(59, 130, 246, 0.3);
+    text-shadow: 0 0 30px rgba(59, 131, 246, 0.628);
     transition: all 0.3s ease;
   }
   
   .text-gradient:hover {
     transform: scale(1.1);
-    text-shadow: 0 0 50px rgba(59, 130, 246, 0.5);
+    text-shadow: 0 0 50px rgba(59, 131, 246, 0.847);
   }
   
   .text-separator {
