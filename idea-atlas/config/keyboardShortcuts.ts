@@ -5,6 +5,9 @@ export interface KeyboardShortcut {
     key: string;
     description: string;
     preventDefault?: boolean;
+    ctrlKey?: boolean;
+    shiftKey?: boolean;
+    preventWithShift?: boolean;
 }
 
 export interface KeyboardShortcutsConfig {
@@ -29,66 +32,86 @@ export const keyboardShortcuts: KeyboardShortcutsConfig = {
         code: 'Enter',
         key: 'Enter',
         description: 'Add a new node at cursor position',
-        preventDefault: true
+        preventDefault: true,
+        ctrlKey: false,
+        shiftKey: false
     },
     deleteSelected: {
         code: 'Backspace',
         key: 'Backspace',
-        description: 'Delete selected node(s)',
-        preventDefault: true
+        description: 'Delete selected node(s) or edge(s)',
+        preventDefault: true,
+        ctrlKey: false,
+        shiftKey: false
     },
     // This only activates with a ctrl key pressed as well
     deleteEdgesFromSelectedNodes: {
         code: 'Backspace',
         key: 'Backspace',
         description: 'Delete edge(s) selected from selected node(s)',
-        preventDefault: true
+        preventDefault: true,
+        ctrlKey: true,
+        shiftKey: false
     },
-    // This only activates with a ctrl key pressed as well
     addEdgeOneSource: {
         code: 'Space',
         key: ' ',
         description: 'Adds edges from the selected node to other nodes',
-        preventDefault: true
+        preventDefault: true,
+        ctrlKey: false,
+        shiftKey: false
     },
+    // This only activates with a ctrl key pressed as well
     addEdges: {
         code: 'Space',
         key: ' ',
         description: 'Adds edges between all selected nodes',
-        preventDefault: true
+        preventDefault: true,
+        ctrlKey: true,
+        shiftKey: false
     },
     // This only activates with a ctrl key pressed as well
     editNode: {
         code: 'Enter',
         key: 'Enter',
         description: 'Rename selected node(s)',
-        preventDefault: true
+        preventDefault: true,
+        ctrlKey: true,
+        shiftKey: false
     },
     deselect: {
         code: 'Escape',
         key: '',
         description: 'Deselect all selected nodes and edges',
-        preventDefault: true
+        preventDefault: true,
+        ctrlKey: false,
+        shiftKey: false
     },
     // This only activates with a ctrl key pressed as well
     undo: {
         code: 'KeyZ',
         key: 'z',
         description: 'Undo the last action',
-        preventDefault: true
+        preventDefault: true,
+        ctrlKey: true,
+        shiftKey: false,
+        preventWithShift: true
     },
     // This only activates with a ctrl key and shift key pressed as well
     redo: {
         code: 'KeyZ',
         key: 'z',
         description: 'Redo the last undone action',
-        preventDefault: true
+        preventDefault: true,
+        ctrlKey: true,
+        shiftKey: true,
     },
     // Add more shortcuts here as needed
     wave: {
         code: 'KeyW',
         key: 'w',
         description: 'Wave the selected node(s)',
-        preventDefault: true
+        preventDefault: true,
+        shiftKey: false
     },
 };
