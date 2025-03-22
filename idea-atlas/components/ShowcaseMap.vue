@@ -28,6 +28,7 @@ import {
 import { historyManager } from "../utils/graphHistory";
 import { INITIAL_WAVE_SELECTION_DELAY, NETXT_WAVE_MODIFIER, MIN_WAVE_DELAY } from "~/config/constants";
 
+// Makes copies of the showcase data
 const data = reactive({
   nodes: { ...showcaseData.nodes },
   edges: { ...showcaseData.edges },
@@ -148,6 +149,7 @@ let mousePosition = { x: 0, y: 0 };
 onMounted(async () => {
   if (configs.view) {
     configs.view.layoutHandler = GridConfig;
+    configs.view.autoPanAndZoomOnLoad = false;
   }
 
   // Create named handler functions that can be referenced for removal
@@ -385,7 +387,22 @@ const eventHandlers: vNG.EventHandlers = {
   "node:dragend":({})=>{
     console.log("dragend");
     historyManager.addToHistory(data);
-  }
+  },
+  "view:load": () => {
+    if (!graph.value) return
+    // Pan the target node position to the center.
+    // const sizes = graph.value.getSizes()
+    // graph.value.panTo({
+    //   x: sizes.width / 2 - data.layouts.nodes['node1'].x,
+    //   y: sizes.height / 2 - data.layouts.nodes['node1'].y,
+    // })
+    graph.value?.setViewBox({
+    left: -150,
+    top: -300,
+    right: 750,
+    bottom: 800,
+    })
+  },
 }
 
 // Configuration object for the graph
