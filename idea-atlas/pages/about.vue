@@ -41,12 +41,16 @@ const features = [
       <h2 class="text-2xl font-bold mb-6 text-center">Built with Modern Technology</h2>
       <div class="flex justify-center items-center gap-8">
         <div class="text-center">
-          <img src="/_nuxt/assets/images/nuxt.svg" alt="Nuxt.js" class="h-12 mb-2 mx-auto">
-          <p class="font-medium">Nuxt 3</p>
+          <a href="https://nuxt.com" target="_blank" rel="noopener noreferrer">
+            <img src="/_nuxt/assets/images/nuxt.svg" alt="Nuxt.js" class="h-12 mb-2 mx-auto">
+            <p class="font-medium">Nuxt 3</p>
+          </a>
         </div>
         <div class="text-center">
-          <img src="/_nuxt/assets/images/supabase.svg" alt="Supabase" class="h-12 mb-2 mx-auto">
-          <p class="font-medium">Supabase</p>
+          <a href="https://supabase.com" target="_blank" rel="noopener noreferrer">
+            <img src="/_nuxt/assets/images/supabase.svg" alt="Supabase" class="h-12 mb-2 mx-auto">
+            <p class="font-medium">Supabase</p>
+          </a>
         </div>
       </div>
     </div>
