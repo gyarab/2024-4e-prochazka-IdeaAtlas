@@ -7,21 +7,23 @@ const props = defineProps<{
 
 defineEmits(['close']);
 
-const shortcuts = Object.entries(keyboardShortcuts).map(([key, shortcut]) => {
-  const modifiers = [];
-  if (shortcut.ctrlKey) modifiers.push('Ctrl');
-  if (shortcut.shiftKey) modifiers.push('Shift');
-  
-  const displayKey = shortcut.key === ' ' ? 'Space' : shortcut.key;
-  const keyCombo = [...modifiers, displayKey].join(' + ');
-  
-  return {
-    combos: shortcut.special 
-      ? [keyCombo, shortcut.special]
-      : [keyCombo],
-    description: shortcut.description
-  };
-});
+const shortcuts = Object.entries(keyboardShortcuts)
+  .map(([key, shortcut]) => {
+    const modifiers = [];
+    if (shortcut.ctrlKey) modifiers.push('Ctrl');
+    if (shortcut.shiftKey) modifiers.push('Shift');
+    
+    const displayKey = shortcut.key === ' ' ? 'Space' : shortcut.key;
+    const keyCombo = [...modifiers, displayKey].join(' + ');
+    
+    return {
+      combos: shortcut.special 
+        ? [keyCombo, shortcut.special]
+        : [keyCombo],
+      description: shortcut.description
+    };
+  })
+  .sort((a, b) => a.description.localeCompare(b.description));
 </script>
 
 <template>
