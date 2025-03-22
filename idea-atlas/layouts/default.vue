@@ -1,21 +1,18 @@
 <template>
     <div>
         <header class="shadow-sm bg-white fixed top-0 left-0 right-0 z-50">
-            <nav class="container mx-auto p-4 flex justify-between">
-                <NuxtLink to="/" class="font-bold">Idea Atlas</NuxtLink>
-                <ul class="flex gap-4">
-                    <li><NuxtLink to="/">Home</NuxtLink></li>
-                    <li><NuxtLink to="/about">About</NuxtLink></li>
-                    <!-- TODO it should not be seen until log in -->
-                    <li><NuxtLink to="/maps" class="btn">Maps</NuxtLink></li>
-                    <!-- TODO it should not be seen until log in -->
-                    <li><NuxtLink to="/profile" class="btn">{{ userEmail || 'Profile' }}</NuxtLink></li>
+            <nav class="container mx-auto p-4 flex justify-between items-center">
+                <NuxtLink to="/" class="font-bold text-xl text-primary hover:text-primary-hover">Idea Atlas</NuxtLink>
+                <ul class="flex gap-6 items-center">
+                    <li><NuxtLink to="/" class="text-text-light hover:text-text-color">Home</NuxtLink></li>
+                    <li><NuxtLink to="/about" class="text-text-light hover:text-text-color">About</NuxtLink></li>
+                    <li><NuxtLink to="/maps" class="btn-primary">Maps</NuxtLink></li>
+                    <li><NuxtLink to="/profile" class="btn-primary">{{ userEmail || 'Profile' }}</NuxtLink></li>
                 </ul>
             </nav>
         </header>
-        <!-- Add top padding to account for fixed header -->
-        <div class="pt-16">
-            <slot /> <!-- page content -->
+        <div class="pt-16 min-h-screen bg-secondary-bg">
+            <slot />
         </div>
     </div>
 </template>

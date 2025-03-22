@@ -2,10 +2,11 @@
   --primary-color: #3b82f6;
   --primary-hover: #2563eb;
   --background-color: #ffffff;
-  --secondary-bg: #f3f4f6;
+  --secondary-bg: #f8f9fb;
   --text-color: #2d3748;
   --text-light: #4b5563;
   --border-color: #e5e7eb;
+  --text-hover: var(--text-color);
 }
 
 body {
@@ -49,4 +50,25 @@ body {
 
 .card:hover {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.text-primary {
+  color: var(--primary-color);
+}
+
+.text-primary-hover:hover {
+  color: var(--primary-hover);
+}
+
+.text-text-light {
+  color: var(--text-light);
+  transition: color 0.2s;
+}
+
+.text-text-color {
+  color: var(--text-color);
+}
+
+.bg-secondary-bg {
+  background-color: var(--secondary-bg);
 }

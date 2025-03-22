@@ -24,7 +24,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    background: #ffffff;
+    background: var(--secondary-bg);
     color: #2d3748;
   }
   
