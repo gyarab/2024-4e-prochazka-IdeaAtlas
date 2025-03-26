@@ -6,7 +6,7 @@
           <span class="text-separator">-</span>
           <span class="text-gradient">Atlas</span>
         </h1>
-        <p class="subtitle">simple brain-storming tool</p>
+        <p class="subtitle">simple mind-map tool</p>
       </div>
       <div class="content-section">
         <p class="description">Created by Vítězsav Procházka 4.E 2024/2025</p>
