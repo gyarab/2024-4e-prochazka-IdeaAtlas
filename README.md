@@ -20,7 +20,9 @@ install bun
 curl -fsSL https://bun.sh/install | bash
 ```
 go to the project directory
-
+```bash
+cd 2024-4e-prochazka-IdeaAtlas
+```
 ```bash
 cd idea-atlas
 ```
@@ -45,7 +47,9 @@ powershell -c "irm bun.sh/install.ps1 | iex"
 ```
 
 go to the project directory
-
+```bash
+cd 2024-4e-prochazka-IdeaAtlas
+```
 ```bash
 cd idea-atlas
 ```
