@@ -171,9 +171,10 @@ async function saveGraph(supabase, data, graph_id) {
     const ids_in_db = await fetchAllIds(supabase, graph_id);
     
     // Find items to delete
-    const { nodesToDelete, edgesToDelete, layoutsToDelete } = await filterDeletedData(data, ids_in_db);
+    // __ is a placeholder for the layoutsToDelete variable - they are not used 
+    const { nodesToDelete, edgesToDelete, __ } = await filterDeletedData(data, ids_in_db);
     
-    // Delete items in correct order to handle foreign key constraints
+    // Delete items in correct order
     // First delete edges
     await deleteEdges(supabase, edgesToDelete, graph_id);
     
@@ -186,6 +187,16 @@ async function saveGraph(supabase, data, graph_id) {
     // Now upsert all current data
     await upsertGraphData(supabase, data, graph_id);
     
+    // Update the graph's updated_at timestamp
+    const { error: updateError } = await supabase
+      .from('graphs')
+      .update({ updated_at: new Date().toISOString() })
+      .eq('id', graph_id);
+      
+    if (updateError) {
+      console.error('Error updating graph timestamp:', updateError);
+    }
+
   } catch (error) {
     console.error('Error saving graph:', error);
     throw error;
