@@ -1,3 +1,5 @@
+// Default colors in node edit dialog
+
 export const colorPalette = [
     '#3498db', // Blue
     '#e74c3c', // Red
