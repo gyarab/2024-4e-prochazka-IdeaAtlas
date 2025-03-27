@@ -138,10 +138,6 @@ function deleeteEdgesBasedOnNodes(data, nodesToDeleteEdgesFrom) {
 
 
 function deleteEdges(data, edgesToDelete) {
-    console.log("Edges to delete:");
-    console.log(edgesToDelete);
-    console.log("Data before deletion:");
-    console.log(data);
     const edges = data.edges;
     const remainingEdges = {};
     for (const [key, edge] of Object.entries(edges)) {
