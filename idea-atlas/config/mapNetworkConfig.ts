@@ -4,6 +4,13 @@ import {
   type ForceNodeDatum,
   type ForceEdgeDatum,
 } from "v-network-graph/lib/force-layout"
+import {
+  FORCE_LINK_DISTANCE,
+  FORCE_LINK_STRENGTH,
+  FORCE_CHARGE_STRENGTH,
+  FORCE_CENTER_STRENGTH,
+  FORCE_ALPHA_MIN
+} from "./constants";
 
 // Helper function to convert color to rgba with opacity
 const convertToRGBA = (color: string, opacity: number = 0.5): string => {
@@ -33,13 +40,12 @@ export const ForceConfig = new ForceLayout({
     return d3
       .forceSimulation(nodes)
       // Edge force: maintains distance between connected nodes
-      .force("edge", forceLink.distance(300).strength(0.2))  // 400px ideal distance, 0.5 strength
+      .force("edge", forceLink.distance(FORCE_LINK_DISTANCE).strength(FORCE_LINK_STRENGTH))
       // Charge force: makes nodes repel each other
-      .force("charge", d3.forceManyBody().strength(-8000))   // Strong repulsion for better spread
-      // .force("collide", d3.forceCollide(50).strength(0.1))
+      .force("charge", d3.forceManyBody().strength(FORCE_CHARGE_STRENGTH))
       // Center force: pulls nodes toward canvas center
-      .force("center", d3.forceCenter().strength(0.001))      // Weak centering force
-      .alphaMin(0.001)  // Minimum energy level before simulation stops
+      .force("center", d3.forceCenter().strength(FORCE_CENTER_STRENGTH))
+      .alphaMin(FORCE_ALPHA_MIN)  // Minimum energy level before simulation stops
   }
 });
 
