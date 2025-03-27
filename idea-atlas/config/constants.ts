@@ -21,3 +21,5 @@ export const EDGE_NOTE_RATIO = 25;
 export const INITIAL_WAVE_SELECTION_DELAY = 600 // delay in ms before the first wave starts
 export const NETXT_WAVE_MODIFIER = 0.75 // how much the delay is reduced for each wave
 export const MIN_WAVE_DELAY = 100 // minimal delay of the wave in ms
+
+export const AUTO_SAVE_DELAY = 2000 // delay in ms before the map is saved automatically

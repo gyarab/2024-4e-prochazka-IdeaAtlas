@@ -26,7 +26,9 @@ import {
   waveNodeSelect
 } from "../utils/graphManager.js";
 import { historyManager } from "../utils/graphHistory";
-import { INITIAL_WAVE_SELECTION_DELAY, NETXT_WAVE_MODIFIER, MIN_WAVE_DELAY } from "~/config/constants";
+import { INITIAL_WAVE_SELECTION_DELAY, NETXT_WAVE_MODIFIER, MIN_WAVE_DELAY,
+  AUTO_SAVE_DELAY
+} from "~/config/constants";
 // Id of Graph to be fetched and displayed
 const props = defineProps<{
     graph_id: string;
@@ -160,7 +162,6 @@ const handleWaveKeyUp = (event: KeyboardEvent) => {
     }
 };
 
-const AUTO_SAVE_DELAY = 2000; // 2 seconds delay
 const saveTimeout = ref<NodeJS.Timeout | null>(null);
 const isSaving = ref(false);
 
