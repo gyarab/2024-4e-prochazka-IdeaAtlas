@@ -11,6 +11,8 @@
 </script>
 <template>
   <div>
-    <MapNetwork :graph_id="stringId"/>
+    <ClientOnly>
+      <MapNetwork :graph_id="stringId"/>
+    </ClientOnly>
   </div>
 </template>
