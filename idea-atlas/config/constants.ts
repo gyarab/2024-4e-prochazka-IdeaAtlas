@@ -30,3 +30,8 @@ export const FORCE_LINK_STRENGTH = 0.2
 export const FORCE_CHARGE_STRENGTH = -8000
 export const FORCE_CENTER_STRENGTH = 0.001
 export const FORCE_ALPHA_MIN = 0.001
+
+//Input and edit dialog dimensions (approximate)
+export const DIALOG_HEIGHT = 300; // height of the dialog
+export const DIALOG_WIDTH = 300;  // width of the dialog
+export const PADDING = 100;       // minimum padding from screen edges

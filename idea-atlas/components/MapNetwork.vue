@@ -27,7 +27,7 @@ import {
 } from "../utils/graphManager.js";
 import { historyManager } from "../utils/graphHistory";
 import { INITIAL_WAVE_SELECTION_DELAY, NETXT_WAVE_MODIFIER, MIN_WAVE_DELAY,
-  AUTO_SAVE_DELAY
+  AUTO_SAVE_DELAY, DIALOG_HEIGHT, DIALOG_WIDTH, PADDING
 } from "~/config/constants";
 // Id of Graph to be fetched and displayed
 const props = defineProps<{
@@ -384,57 +384,29 @@ const calculateFirstSelectedNodePosition = () => {
     // Important feautre
     // Translate from SVG to DOM coordinates
     const domPoint = graph.value.translateFromSvgToDomCoordinates({ x: nodeLayout.x, y: nodeLayout.y });
-    
-    // Get window dimensions
-    const windowWidth = window.innerWidth;
-    const windowHeight = window.innerHeight;
-    
-    // Dialog dimensions (approximate)
-    const dialogHeight = 300; // height of the dialog
-    const dialogWidth = 300;  // width of the dialog
-    const padding = 100;       // minimum padding from screen edges
-    
-    // Calculate horizontal offset
-    let xOffset = domPoint.x < windowWidth / 2 ? dialogWidth/2 + padding : -(dialogWidth/2 + padding);
-    
-    // Calculate vertical offset
-    let yOffset = 0;
-    if (domPoint.y < dialogHeight + padding) {
-      // Too close to top - move down
-      yOffset = (dialogHeight/2 + padding) - domPoint.y;
-    } else if (domPoint.y > windowHeight - dialogHeight - padding) {
-      // Too close to bottom - move up
-      yOffset = (windowHeight - dialogHeight/2 - padding) - domPoint.y;
-    }
-    
-    return {
-      x: domPoint.x + xOffset,
-      y: domPoint.y + yOffset
-    };
+    return calculateOfset(domPoint);
   }
   return { x: 0, y: 0 };
 };
 const calculateInputDialogPosition = () => {
   const domPoint = newNodePosition.value;
-  // Get window dimensions
+  return calculateOfset(domPoint);
+};
+const calculateOfset = (domPoint: { x: number; y: number; }) => {
   const windowWidth = window.innerWidth;
   const windowHeight = window.innerHeight;
-   // Dialog dimensions (approximate)
-   const dialogHeight = 300; // height of the dialog
-  const dialogWidth = 300;  // width of the dialog
-  const padding = 100;       // minimum padding from screen edges
-    
+
   // Calculate horizontal offset
-  let xOffset = domPoint.x < windowWidth / 2 ? dialogWidth/2 + padding : -(dialogWidth/2 + padding);
+  let xOffset = domPoint.x < windowWidth / 2 ? DIALOG_WIDTH/2 + PADDING : -(DIALOG_WIDTH/2 + PADDING);
     
     // Calculate vertical offset
   let yOffset = 0;
-  if (domPoint.y < dialogHeight + padding) {
+  if (domPoint.y < DIALOG_HEIGHT + PADDING) {
     // Too close to top - move down
-    yOffset = (dialogHeight/2 + padding) - domPoint.y;
-  } else if (domPoint.y > windowHeight - dialogHeight - padding) {
+    yOffset = (DIALOG_HEIGHT/2 + PADDING) - domPoint.y;
+  } else if (domPoint.y > windowHeight - DIALOG_HEIGHT - PADDING) {
     // Too close to bottom - move up
-    yOffset = (windowHeight - dialogHeight/2 - padding) - domPoint.y;
+    yOffset = (windowHeight - DIALOG_HEIGHT/2 - PADDING) - domPoint.y;
   }
   
   return {
@@ -442,7 +414,6 @@ const calculateInputDialogPosition = () => {
     y: domPoint.y + yOffset
     };
 };
-
 // Handler for node name submission
 const handleNodeSubmit = (nodeProps: { name: string, color: string, size: number }) => {
   const svgPoint = graph.value?.translateFromDomToSvgCoordinates(newNodePosition.value);
