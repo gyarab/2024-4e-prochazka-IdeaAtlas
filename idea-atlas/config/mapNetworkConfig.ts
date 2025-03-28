@@ -128,7 +128,7 @@ export const mainConfig = reactive(
       selected: {
         width: edge => edge.width * 1.5, // Increase width by 50% when selected
         color: edge => edge.color,
-        dasharray: "6",  // Fixed dash pattern for selected edges
+        dasharray: "10",  // Fixed dash pattern for selected edges
         animate: true,   // Always animate selected edges
       },
     },
