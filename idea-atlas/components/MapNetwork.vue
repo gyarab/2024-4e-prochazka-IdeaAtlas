@@ -414,6 +414,34 @@ const calculateFirstSelectedNodePosition = () => {
   }
   return { x: 0, y: 0 };
 };
+const calculateInputDialogPosition = () => {
+  const domPoint = newNodePosition.value;
+  // Get window dimensions
+  const windowWidth = window.innerWidth;
+  const windowHeight = window.innerHeight;
+   // Dialog dimensions (approximate)
+   const dialogHeight = 300; // height of the dialog
+  const dialogWidth = 300;  // width of the dialog
+  const padding = 100;       // minimum padding from screen edges
+    
+  // Calculate horizontal offset
+  let xOffset = domPoint.x < windowWidth / 2 ? dialogWidth/2 + padding : -(dialogWidth/2 + padding);
+    
+    // Calculate vertical offset
+  let yOffset = 0;
+  if (domPoint.y < dialogHeight + padding) {
+    // Too close to top - move down
+    yOffset = (dialogHeight/2 + padding) - domPoint.y;
+  } else if (domPoint.y > windowHeight - dialogHeight - padding) {
+    // Too close to bottom - move up
+    yOffset = (windowHeight - dialogHeight/2 - padding) - domPoint.y;
+  }
+  
+  return {
+    x: domPoint.x + xOffset,
+    y: domPoint.y + yOffset
+    };
+};
 
 // Handler for node name submission
 const handleNodeSubmit = (nodeProps: { name: string, color: string, size: number }) => {
@@ -550,7 +578,9 @@ const toggleControls = () => {
   <!-- Node input dialog component for creating new nodes -->
   <!-- Shows when showNodeInput is true, positioned at newNodePosition -->
   <!-- Emits 'close' event to hide dialog and 'submit' event with node name -->
-  <NodeInputDialog :is-open="getShowingNodeInput()" :position="newNodePosition" @close="setShowingNodeInput(false)"
+  <NodeInputDialog :is-open="getShowingNodeInput()"
+    :position="calculateInputDialogPosition()" 
+    @close="setShowingNodeInput(false)"
     @submit="handleNodeSubmit" />
   <!-- TODO find a position of first selected node -->
   <NodeEditDialog 
