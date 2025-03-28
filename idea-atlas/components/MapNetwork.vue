@@ -381,6 +381,8 @@ const calculateFirstSelectedNodePosition = () => {
   if (selectedNodes.value.length > 0 && graph.value) {
     const firstNodeId = selectedNodes.value[0];
     const nodeLayout = data.layouts.nodes[firstNodeId];
+    // Important feautre
+    // Translate from SVG to DOM coordinates
     const domPoint = graph.value.translateFromSvgToDomCoordinates({ x: nodeLayout.x, y: nodeLayout.y });
     
     // Get window dimensions
