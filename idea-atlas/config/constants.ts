@@ -35,3 +35,6 @@ export const FORCE_ALPHA_MIN = 0.01         // Minimum energy threshold - simula
 export const DIALOG_HEIGHT = 300; // height of the dialog
 export const DIALOG_WIDTH = 300;  // width of the dialog
 export const PADDING = 100;       // minimum padding from screen edges
+
+// History constants
+export const HISTORY_MAX_LENGTH = 100; // maximum number of history items

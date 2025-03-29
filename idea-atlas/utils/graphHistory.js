@@ -1,9 +1,11 @@
 // This file contians the functions that are used to manage the history of the graph data structure
+import { HISTORY_MAX_LENGTH } from "~/config/constants";
+
 class HistoryManager {
     constructor() {
         this.history = [];
         this.currentIndex = -1;
-        this.maxHistory = 10; // Maximum number of saved states
+        this.maxHistory = HISTORY_MAX_LENGTH; // Maximum number of saved states
     }
 
 
