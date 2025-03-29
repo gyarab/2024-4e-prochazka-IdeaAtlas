@@ -23,6 +23,24 @@ const errorMessage = ref('');  // Add this line
 const nodeColor = ref(props.currentColor);
 const nodeSize = ref(props.currentSize);
 
+// Add new refs for tracking dialog position
+const dialogPosition = ref({ x: 0, y: 0 });
+
+// Update the watch handler for position
+watch(() => props.position, (newPosition) => {
+    if (props.isOpen) {
+        // Set initial position without any offset
+        dialogPosition.value = {
+            x: newPosition.x,
+            y: newPosition.y
+        };
+    }
+}, { immediate: true });
+
+const handlePositionChange = (x: number, y: number) => {
+  dialogPosition.value = { x, y };
+};
+
 // Watch for dialog open state to reset and focus input
 watch(() => props.isOpen, (newValue) => {
     if (newValue) {
@@ -85,16 +103,17 @@ const dialogRef = ref<HTMLDivElement | null>(null);
                 ref="dialogRef"
                 class="absolute bg-white rounded-lg shadow-xl pointer-events-auto border-2 border-blue-200" 
                 :style="{
-                    left: `${position.x}px`,
-                    top: `${position.y}px`,
+                    left: `${dialogPosition.x}px`,
+                    top: `${dialogPosition.y}px`,
                     transform: 'translate(-50%, -50%)',
+                    position: 'fixed',
                     zIndex: 1000
                 }"
             >
                 <!-- Add draggable header -->
                 <div 
                     class="p-2 bg-gray-100 cursor-move rounded-t-lg border-b flex justify-between items-center"
-                    @mousedown="(e) => dialogRef && startDrag(e, dialogRef)"
+                    @mousedown="(e) => dialogRef && startDrag(e, dialogRef, handlePositionChange)"
                 >
                     <span class="text-sm font-semibold">Edit Node</span>
                 </div>
