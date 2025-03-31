@@ -1,0 +1,84 @@
+\section{Instalace}
+\subsection{Linux Setup}
+
+Pro správnou instalaci projektu IdeaAtlas na operační systém Linux postupujte podle následujících kroků:
+
+\textbf{Klonování repozitáře}
+\newline
+Nejprve naklonujte repozitář pomocí příkazu:
+
+\begin{lstlisting}[style= bash]
+git clone https://github.com/gyarab/2024-4e-prochazka-IdeaAtlas.git
+\end{lstlisting}
+
+\textbf{Instalace Bun}
+\newline
+Nainstalujte správce balíčků Bun spuštěním následujícího příkazu:
+
+\begin{lstlisting}[style= bash]
+curl -fsSL https://bun.sh/install | bash
+\end{lstlisting}
+
+\textbf{Přechod do adresáře projektu}
+\newline
+Přejděte do hlavního adresáře projektu:
+
+\begin{lstlisting}[style= bash]
+cd 2024-4e-prochazka-IdeaAtlas
+cd idea-atlas
+\end{lstlisting}
+
+\textbf{Instalace závislostí}
+\newline
+Nakonec nainstalujte všechny závislosti projektu:
+
+\begin{lstlisting}[style= bash]
+bun install
+\end{lstlisting}
+
+Po úspěšném dokončení těchto kroků by měl být projekt připraven k použití.
+
+\newpage
+\subsection{Widnows setup}
+Pro správnou instalaci projektu IdeaAtlas na operační systém Windows postupujte podle následujících kroků:
+
+\textbf{Klonování repozitáře}
+\newline
+Nejprve naklonujte repozitář pomocí příkazu:
+
+\begin{lstlisting}[style= bash]
+git clone https://github.com/gyarab/2024-4e-prochazka-IdeaAtlas.git
+\end{lstlisting}
+\textbf{Instalace Bun}
+\newline
+Nainstalujte správce balíčků Bun spuštěním následujícího příkazu:
+
+\begin{lstlisting}[style= bash]
+powershell -c "irm bun.sh/install.ps1 | iex"
+\end{lstlisting}
+
+\textbf{Přechod do adresáře projektu}
+\newline
+Přejděte do hlavního adresáře projektu:
+
+\begin{lstlisting}[style= bash]
+cd 2024-4e-prochazka-IdeaAtlas
+cd idea-atlas
+\end{lstlisting}
+
+\textbf{Instalace závislostí}
+\newline
+Nakonec nainstalujte všechny závislosti projektu:
+
+\begin{lstlisting}[style= bash]
+bun install
+\end{lstlisting}
+
+Po úspěšném dokončení těchto kroků by měl být projekt připraven k použití.
+
+
+\subsection{Spuštění projektu}
+Pro spuštění projektu: v adresáři \textit{2024-4e-prochazka-IdeaAtlas\textbackslash idea-atlas} použijte příkaz
+\begin{lstlisting}[style= bash]
+bun run dev
+\end{lstlisting}

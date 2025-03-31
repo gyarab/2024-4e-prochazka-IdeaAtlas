@@ -1,0 +1,240 @@
+\documentclass[a4paper, 12pt]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage{breakurl}
+\usepackage[czech]{babel}
+\usepackage[top=2.5cm,bottom=2.5cm,left=3.5cm,right=2.5cm]{geometry}
+\usepackage[scaled=1]{helvet}
+\usepackage{graphicx}
+\usepackage[dvipsnames]{xcolor} % for colored text
+\usepackage[colorlinks=true, allcolors=RoyalBlue]{hyperref}
+\usepackage{tocloft} % Table of contents
+\usepackage{multicol} % Multiple columns
+\usepackage{wrapfig}
+\usepackage{index}
+\usepackage{courier} % Sets font for listing as Courier.
+\usepackage{listings, xcolor}
+\usepackage{tcolorbox}
+\usepackage{subfig}
+\usepackage{setspace}
+\usepackage{titlesec}
+\usepackage{todonotes}
+\usepackage{csquotes}
+\usepackage{filecontents} % data or code snippets from external sources
+\usepackage{microtype} % Zlepší dělení a vizuální výstup
+
+
+
+% Sections on new page
+\newif\ifclearpageenabled
+\clearpageenabledtrue % Set the variable to true by default
+\AddToHook{cmd/section/before}{
+    % Check if \clearpageenabled is true
+    \ifclearpageenabled
+        \clearpage % Execute \clearpage if true
+    \fi
+}
+
+
+
+
+% Ukázky kódu
+\renewcommand\lstlistlistingname{\LARGE Seznam ukázek kódu}
+\renewcommand\lstlistingname{Ukázka}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.97}
+\lstdefinestyle{Python}{
+    language=Python,
+    basicstyle=\scriptsize\fontfamily{lmtt}\selectfont,
+    backgroundcolor=\color{backcolour},
+    keywordstyle=\color{blue},
+    commentstyle=\color{green!40!black},
+    stringstyle=\color{RedViolet},
+    showstringspaces=false,
+    breaklines=true,
+    breakatwhitespace=true,
+    tabsize=4,
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    frame=single,
+    columns=fullflexible,
+    % rulecolor = \color{black}, %% set frame color to avoid being affected by text color
+}
+\lstdefinestyle{bash}{
+    language=bash,
+    basicstyle=\ttfamily\footnotesize,
+    keywordstyle=\color{blue},
+    commentstyle=\color{gray},
+    stringstyle=\color{red},
+    backgroundcolor=\color{lightgray!20},
+    frame=single,
+    breaklines=true,
+    postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
+}
+
+\lstdefinelanguage{JavaScript}{
+  keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break, const},
+  keywordstyle=\color{blue}\bfseries,
+  ndkeywords={class, export, boolean, throw, implements, import, this},
+  ndkeywordstyle=\color{darkgray}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=false,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{purple}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  morestring=[b]',
+  morestring=[b]"
+}
+
+\lstdefinestyle{JavaScript}{
+    language=JavaScript,
+    basicstyle=\scriptsize\fontfamily{lmtt}\selectfont,
+    backgroundcolor=\color{backcolour},
+    keywordstyle=\color{blue},
+    commentstyle=\color{green!40!black},
+    stringstyle=\color{RedViolet},
+    showstringspaces=false,
+    breaklines=true,
+    breakatwhitespace=true,
+    tabsize=4,
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    frame=single,
+    columns=fullflexible,
+    % rulecolor = \color{black}, %% set frame color to avoid being affected by text color
+}
+
+
+\lstdefinelanguage{XML_SYNTAX}{%
+    alsoletter=-,
+    morestring=[b]",stringstyle=\color[rgb]{0,0,1},
+    moredelim=*[s][{\color[rgb]{0.75,0,0}}]{<}{>},
+    moredelim=[s][{\color[rgb]{0,0,0}}]{<!--}{-->},
+    moredelim=[s][{\color[rgb]{0,0.75,0}}]{\ }{=},
+    moredelim=[s][{\color[rgb]{0,0.75,0}}]{\    }{=} % here there is \tab
+}
+
+\lstdefinestyle{HTML}{
+    % Basic design
+    backgroundcolor=\color{backcolour},
+    basicstyle=\scriptsize\fontfamily{lmtt}\selectfont,
+    breaklines=true,
+    frame=l,
+    tabsize=4,    
+    breakatwhitespace=true,
+    numbers=left,    
+    numberstyle=\tiny\color{gray},
+    frame=single,
+    numberfirstline=true,
+    % HTML formatting
+    language=XML_SYNTAX,
+}
+
+\lstdefinelanguage{CSS}{
+  keywords={background-color, height, width, border, radius, animation, opacity, position, z, index, background, color, transform, left, top, margin, padding, overflow, backdrop, filter, box, shadow, webkit, transition},
+  keywordstyle=\color{blue}\bfseries,
+  ndkeywords={ ease, in, out, infinite, both, alternate, var, px, rem, s},
+  ndkeywordstyle=\color{green!50!black}\bfseries,
+  identifierstyle=\color{orange}\bfseries,
+  sensitive=false,
+  comment=[l]{/*},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{purple}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  morestring=[b]',
+  morestring=[b]"
+}
+
+\lstdefinestyle{CSS}{
+    language=CSS,
+    basicstyle=\scriptsize\fontfamily{lmtt}\selectfont,
+    backgroundcolor=\color{backcolour},
+    keywordstyle=\color{blue},
+    commentstyle=\color{green!40!black},
+    stringstyle=\color{RedViolet},
+    showstringspaces=false,
+    breaklines=true,
+    breakatwhitespace=true,
+    tabsize=4,
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    frame=single,
+    columns=fullflexible,
+    % rulecolor = \color{black}, %% set frame color to avoid being affected by text color
+}
+
+
+
+% List of figures
+\renewcommand{\cftloftitlefont}{\LARGE\bfseries}
+\renewcommand\cftfigfont{\small}
+\renewcommand\cftfigpagefont{\small}
+
+
+% Bibliography
+\usepackage[natbib=true,
+    style=numeric,
+    sorting=none]{biblatex}
+\addbibresource{ref.bib}
+% Define a command to set the font size for the bibliography entries
+\newcommand{\setbibfont}{\small} 
+\AtBeginBibliography{\setbibfont}
+
+
+
+%% Section font format
+\titleformat*{\section}{\LARGE\bfseries}
+\titleformat*{\subsection}{\Large\bfseries}
+\titleformat*{\subsubsection}{\large\bfseries}
+\titleformat*{\paragraph}{\large\bfseries}
+\titleformat*{\subparagraph}{\large\bfseries}
+
+
+\setstretch{1.5}
+\hyphenpenalty=10000\exhyphenpenalty=10000 %žádné pomlčky na konci
+\setlength {\marginparwidth }{2cm} 
+
+
+\begin{document}
+
+
+
+\pagenumbering{gobble} %%no page number
+
+\input{zacatek/titulni strana}
+\input{zacatek/prohlaseni}
+\input{zacatek/podekovani}
+\input{zacatek/anotace} 
+
+
+\newpage
+\pagenumbering{arabic} % start numbering pages
+% \linespread{0.9}\selectfont
+\tableofcontents
+% \linespread{1.5}\selectfont
+\input{Kapitoly/1Uvod}
+\input{Kapitoly/2Technologie}
+\input{Kapitoly/3BrainStroming}
+\input{Kapitoly/4Instalace}
+\input{Kapitoly/5Ovládání}
+\input{Kapitoly/6FrontEnd}
+\input{Kapitoly/7VizualizaceGrafu}
+\input{Kapitoly/8Backend}
+\input{Kapitoly/9Klicoveproblemy}
+\input{Kapitoly/10Návrhy}
+\input{Kapitoly/11Zaver}
+
+\section{Použité zdroje}
+
+\printbibliography[heading=none]
+
+\newpage
+\mbox{}
+\addcontentsline{toc}{section}{\listfigurename}
+\listoffigures
+\newpage
+\mbox{}
+\addcontentsline{toc}{section}{Seznam ukázek kódu}
+\lstlistoflistings
+
+\end{document}
