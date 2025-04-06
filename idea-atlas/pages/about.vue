@@ -5,16 +5,16 @@ const features = [
     description: 'Create beautiful, interactive mind maps to organize your thoughts and ideas'
   },
   {
-    title: 'Real-time Collaboration',
-    description: 'Work together with your team in real-time, seeing changes as they happen'
+    title: 'Individuual Workspaces',
+    description: ' Each user has their own private workspace to manage their ideas'
   },
   {
-    title: 'Smart Connections',
-    description: 'Discover relationships between ideas with our intelligent linking system'
+    title: 'Easy Control',
+    description: 'Intuuitive controls for easy navigation and manipulation of your mind maps'
   },
   {
-    title: 'Cross-Platform Access',
-    description: 'Access your idea maps from any device, anywhere, anytime'
+    title: 'Simple Design',
+    description: 'A clean and simple design that focuses on your ideas without distractions'
   }
 ]
 </script>
